@@ -1,0 +1,25 @@
+// A launch configuration that compiles the extension and then opens it inside a new window
+// Use IntelliSense to learn about possible attributes.
+// Hover to view descriptions of existing attributes.
+// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch Extension with Shroom Space Theme and Samples",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--theme=Shroom Space",
+				"${workspaceFolder}/showcase/test-samples.js",
+				"${workspaceFolder}/showcase/test-samples.py",
+				"${workspaceFolder}/showcase/test-samples.rs",
+				"${workspaceFolder}/showcase/test-samples.go",
+				"${workspaceFolder}/showcase/test-samples.css",
+				"${workspaceFolder}/showcase/test-samples.html",
+				"${workspaceFolder}/showcase/test-samples.md"
+			]
+		}
+	]
+}

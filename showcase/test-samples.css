@@ -1,0 +1,40 @@
+/* CSS sample code */
+body {
+    background-color: #0d0d0d;
+    color: #f8f8f2;
+    font-family: 'Monaspace Neon', monospace;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.title {
+    font-size: 2em;
+    color: #bd93f9;
+    text-align: center;
+}
+
+.button {
+    background-color: #6272a4;
+    color: #f8f8f2;
+    border: 1px solid #bd93f9;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #bd93f9;
+}
+
+/* Keywords: none (CSS properties are not keywords in the same way)
+   Strings: '#0d0d0d', '#f8f8f2', etc.
+   Comments: CSS sample code, Keywords: ...
+   Functions: none
+   Variables: none
+   Numbers: 1200px, 0, 20px, 2em, 10px, 20px, 1px
+   Operators: :, ;, ., #, px, em
+   Classes: .container, .title, .button
+   Constants: none */
