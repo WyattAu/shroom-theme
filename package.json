@@ -3,6 +3,7 @@
   "displayName": "Shroom Space Theme",
   "description": "VS Code theme extension",
   "version": "0.0.1",
+  "publisher": "wyattau",
   "author": "Wyatt Au <wyatt_au@protonmail.com>",
   "license": "Apache-2.0",
   "repository": {
