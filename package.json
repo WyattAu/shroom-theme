@@ -3,6 +3,22 @@
   "displayName": "Shroom Space Theme",
   "description": "VS Code theme extension",
   "version": "0.0.1",
+  "author": "Wyatt Au <wyatt_au@protonmail.com>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WyattAu/shroom-theme.git"
+  },
+  "keywords": [
+    "vscode",
+    "theme",
+    "shroom",
+    "space"
+  ],
+  "homepage": "https://github.com/WyattAu/shroom-theme#readme",
+  "bugs": {
+    "url": "https://github.com/WyattAu/shroom-theme/issues"
+  },
   "engines": {
     "vscode": "^1.105.0"
   },
@@ -44,6 +60,12 @@
     ]
   },
   "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
   },
   "devDependencies": {
     "@types/chai": "^5.2.3",

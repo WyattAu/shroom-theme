@@ -18,7 +18,14 @@
             "label": "Validate Themes",
             "type": "shell",
             "command": "node",
-            "args": ["validate-themes.js"]
+            "args": ["validate-themes.js"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            }
         }
     ]
 }
