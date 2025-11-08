@@ -18,7 +18,8 @@
 				"${workspaceFolder}/showcase/test-samples.go",
 				"${workspaceFolder}/showcase/test-samples.css",
 				"${workspaceFolder}/showcase/test-samples.html",
-				"${workspaceFolder}/showcase/test-samples.md"
+				"${workspaceFolder}/showcase/test-samples.md",
+				"${workspaceFolder}/showcase/test-samples.cpp"
 			]
 		}
 	]

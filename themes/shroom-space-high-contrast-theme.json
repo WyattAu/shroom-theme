@@ -115,61 +115,17 @@
     "widget.shadow": "#00000030"
   },
   "tokenColors": [
-    {
-      "scope": "comment",
-      "settings": {
-        "foreground": "#AAAAAA",
-        "fontStyle": "italic"
-      }
-    },
-    {
-      "scope": "string",
-      "settings": {
-        "foreground": "#95F94A"
-      }
-    },
-    {
-      "scope": "keyword",
-      "settings": {
-        "foreground": "#AD58FF",
-        "fontStyle": "bold"
-      }
-    },
-    {
-      "scope": "entity.name.function",
-      "settings": {
-        "foreground": "#4AF8E1"
-      }
-    },
-    {
-      "scope": "entity.name.type",
-      "settings": {
-        "foreground": "#FFD978",
-        "fontStyle": "italic"
-      }
-    },
-    {
-      "scope": "constant",
-      "settings": {
-        "foreground": "#FFD978"
-      }
-    },
-    {
-      "scope": [
-        "variable",
-        "variable.parameter"
-      ],
-      "settings": {
-        "foreground": "#589BFF"
-      }
-    },
-    {
-      "scope": "invalid",
-      "settings": {
-        "foreground": "#FF6B6B",
-        "fontStyle": "bold"
-      }
-    }
+    { "scope": ["comment", "punctuation.definition.comment"], "settings": { "foreground": "#AAAAAA", "fontStyle": "italic" } },
+    { "scope": ["string", "punctuation.definition.string"], "settings": { "foreground": "#95F94A" } },
+    { "scope": ["keyword", "storage.type"], "settings": { "foreground": "#AD58FF", "fontStyle": "bold" } },
+    { "scope": "storage.modifier", "settings": { "foreground": "#AD58FF", "fontStyle": "italic bold" } },
+    { "scope": ["entity.name.function", "support.function"], "settings": { "foreground": "#4AF8E1" } },
+    { "scope": ["entity.name.type", "entity.name.class", "support.type"], "settings": { "foreground": "#FFD978", "fontStyle": "italic" } },
+    { "scope": ["constant.language", "constant.numeric"], "settings": { "foreground": "#FFD978" } },
+    { "scope": ["variable", "variable.parameter"], "settings": { "foreground": "#589BFF" } },
+    { "scope": ["variable.other.property", "support.type.property-name"], "settings": { "foreground": "#FFFFFF" } },
+    { "scope": ["keyword.control.directive", "meta.preprocessor", "entity.name.constant.preprocessor", "meta.decorator", "entity.name.decorator", "storage.type.annotation", "punctuation.definition.decorator"], "settings": { "foreground": "#FFD978" } },
+    { "scope": "invalid", "settings": { "foreground": "#FF6B6B", "fontStyle": "bold" } }
   ],
   "semanticTokenColors": {
     "enabled": true,

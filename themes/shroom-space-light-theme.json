@@ -199,6 +199,15 @@
       }
     },
     {
+      "name": "Preprocessor, Annotations, Decorators, Attributes",
+      "scope": [
+        "keyword.control.directive", "meta.preprocessor", "entity.name.constant.preprocessor",
+        "meta.decorator", "entity.name.decorator", "storage.type.annotation",
+        "punctuation.definition.decorator"
+      ],
+      "settings": { "foreground": "#8C6D34" }
+    },
+    {
       "scope": "invalid",
       "settings": {
         "foreground": "#B45353",

@@ -1,31 +1,17 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Package Extension",
-            "type": "shell",
-            "command": "npx",
-            "args": ["vsce", "package"],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared"
-            }
-        },
-        {
-            "label": "Validate Themes",
-            "type": "shell",
-            "command": "node",
-            "args": ["validate-themes.js"],
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "shared"
-            }
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Generate Showcase Args",
+      "type": "shell",
+      "command": "for /f \"delims=\" %i in ('node generate-showcase-args.js') do set SHOWCASE_FILES=%i",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      }
+    }
+  ]
 }

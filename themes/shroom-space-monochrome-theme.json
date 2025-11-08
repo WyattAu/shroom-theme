@@ -115,67 +115,17 @@
     "widget.shadow": "#00000030"
   },
   "tokenColors": [
-    {
-      "scope": "comment",
-      "settings": {
-        "foreground": "#777777",
-        "fontStyle": "italic"
-      }
-    },
-    {
-      "scope": "string",
-      "settings": {
-        "foreground": "#BBBBBB"
-      }
-    },
-    {
-      "scope": [
-        "keyword",
-        "storage.type"
-      ],
-      "settings": {
-        "foreground": "#FFFFFF",
-        "fontStyle": "bold"
-      }
-    },
-    {
-      "scope": "entity.name.function",
-      "settings": {
-        "foreground": "#FFFFFF"
-      }
-    },
-    {
-      "scope": [
-        "entity.name.type",
-        "entity.name.class"
-      ],
-      "settings": {
-        "foreground": "#EEEEEE",
-        "fontStyle": "italic"
-      }
-    },
-    {
-      "scope": "constant",
-      "settings": {
-        "foreground": "#CCCCCC"
-      }
-    },
-    {
-      "scope": [
-        "variable",
-        "variable.parameter"
-      ],
-      "settings": {
-        "foreground": "#DDDDDD"
-      }
-    },
-    {
-      "scope": "invalid",
-      "settings": {
-        "foreground": "#FFFFFF",
-        "background": "#550000"
-      }
-    }
+    { "scope": ["comment", "punctuation.definition.comment"], "settings": { "foreground": "#777777", "fontStyle": "italic" } },
+    { "scope": ["string", "punctuation.definition.string"], "settings": { "foreground": "#BBBBBB" } },
+    { "scope": ["keyword", "storage.type"], "settings": { "foreground": "#FFFFFF", "fontStyle": "bold" } },
+    { "scope": "storage.modifier", "settings": { "foreground": "#FFFFFF", "fontStyle": "italic bold" } },
+    { "scope": ["entity.name.function", "support.function"], "settings": { "foreground": "#FFFFFF" } },
+    { "scope": ["entity.name.type", "entity.name.class", "support.type"], "settings": { "foreground": "#EEEEEE", "fontStyle": "italic" } },
+    { "scope": ["constant.language", "constant.numeric"], "settings": { "foreground": "#CCCCCC" } },
+    { "scope": ["variable", "variable.parameter"], "settings": { "foreground": "#DDDDDD" } },
+    { "scope": ["variable.other.property", "support.type.property-name"], "settings": { "foreground": "#CCCCCC" } },
+    { "scope": ["keyword.control.directive", "meta.preprocessor", "entity.name.constant.preprocessor", "meta.decorator", "entity.name.decorator", "storage.type.annotation", "punctuation.definition.decorator"], "settings": { "foreground": "#EEEEEE", "fontStyle": "italic" } },
+    { "scope": "invalid", "settings": { "foreground": "#FFFFFF", "background": "#550000" } }
   ],
   "semanticTokenColors": {
     "enabled": true,
