@@ -25,9 +25,9 @@
     "editor.lineHighlightBackground": "#2A2739",
     "editor.selectionBackground": "#393552",
     "editorBracketHighlight.foreground1": "#E8C990",
-    "editorBracketHighlight.foreground2": "#FFCB6B",
+    "editorBracketHighlight.foreground2": "#74D7C8",
     "editorBracketHighlight.foreground3": "#BE9AF7",
-    "editorBracketHighlight.foreground4": "#FFCB6B",
+    "editorBracketHighlight.foreground4": "#82AAFF",
     "editorBracketHighlight.foreground5": "#82AAFF",
     "editorBracketHighlight.foreground6": "#E68484",
     "editorBracketMatch.background": "#39355290",
@@ -95,7 +95,7 @@
     "tab.inactiveForeground": "#726D89",
     "terminal.ansiBlue": "#74D7C8",
     "terminal.ansiBrightBlack": "#726D89",
-    "terminal.ansiCyan": "#FFCB6B",
+    "terminal.ansiCyan": "#74D7C8",
     "terminal.ansiGreen": "#E8C990",
     "terminal.ansiMagenta": "#BE9AF7",
     "terminal.ansiRed": "#E68484",
@@ -124,7 +124,7 @@
     { "scope": ["constant.language", "constant.numeric"], "settings": { "foreground": "#E8C990" } },
     { "scope": ["variable", "variable.parameter"], "settings": { "foreground": "#82AAFF" } },
     { "scope": ["variable.other.property", "support.type.property-name"], "settings": { "foreground": "#CCC8D9" } },
-    { "scope": ["keyword.control.directive", "meta.preprocessor", "entity.name.constant.preprocessor", "meta.decorator", "entity.name.decorator", "storage.type.annotation", "punctuation.definition.decorator"], "settings": { "foreground": "#E8C990" } },
+    { "name": "Preprocessor, Annotations, Decorators, Attributes", "scope": ["keyword.control.directive", "meta.preprocessor", "entity.name.constant.preprocessor", "meta.decorator", "entity.name.decorator", "storage.type.annotation", "punctuation.definition.decorator"], "settings": { "foreground": "#E8C990" } },
     { "scope": "invalid", "settings": { "foreground": "#E68484", "fontStyle": "bold" } }
   ],
   "semanticTokenColors": {
@@ -135,6 +135,9 @@
       },
       "method": {
         "foreground": "#82AAFF"
+      },
+      "property": {
+        "foreground": "#CCC8D9"
       },
       "type": {
         "foreground": "#E8C990",

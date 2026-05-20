@@ -11,3 +11,9 @@ vsc-extension-quickstart.md
 **/.vscode-test.*
 !fonts/**
 !styles/**
+docs/**
+.github/**
+.git/hooks/**
+validate-themes.js
+generate-showcase-args.js
+showcase/**

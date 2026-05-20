@@ -26,7 +26,7 @@
     "editor.selectionBackground": "#393552",
     "editorBracketHighlight.foreground1": "#89DDFF",
     "editorBracketHighlight.foreground2": "#FF79C6",
-    "editorBracketHighlight.foreground3": "#FF79C6",
+    "editorBracketHighlight.foreground3": "#C3E88D",
     "editorBracketHighlight.foreground4": "#89DDFF",
     "editorBracketHighlight.foreground5": "#C3E88D",
     "editorBracketHighlight.foreground6": "#E68484",
@@ -44,7 +44,7 @@
     "editorIndentGuide.activeBackground": "#FF79C6",
     "editorIndentGuide.background": "#726D8950",
     "editorInfo.foreground": "#89DDFF",
-    "editorWarning.foreground": "#E68484",
+    "editorWarning.foreground": "#89DDFF",
     "editorWhitespace.foreground": "#726D8950",
     "errorForeground": "#E68484",
     "focusBorder": "#726D89",
@@ -73,7 +73,7 @@
     "notifications.border": "#1E1C29",
     "notificationsErrorIcon.foreground": "#E68484",
     "notificationsInfoIcon.foreground": "#89DDFF",
-    "notificationsWarningIcon.foreground": "#E68484",
+    "notificationsWarningIcon.foreground": "#C3E88D",
     "panel.background": "#2A2739",
     "panel.border": "#1E1C29",
     "panelTitle.activeForeground": "#E0DEF4",
@@ -93,9 +93,9 @@
     "tab.border": "#1E1C29",
     "tab.inactiveBackground": "#1E1C29",
     "tab.inactiveForeground": "#726D89",
-    "terminal.ansiBlue": "#FF79C6",
+    "terminal.ansiBlue": "#89DDFF",
     "terminal.ansiBrightBlack": "#726D89",
-    "terminal.ansiCyan": "#89DDFF",
+    "terminal.ansiCyan": "#C3E88D",
     "terminal.ansiGreen": "#C3E88D",
     "terminal.ansiMagenta": "#FF79C6",
     "terminal.ansiRed": "#E68484",
@@ -124,7 +124,7 @@
     { "scope": ["constant.language", "constant.numeric"], "settings": { "foreground": "#FF79C6" } },
     { "scope": ["variable", "variable.parameter"], "settings": { "foreground": "#89DDFF" } },
     { "scope": ["variable.other.property", "support.type.property-name"], "settings": { "foreground": "#CCC8D9" } },
-    { "scope": ["keyword.control.directive", "meta.preprocessor", "entity.name.constant.preprocessor", "meta.decorator", "entity.name.decorator", "storage.type.annotation", "punctuation.definition.decorator"], "settings": { "foreground": "#C3E88D" } },
+    { "name": "Preprocessor, Annotations, Decorators, Attributes", "scope": ["keyword.control.directive", "meta.preprocessor", "entity.name.constant.preprocessor", "meta.decorator", "entity.name.decorator", "storage.type.annotation", "punctuation.definition.decorator"], "settings": { "foreground": "#C3E88D" } },
     { "scope": "invalid", "settings": { "foreground": "#E68484", "fontStyle": "bold" } }
   ],
   "semanticTokenColors": {
@@ -135,6 +135,9 @@
       },
       "method": {
         "foreground": "#89DDFF"
+      },
+      "property": {
+        "foreground": "#CCC8D9"
       },
       "type": {
         "foreground": "#C3E88D",

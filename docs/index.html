@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }} - Shroom Space Theme</title>
+  <style>
+    :root {
+      --bg: #24212E;
+      --bg-surface: #1E1C29;
+      --fg: #CCC8D9;
+      --fg-muted: #726D89;
+      --accent: #BE9AF7;
+      --accent-teal: #74D7C8;
+      --accent-green: #A6C18B;
+      --accent-amber: #E8C990;
+      --accent-red: #E68484;
+      --border: #393552;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: var(--accent-teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+
+    /* Header */
+    header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 1.25rem; color: var(--accent); }
+    nav a {
+      color: var(--fg-muted);
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+    nav a:hover { color: var(--accent); text-decoration: none; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 4rem 0 3rem;
+    }
+    .hero h2 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.75rem; }
+    .hero p { color: var(--fg-muted); font-size: 1.125rem; max-width: 600px; margin: 0 auto 2rem; }
+    .hero .install-cmd {
+      display: inline-block;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.875rem;
+      color: var(--accent-green);
+    }
+
+    /* Theme Grid */
+    .themes { margin: 2rem 0; }
+    .themes h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.25rem; }
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .theme-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+    .theme-card h4 { color: var(--accent); margin-bottom: 0.5rem; }
+    .theme-card .type-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      background: var(--border);
+      color: var(--fg-muted);
+      margin-bottom: 0.5rem;
+    }
+    .theme-card p { color: var(--fg-muted); font-size: 0.875rem; }
+    .color-swatch {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    /* Palette */
+    .palette { margin: 2rem 0; }
+    .palette h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.25rem; }
+    .palette-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .palette-table th, .palette-table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    .palette-table th { color: var(--fg-muted); font-weight: 500; }
+
+    /* Content */
+    .content { margin: 2rem 0; }
+    .content h3 { color: var(--accent); margin: 1.5rem 0 0.75rem; }
+    .content p { margin-bottom: 0.75rem; }
+    .content ul { margin-left: 1.5rem; margin-bottom: 0.75rem; }
+    .content li { margin-bottom: 0.25rem; }
+    .content code {
+      background: var(--bg-surface);
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      color: var(--accent-amber);
+    }
+    .content pre {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .content pre code {
+      background: none;
+      padding: 0;
+      color: var(--fg);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 0;
+      text-align: center;
+      color: var(--fg-muted);
+      font-size: 0.8rem;
+    }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Shroom Space Theme</h1>
+      <nav>
+        <a href="#themes">Themes</a>
+        <a href="#palette">Palette</a>
+        <a href="#installation">Installation</a>
+        <a href="#development">Development</a>
+        <a href="https://github.com/WyattAu/shroom-theme">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <h2>Shroom Space Theme</h2>
+      <p>A dark VS Code color theme with accessibility-focused variants. 7 theme configurations covering standard dark, light, and color-vision-deficiency adapted palettes.</p>
+      <div class="install-cmd">code --install-extension wyattau.shroom-space-theme</div>
+    </section>
+
+    <section class="themes" id="themes">
+      <h3>Available Themes</h3>
+      <div class="theme-grid">
+        <div class="theme-card">
+          <h4>Shroom Space</h4>
+          <span class="type-badge">dark</span>
+          <p>Base dark theme. Purple/teal/green palette with warm amber constants.</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#CCC8D9"></span>
+            <span class="color-swatch" style="background:#BE9AF7"></span>
+            <span class="color-swatch" style="background:#74D7C8"></span>
+            <span class="color-swatch" style="background:#A6C18B"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Shroom Space Light</h4>
+          <span class="type-badge">light</span>
+          <p>Light variant with warm earth-tone backgrounds and muted accents.</p>
+          <div>
+            <span class="color-swatch" style="background:#F5F2E8"></span>
+            <span class="color-swatch" style="background:#4A4555"></span>
+            <span class="color-swatch" style="background:#8B5F9E"></span>
+            <span class="color-swatch" style="background:#007A7A"></span>
+            <span class="color-swatch" style="background:#5A785A"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Deuteranopia</h4>
+          <span class="type-badge">dark</span>
+          <p>Adapted for deuteranopia (green-weak CVD). Blue-shifted additions, avoided red-green confusion.</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#BE9AF7"></span>
+            <span class="color-swatch" style="background:#82AAFF"></span>
+            <span class="color-swatch" style="background:#E8C990"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Protanopia</h4>
+          <span class="type-badge">dark</span>
+          <p>Adapted for protanopia (red-blind CVD). Coral-shifted errors with blue additions.</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#BE9AF7"></span>
+            <span class="color-swatch" style="background:#82AAFF"></span>
+            <span class="color-swatch" style="background:#F07178"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Tritanopia</h4>
+          <span class="type-badge">dark</span>
+          <p>Adapted for tritanopia (blue-yellow CVD). Pink/cyan-shifted accents with green strings.</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#FF79C6"></span>
+            <span class="color-swatch" style="background:#89DDFF"></span>
+            <span class="color-swatch" style="background:#C3E88D"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Monochrome</h4>
+          <span class="type-badge">dark</span>
+          <p>Grayscale palette. Error indicators use luminance contrast. Maximum text clarity.</p>
+          <div>
+            <span class="color-swatch" style="background:#1C1C1C"></span>
+            <span class="color-swatch" style="background:#CCCCCC"></span>
+            <span class="color-swatch" style="background:#FFFFFF"></span>
+            <span class="color-swatch" style="background:#777777"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>High Contrast</h4>
+          <span class="type-badge">hc</span>
+          <p>Maximum contrast ratios. Pure black background. Full WCAG AAA compliance target.</p>
+          <div>
+            <span class="color-swatch" style="background:#000000"></span>
+            <span class="color-swatch" style="background:#FFFFFF"></span>
+            <span class="color-swatch" style="background:#AD58FF"></span>
+            <span class="color-swatch" style="background:#4AF8E1"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="palette" id="palette">
+      <h3>Base Dark Color Palette</h3>
+      <table class="palette-table">
+        <thead>
+          <tr><th>Role</th><th>Hex</th><th>Usage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="color-swatch" style="background:#24212E"></span> Background</td><td><code>#24212E</code></td><td>Editor background</td></tr>
+          <tr><td><span class="color-swatch" style="background:#CCC8D9"></span> Foreground</td><td><code>#CCC8D9</code></td><td>Default text</td></tr>
+          <tr><td><span class="color-swatch" style="background:#BE9AF7"></span> Accent (purple)</td><td><code>#BE9AF7</code></td><td>Keywords, badges</td></tr>
+          <tr><td><span class="color-swatch" style="background:#74D7C8"></span> Accent (teal)</td><td><code>#74D7C8</code></td><td>Functions, info</td></tr>
+          <tr><td><span class="color-swatch" style="background:#A6C18B"></span> Accent (green)</td><td><code>#A6C18B</code></td><td>Strings, additions</td></tr>
+          <tr><td><span class="color-swatch" style="background:#E8C990"></span> Accent (amber)</td><td><code>#E8C990</code></td><td>Constants, types</td></tr>
+          <tr><td><span class="color-swatch" style="background:#E68484"></span> Accent (red)</td><td><code>#E68484</code></td><td>Errors, deletions</td></tr>
+          <tr><td><span class="color-swatch" style="background:#726D89"></span> Muted</td><td><code>#726D89</code></td><td>Comments, disabled</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content" id="installation">
+      <h3>Installation</h3>
+      <p>Search for "Shroom Space" in the VS Code Extensions panel, or install via CLI:</p>
+      <pre><code>code --install-extension wyattau.shroom-space-theme</code></pre>
+      <p>Select a theme via <code>Ctrl+K Ctrl+T</code> (macOS: <code>Cmd+K Cmd+T</code>).</p>
+
+      <h3>Manual Installation</h3>
+      <ol>
+        <li>Download the latest <code>.vsix</code> from <a href="https://github.com/WyattAu/shroom-theme/releases">releases</a>.</li>
+        <li>Run: <code>code --install-extension shroom-space-theme-*.vsix</code></li>
+      </ol>
+    </section>
+
+    <section class="content" id="development">
+      <h3>Development</h3>
+      <p>Prerequisites: Node.js 22+, npm 10+, VS Code 1.105.0+.</p>
+      <table class="palette-table">
+        <thead><tr><th>Command</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>npm run compile</code></td><td>TypeScript compilation</td></tr>
+          <tr><td><code>npm run lint</code></td><td>ESLint with strict rules</td></tr>
+          <tr><td><code>npm run validate</code></td><td>Theme JSON validation</td></tr>
+          <tr><td><code>npm test</code></td><td>Full pipeline (compile + lint + validate + 76 tests)</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Shroom Space Theme -- <a href="https://github.com/WyattAu/shroom-theme">GitHub</a> -- <a href="https://github.com/WyattAu/shroom-theme/issues">Issues</a> -- Apache License 2.0</p>
+    </div>
+  </footer>
+</body>
+</html>

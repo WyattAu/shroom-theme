@@ -34,6 +34,11 @@
         "path": "./themes/shroom-space-theme.json"
       },
       {
+        "label": "Shroom Space Light",
+        "uiTheme": "vs",
+        "path": "./themes/shroom-space-light-theme.json"
+      },
+      {
         "label": "Shroom Space (Deuteranopia)",
         "uiTheme": "vs-dark",
         "path": "./themes/shroom-space-deuteranopia-theme.json"
@@ -55,7 +60,7 @@
       },
       {
         "label": "Shroom Space (High Contrast)",
-        "uiTheme": "vs-dark",
+        "uiTheme": "hc-black",
         "path": "./themes/shroom-space-high-contrast-theme.json"
       }
     ]
@@ -64,7 +69,8 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
+    "validate": "node validate-themes.js",
+    "pretest": "npm run compile && npm run lint && npm run validate",
     "lint": "eslint src",
     "test": "vscode-test"
   },

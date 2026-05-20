@@ -15,14 +15,24 @@ export default [{
     },
 
     rules: {
-        "@typescript-eslint/naming-convention": ["warn", {
+        "@typescript-eslint/naming-convention": ["error", {
             selector: "import",
             format: ["camelCase", "PascalCase"],
         }],
 
-        curly: "warn",
-        eqeqeq: "warn",
-        "no-throw-literal": "warn",
-        semi: "warn",
+        "curly": "error",
+        "eqeqeq": "error",
+        "no-throw-literal": "error",
+        "semi": "error",
+        "no-console": "error",
+        "no-debugger": "error",
+        "prefer-const": "error",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/explicit-function-return-type": ["error", {
+            "allowExpressions": true,
+        }],
+        "no-empty-function": "error",
     },
 }];

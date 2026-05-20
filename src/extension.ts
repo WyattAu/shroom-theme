@@ -1,5 +1,5 @@
 /*
-Copyright 2023 Your Name
+Copyright 2024-2026 Wyatt Au
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,29 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+/**
+ * Shroom Space Theme - VS Code color theme extension.
+ *
+ * Theme extensions require no activation logic. VS Code loads themes
+ * from the JSON files declared in package.json `contributes.themes`.
+ * This file exists solely to satisfy the VS Code extension host API
+ * contract for testing purposes.
+ */
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "shroom-theme" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('shroom-theme.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from shroom-theme!');
-	});
-
-	context.subscriptions.push(disposable);
+export function activate(): void {
+  // Theme extension: no activation required.
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate(): void {
+  // Theme extension: no deactivation required.
+}
