@@ -621,7 +621,17 @@
     "editorGutter.commentUnresolvedGlyphForeground": "#B45353",
     "editorGutter.itemGlyphForeground": "#8B5F9E",
     "editorGutter.itemBackground": "#D5D1C480",
-    "editor.compositionBorder": "#8B5F9E50"
+    "editor.compositionBorder": "#8B5F9E50",
+    "chat.editedFileForeground": "#886A32",
+    "chat.slashCommandBackground": "#C8C3D466",
+    "chat.slashCommandForeground": "#8B5F9E",
+    "dropdown.foreground": "#4A4555",
+    "editorGroupHeader.tabsBorder": "#D9D5E0",
+    "textBlockQuote.background": "#E8E4EE",
+    "textBlockQuote.border": "#C8C3D4",
+    "textPreformat.background": "#E8E4EE",
+    "textPreformat.foreground": "#4A4555",
+    "textSeparator.foreground": "#C8C3D4"
   },
   "tokenColors": [
     {
