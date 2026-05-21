@@ -9,6 +9,7 @@ vendor
 exports/
 reports/
 tests/visual/pages/
+tests/visual/baseline/
 tests/visual/diffs/
 tests/visual/test-results/
 playwright-report/

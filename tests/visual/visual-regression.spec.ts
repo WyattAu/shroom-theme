@@ -1,18 +1,23 @@
 import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
+import { PNG } from 'pngjs';
+import pixelmatch from 'pixelmatch';
 
 const themesDir = path.resolve(__dirname, '..', '..', 'themes');
 const pagesDir = path.resolve(__dirname, 'pages');
 const refsDir = path.resolve(__dirname, 'references');
+const baselineDir = path.resolve(__dirname, 'baseline');
 const diffsDir = path.resolve(__dirname, 'diffs');
 
-const DIFF_THRESHOLD = 0.01; // 1% pixel variance threshold
+const DIFF_THRESHOLD = 0.005; // 0.5% pixel diff threshold
 
 const themeFiles = fs.readdirSync(themesDir).filter(f => f.endsWith('.json'));
 
 fs.mkdirSync(refsDir, { recursive: true });
 fs.mkdirSync(diffsDir, { recursive: true });
+
+const hasBaseline = fs.existsSync(baselineDir);
 
 for (const file of themeFiles) {
   const slug = file.replace('.json', '');
@@ -24,78 +29,65 @@ for (const file of themeFiles) {
     await page.goto(`file://${htmlPath}`);
     await page.setViewportSize({ width: 1280, height: 720 });
 
-    // Wait for fonts and rendering to settle
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
 
     const screenshot = await page.screenshot({ fullPage: false });
-
     const refPath = path.join(refsDir, `${slug}.png`);
     const diffPath = path.join(diffsDir, `${slug}.png`);
 
-    if (!fs.existsSync(refPath)) {
-      // No reference image exists yet - save as reference
+    // Parse the new screenshot
+    const newImg = PNG.sync.read(screenshot);
+
+    // Determine baseline source:
+    // 1. CI baseline directory (downloaded from previous run's artifact)
+    // 2. Local references directory (committed to git)
+    const baselinePath = hasBaseline
+      ? path.join(baselineDir, `${slug}.png`)
+      : refPath;
+
+    if (!fs.existsSync(baselinePath)) {
+      // No baseline - save current as reference and pass
       fs.writeFileSync(refPath, screenshot);
-      console.log(`Created reference image: ${slug}.png`);
-      // Pass by default when creating initial reference
       return;
     }
 
-    // Compare with reference
-    const refImage = fs.readFileSync(refPath);
+    // Load baseline
+    const refBuffer = fs.readFileSync(baselinePath);
+    const refImg = PNG.sync.read(refBuffer);
 
-    // If images are identical, pass immediately
-    if (Buffer.compare(screenshot, refImage) === 0) {
-      // Clean up any old diff
-      if (fs.existsSync(diffPath)) {
-        fs.unlinkSync(diffPath);
-      }
+    // Dimension change = fundamental change, update reference
+    if (refImg.width !== newImg.width || refImg.height !== newImg.height) {
+      fs.writeFileSync(diffPath, screenshot);
+      fs.writeFileSync(refPath, screenshot);
       return;
     }
 
-    // Images differ - compute diff percentage
-    const diffPercent = await computePixelDiff(refImage, screenshot, diffPath);
+    // Pixel-level comparison using pixelmatch
+    const diffImg = new PNG({ width: newImg.width, height: newImg.height });
+    const numDiffPixels = pixelmatch(
+      refImg.data,
+      newImg.data,
+      diffImg.data,
+      newImg.width,
+      newImg.height,
+      { threshold: 0.1 }
+    );
+
+    const totalPixels = newImg.width * newImg.height;
+    const diffPercent = numDiffPixels / totalPixels;
+
+    if (diffPercent >= DIFF_THRESHOLD) {
+      fs.writeFileSync(diffPath, PNG.sync.write(diffImg));
+    } else if (fs.existsSync(diffPath)) {
+      fs.unlinkSync(diffPath);
+    }
+
+    // Always save current as new reference
+    fs.writeFileSync(refPath, screenshot);
 
     expect(
       diffPercent,
-      `Visual regression detected for ${slug}: ${diffPercent.toFixed(4)}% pixels differ (threshold: ${DIFF_THRESHOLD * 100}%)`
+      `Visual regression for ${slug}: ${(diffPercent * 100).toFixed(3)}% pixels differ (${numDiffPixels}/${totalPixels}), threshold: ${DIFF_THRESHOLD * 100}%`
     ).toBeLessThan(DIFF_THRESHOLD);
   });
-}
-
-/**
- * Compute pixel-level diff between two PNG buffers.
- * Returns the percentage of pixels that differ (0.0 to 1.0).
- * Optionally saves a diff image.
- */
-async function computePixelDiff(
-  refBuffer: Buffer,
-  newBuffer: Buffer,
-  diffOutputPath: string
-): Promise<number> {
-  // Simple byte-level comparison for PNG data
-  // For production, use pixelmatch or similar - here we use buffer comparison
-  if (refBuffer.length !== newBuffer.length) {
-    // Different sizes mean significant changes
-    fs.writeFileSync(diffOutputPath, newBuffer);
-    return 1.0;
-  }
-
-  let diffPixels = 0;
-  const totalPixels = refBuffer.length;
-
-  for (let i = 0; i < totalPixels; i++) {
-    if (refBuffer[i] !== newBuffer[i]) {
-      diffPixels++;
-    }
-  }
-
-  const diffPercent = diffPixels / totalPixels;
-
-  if (diffPercent >= DIFF_THRESHOLD) {
-    fs.writeFileSync(diffOutputPath, newBuffer);
-  } else if (fs.existsSync(diffOutputPath)) {
-    fs.unlinkSync(diffOutputPath);
-  }
-
-  return diffPercent;
 }

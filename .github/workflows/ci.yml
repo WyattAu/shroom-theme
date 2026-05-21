@@ -70,11 +70,26 @@ jobs:
           done
           echo "All converted themes validated"
 
+      # Visual regression testing
+      - name: Download previous visual baseline
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: visual-references
+          path: tests/visual/baseline
+
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
       - name: Visual regression tests
         run: npm run test:visual
+
+      - name: Upload visual references (for next run)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-references
+          path: tests/visual/references/
 
       - name: Upload WCAG reports
         uses: actions/upload-artifact@v4
@@ -95,3 +110,51 @@ jobs:
         with:
           name: visual-regression-diffs
           path: tests/visual/diffs/
+
+  # Publish job - only on version tags, depends on test passing
+  publish:
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile
+        run: npm run compile
+
+      - name: Validate themes
+        run: npm run validate
+
+      - name: Convert themes
+        run: npm run convert
+
+      - name: Package extension
+        run: npx vsce package --no-dependencies
+
+      - name: Publish to VS Code Marketplace
+        run: npx vsce publish --no-dependencies
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+      - name: Create or update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            *.vsix
+            exports/tmTheme/*.tmTheme
+            exports/jetbrains/*.icls
+            exports/vim/*.vim
+            exports/windows-terminal/*.json
+          body_path: CHANGELOG.md
