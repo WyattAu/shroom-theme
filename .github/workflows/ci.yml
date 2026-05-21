@@ -69,6 +69,30 @@ jobs:
               exit 1
             fi
           done
+          for f in exports/iterm2/*.itermcolors; do
+            if [ ! -f "$f" ] || ! grep -q '<?xml' "$f"; then
+              echo "Invalid iTerm2 scheme: $f"
+              exit 1
+            fi
+          done
+          for f in exports/warp/*.yaml; do
+            if [ ! -f "$f" ] || ! grep -q 'background:' "$f"; then
+              echo "Invalid Warp scheme: $f"
+              exit 1
+            fi
+          done
+          for f in exports/alacritty/*.toml; do
+            if [ ! -f "$f" ] || ! grep -q '\[colors.primary\]' "$f"; then
+              echo "Invalid Alacritty scheme: $f"
+              exit 1
+            fi
+          done
+          for f in exports/kitty/*.conf; do
+            if [ ! -f "$f" ] || ! grep -q '^background ' "$f"; then
+              echo "Invalid Kitty scheme: $f"
+              exit 1
+            fi
+          done
           echo "All converted themes validated"
 
       - name: Generate SBOM

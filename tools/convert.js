@@ -11,6 +11,10 @@ const DIRS = {
   jetbrains: path.join(EXPORTS_DIR, "jetbrains"),
   vim: path.join(EXPORTS_DIR, "vim"),
   wt: path.join(EXPORTS_DIR, "windows-terminal"),
+  iterm2: path.join(EXPORTS_DIR, "iterm2"),
+  warp: path.join(EXPORTS_DIR, "warp"),
+  alacritty: path.join(EXPORTS_DIR, "alacritty"),
+  kitty: path.join(EXPORTS_DIR, "kitty"),
 };
 
 function escapeXml(str) {
@@ -24,6 +28,27 @@ function escapeXml(str) {
 
 function slugify(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+}
+
+function simpleYamlStringify(obj, indent = 0) {
+  const pad = "  ".repeat(indent);
+  const lines = [];
+  for (const [key, value] of Object.entries(obj)) {
+    if (Array.isArray(value)) {
+      lines.push(`${pad}${key}:`);
+      for (const item of value) {
+        lines.push(`${pad}  - '${item}'`);
+      }
+    } else if (typeof value === "string") {
+      lines.push(`${pad}${key}: '${value}'`);
+    } else if (typeof value === "number" || typeof value === "boolean") {
+      lines.push(`${pad}${key}: ${value}`);
+    } else if (typeof value === "object" && value !== null) {
+      lines.push(`${pad}${key}:`);
+      lines.push(simpleYamlStringify(value, indent + 1));
+    }
+  }
+  return lines.join("\n");
 }
 
 function getColor(colors, key, fallback) {
@@ -569,6 +594,167 @@ function convertToWindowsTerminal(theme) {
   return JSON.stringify({ schemes: [scheme] }, null, 2) + "\n";
 }
 
+function convertToITerm2(theme) {
+  const colors = theme.colors || {};
+  const ansi = getAnsiColors(colors);
+  const name = theme.name;
+
+  const plist = [
+    `<?xml version="1.0" encoding="UTF-8"?>`,
+    `<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">`,
+    `<plist version="1.0">`,
+    `<dict>`,
+    `  <key>Ansi 0 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBlack.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBlack.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBlack.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 1 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiRed.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiRed.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiRed.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 2 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiGreen.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiGreen.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiGreen.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 3 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiYellow.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiYellow.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiYellow.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 4 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBlue.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBlue.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBlue.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 5 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiMagenta.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiMagenta.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiMagenta.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 6 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiCyan.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiCyan.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiCyan.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 7 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiWhite.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiWhite.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiWhite.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 8 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBrightBlack.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBrightBlack.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBrightBlack.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 9 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBrightRed.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBrightRed.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBrightRed.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 10 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBrightGreen.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBrightGreen.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBrightGreen.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 11 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBrightYellow.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBrightYellow.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBrightYellow.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 12 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBrightBlue.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBrightBlue.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBrightBlue.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 13 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBrightMagenta.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBrightMagenta.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBrightMagenta.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 14 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBrightCyan.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBrightCyan.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBrightCyan.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Ansi 15 Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(ansi.ansiBrightWhite.slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(ansi.ansiBrightWhite.slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(ansi.ansiBrightWhite.slice(5,7),16)/255}</real></dict>`,
+    `  <key>Background Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(getColor(colors, "terminal.background", getColor(colors, "editor.background", "#000000")).slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(getColor(colors, "terminal.background", getColor(colors, "editor.background", "#000000")).slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(getColor(colors, "terminal.background", getColor(colors, "editor.background", "#000000")).slice(5,7),16)/255}</real></dict>`,
+    `  <key>Foreground Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(getColor(colors, "terminal.foreground", getColor(colors, "editor.foreground", "#cccccc")).slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(getColor(colors, "terminal.foreground", getColor(colors, "editor.foreground", "#cccccc")).slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(getColor(colors, "terminal.foreground", getColor(colors, "editor.foreground", "#cccccc")).slice(5,7),16)/255}</real></dict>`,
+    `  <key>Cursor Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(getColor(colors, "editorCursor.foreground", "#ffffff").slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(getColor(colors, "editorCursor.foreground", "#ffffff").slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(getColor(colors, "editorCursor.foreground", "#ffffff").slice(5,7),16)/255}</real></dict>`,
+    `  <key>Bold Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(getColor(colors, "editor.foreground", "#cccccc").slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(getColor(colors, "editor.foreground", "#cccccc").slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(getColor(colors, "editor.foreground", "#cccccc").slice(5,7),16)/255}</real></dict>`,
+    `  <key>Cursor Text Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(getColor(colors, "editor.background", "#000000").slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(getColor(colors, "editor.background", "#000000").slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(getColor(colors, "editor.background", "#000000").slice(5,7),16)/255}</real></dict>`,
+    `  <key>Selected Text Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(getColor(colors, "editor.foreground", "#cccccc").slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(getColor(colors, "editor.foreground", "#cccccc").slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(getColor(colors, "editor.foreground", "#cccccc").slice(5,7),16)/255}</real></dict>`,
+    `  <key>Selection Color</key>`,
+    `  <dict><key>Color Space</key><data>sRGB</data><key>Red Component</key><real>${parseInt(getColor(colors, "editor.selectionBackground", "#393552").slice(1,3),16)/255}</real><key>Green Component</key><real>${parseInt(getColor(colors, "editor.selectionBackground", "#393552").slice(3,5),16)/255}</real><key>Blue Component</key><real>${parseInt(getColor(colors, "editor.selectionBackground", "#393552").slice(5,7),16)/255}</real></dict>`,
+    `</dict>`,
+    `</plist>`,
+  ].join("\n");
+  return plist;
+}
+
+function convertToWarp(theme) {
+  const colors = theme.colors || {};
+  const ansi = getAnsiColors(colors);
+  const bg = getColor(colors, "terminal.background", getColor(colors, "editor.background", "#000000"));
+  const fg = getColor(colors, "terminal.foreground", getColor(colors, "editor.foreground", "#cccccc"));
+  const cursor = getColor(colors, "editorCursor.foreground", fg);
+  const selection = getColor(colors, "terminal.selectionBackground", getColor(colors, "editor.selectionBackground", "#393552"));
+
+  const warpTheme = {
+    background: bg,
+    foreground: fg,
+    cursor: cursor,
+    cursor_text_color: bg,
+    selection: selection,
+    ansi: [
+      ansi.ansiBlack, ansi.ansiRed, ansi.ansiGreen, ansi.ansiYellow,
+      ansi.ansiBlue, ansi.ansiMagenta, ansi.ansiCyan, ansi.ansiWhite,
+    ],
+    brights: [
+      ansi.ansiBrightBlack, ansi.ansiBrightRed, ansi.ansiBrightGreen, ansi.ansiBrightYellow,
+      ansi.ansiBrightBlue, ansi.ansiBrightMagenta, ansi.ansiBrightCyan, ansi.ansiBrightWhite,
+    ],
+  };
+
+  return simpleYamlStringify({ name: theme.name, ...warpTheme }) + "\n";
+}
+
+function convertToAlacritty(theme) {
+  const colors = theme.colors || {};
+  const ansi = getAnsiColors(colors);
+  const bg = getColor(colors, "terminal.background", getColor(colors, "editor.background", "#000000"));
+  const fg = getColor(colors, "terminal.foreground", getColor(colors, "editor.foreground", "#cccccc"));
+
+  const toml = `# ${theme.name} - Alacritty color scheme
+# Converted from ${theme.name} VS Code theme
+
+[colors.primary]
+background = "${bg}"
+foreground = "${fg}"
+
+[colors.normal]
+black = "${ansi.ansiBlack}"
+red = "${ansi.ansiRed}"
+green = "${ansi.ansiGreen}"
+yellow = "${ansi.ansiYellow}"
+blue = "${ansi.ansiBlue}"
+magenta = "${ansi.ansiMagenta}"
+cyan = "${ansi.ansiCyan}"
+white = "${ansi.ansiWhite}"
+
+[colors.bright]
+black = "${ansi.ansiBrightBlack}"
+red = "${ansi.ansiBrightRed}"
+green = "${ansi.ansiBrightGreen}"
+yellow = "${ansi.ansiBrightYellow}"
+blue = "${ansi.ansiBrightBlue}"
+magenta = "${ansi.ansiBrightMagenta}"
+cyan = "${ansi.ansiBrightCyan}"
+white = "${ansi.ansiBrightWhite}"
+`;
+  return toml;
+}
+
+function convertToKitty(theme) {
+  const colors = theme.colors || {};
+  const ansi = getAnsiColors(colors);
+  const bg = getColor(colors, "terminal.background", getColor(colors, "editor.background", "#000000"));
+  const fg = getColor(colors, "terminal.foreground", getColor(colors, "editor.foreground", "#cccccc"));
+  const cursor = getColor(colors, "editorCursor.foreground", fg);
+  const selection = getColor(colors, "editor.selectionBackground", getColor(colors, "editor.selectionBackground", "#393552"));
+  const slug = slugify(theme.name);
+
+  return `# ${theme.name} - Kitty color scheme
+# Converted from ${theme.name} VS Code theme
+
+color0 ${ansi.ansiBlack}
+color1 ${ansi.ansiRed}
+color2 ${ansi.ansiGreen}
+color3 ${ansi.ansiYellow}
+color4 ${ansi.ansiBlue}
+color5 ${ansi.ansiMagenta}
+color6 ${ansi.ansiCyan}
+color7 ${ansi.ansiWhite}
+color8 ${ansi.ansiBrightBlack}
+color9 ${ansi.ansiBrightRed}
+color10 ${ansi.ansiBrightGreen}
+color11 ${ansi.ansiBrightYellow}
+color12 ${ansi.ansiBrightBlue}
+color13 ${ansi.ansiBrightMagenta}
+color14 ${ansi.ansiBrightCyan}
+color15 ${ansi.ansiBrightWhite}
+background ${bg}
+foreground ${fg}
+cursor ${cursor}
+selection_background ${selection}
+selection_foreground ${fg}
+`;
+}
+
 async function main() {
   for (const dir of Object.values(DIRS)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -604,6 +790,22 @@ async function main() {
     const wt = convertToWindowsTerminal(theme);
     fs.writeFileSync(path.join(DIRS.wt, `${slug}.json`), wt);
     console.log(`  -> windows-terminal/${slug}.json`);
+
+    const iterm2 = convertToITerm2(theme);
+    fs.writeFileSync(path.join(DIRS.iterm2, `${slug}.itermcolors`), iterm2);
+    console.log(`  -> iterm2/${slug}.itermcolors`);
+
+    const warp = convertToWarp(theme);
+    fs.writeFileSync(path.join(DIRS.warp, `${slug}.yaml`), warp);
+    console.log(`  -> warp/${slug}.yaml`);
+
+    const alacritty = convertToAlacritty(theme);
+    fs.writeFileSync(path.join(DIRS.alacritty, `${slug}.toml`), alacritty);
+    console.log(`  -> alacritty/${slug}.toml`);
+
+    const kitty = convertToKitty(theme);
+    fs.writeFileSync(path.join(DIRS.kitty, `${slug}.conf`), kitty);
+    console.log(`  -> kitty/${slug}.conf`);
 
     console.log();
   }
