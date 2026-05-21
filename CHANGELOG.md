@@ -5,6 +5,57 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-05-21
+
+### Added
+
+- 509 new color tokens added to base dark theme (111 -> 620 total, 68% of VS Code API)
+- All 509 tokens propagated to all 6 variant themes with proper color derivation:
+  - Light theme: background inversion, accent color adaptation for light surfaces
+  - Deuteranopia: green -> amber substitution
+  - Protanopia: red -> coral, green -> amber substitution
+  - Tritanopia: blue/teal -> pink/cyan, green -> lime substitution
+  - Monochrome: all accents -> differentiated grayscale
+  - High contrast: maximum brightness on pure black
+- 70 new tokenColors entries per theme (11 -> 81 total) covering:
+  - Operators (arithmetic, bitwise, assignment, comparison, logical, type)
+  - Punctuation (separators, terminators, brackets, delimiters)
+  - Regular expressions
+  - Markdown/markup (headings, bold, italic, strikethrough, lists, links, code blocks, quotes)
+  - HTML/XML/JSX/TSX tags and attributes
+  - Decorators/annotations
+  - CSS/SCSS/Less property names, selectors, units, pseudo-classes
+  - JSON, YAML, TOML keys
+  - Shell operators and builtins
+  - SQL keywords
+  - GraphQL operations
+  - Rust lifetimes, types, operators
+  - Go types and packages
+  - Python operators, types, decorators
+  - Java/Kotlin types
+  - C/C++ types, structs, enums
+  - Environment variable definitions
+  - Diff markup (inserted, deleted)
+  - Invalid/deprecated tokens
+- 51 new semanticTokenColors rules per theme (6 -> 57 total) covering:
+  - Type system: enum, struct, typeParameter, interface, namespace, module
+  - Functions: function, decorator, defaultLibrary variants
+  - Variables: constant, readonly, static, global, defaultLibrary
+  - Keywords: controlKeyword, operator modifiers
+  - Markup: heading, bold, italic, strikethrough, link
+  - Operators: arithmetic, bitwise, comparison, logical, assignment
+  - Modifiers: readonly, global, defaultLibrary, declaration
+  - Framework-specific: Angular (component, directive, pipe, service), React (hook, component.tag)
+- Test: minimum 500 color token count assertion per theme
+- Test: cross-theme color token consistency check (all variants match base theme key set)
+
+### Changed
+
+- Light theme `activityBarBadge.foreground` changed from `#F5F2E8` to `#FFFFFF` for WCAG AA compliance (4.43:1 -> 4.97:1)
+- Version bumped to 0.3.0
+- ROADMAP.md updated: Phase 2 marked completed
+- 90 total tests (up from 76)
+
 ## [0.2.0] - 2026-05-21
 
 ### Added

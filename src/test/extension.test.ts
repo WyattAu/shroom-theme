@@ -130,6 +130,28 @@ suite('Theme Validation Tests', () => {
           'editorError.foreground must differ from editorWarning.foreground');
       });
 
+      test('has minimum 500 color tokens', () => {
+        const colors = theme.colors as Record<string, string>;
+        const count = Object.keys(colors).length;
+        assert.ok(
+          count >= 500,
+          `Expected >= 500 color tokens, got ${count}. Theme coverage is too low.`
+        );
+      });
+
+      test('has consistent color token set across themes', () => {
+        const baseThemePath = path.join(themesDir, 'shroom-space-theme.json');
+        const baseTheme = JSON.parse(fs.readFileSync(baseThemePath, 'utf8'));
+        const baseKeys = new Set(Object.keys(baseTheme.colors as Record<string, string>));
+        const variantKeys = new Set(Object.keys(theme.colors as Record<string, string>));
+        const missing = [...baseKeys].filter(k => !variantKeys.has(k));
+        assert.strictEqual(
+          missing.length,
+          0,
+          `Theme "${file}" is missing ${missing.length} tokens present in base theme: ${missing.slice(0, 10).join(', ')}${missing.length > 10 ? '...' : ''}`
+        );
+      });
+
     });
   }
 });
