@@ -268,7 +268,7 @@ function validateWCAGContrast(file, colors, themeType) {
 
 function main() {
   if (!fs.existsSync(themesDir)) {
-    console.error(`Themes directory '${themesDir}' does not exist`);
+    console.log(`Themes directory '${themesDir}' does not exist`);
     process.exit(1);
   }
 
@@ -311,7 +311,7 @@ function main() {
     for (const e of errors) {
       console.log(`  [FAIL] ${e.file}: ${e.message}`);
     }
-    console.error(`\nValidation failed: ${errors.length} error(s)`);
+    console.log(`\nValidation failed: ${errors.length} error(s)`);
     process.exit(1);
   }
 

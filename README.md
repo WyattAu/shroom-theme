@@ -41,7 +41,7 @@ shroom-theme/
   src/
     extension.ts      # Minimal activation stub (theme extensions need no logic)
     test/
-      extension.test.ts  # 76 tests: hex format, structural, accessibility, manifest
+      extension.test.ts  # 90 tests: hex format, structural, accessibility, manifest
   validate-themes.js  # CI-integrated validation (structure, hex, accessibility, manifest)
   showcase/           # Sample files for visual theme testing across 8 languages
 ```
@@ -58,7 +58,7 @@ shroom-theme/
 ### Test Pipeline
 
 ```
-npm test  =>  compile  ->  lint  ->  validate  ->  vscode-test (76 tests)
+npm test  =>  compile  ->  lint  ->  validate  ->  vscode-test (90 tests)
 ```
 
 ## Development

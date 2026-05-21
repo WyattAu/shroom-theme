@@ -2,14 +2,6 @@ title: Shroom Space Theme
 description: A dark VS Code color theme with accessibility-focused variants
 url: https://wyattau.github.io
 baseurl: /shroom-theme
-theme: minima
 markdown: kramdown
 kramdown:
   input: GFM
-plugins:
-  - jekyll-readme-index
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: "default"

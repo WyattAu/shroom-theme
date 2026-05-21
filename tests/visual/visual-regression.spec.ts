@@ -82,9 +82,6 @@ for (const file of themeFiles) {
       fs.unlinkSync(diffPath);
     }
 
-    // Always save current as new reference
-    fs.writeFileSync(refPath, screenshot);
-
     expect(
       diffPercent,
       `Visual regression for ${slug}: ${(diffPercent * 100).toFixed(3)}% pixels differ (${numDiffPixels}/${totalPixels}), threshold: ${DIFF_THRESHOLD * 100}%`
