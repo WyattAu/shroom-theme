@@ -70,6 +70,12 @@ jobs:
           done
           echo "All converted themes validated"
 
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Visual regression tests
+        run: npm run test:visual
+
       - name: Upload WCAG reports
         uses: actions/upload-artifact@v4
         if: always()
@@ -82,3 +88,10 @@ jobs:
         with:
           name: converted-themes
           path: exports/
+
+      - name: Upload visual regression diffs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-regression-diffs
+          path: tests/visual/diffs/

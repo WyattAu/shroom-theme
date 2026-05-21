@@ -5,6 +5,33 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-05-21
+
+### Added
+
+- Playwright visual regression testing framework with 7 tests (one per theme)
+- `tools/generate-theme-html.js`: generates styled HTML pages from theme colors for screenshot capture
+- `tests/visual/visual-regression.spec.ts`: pixel-diff comparison with 1% threshold
+- `tests/visual/playwright.config.ts`: Playwright configuration
+- 7 reference screenshots in `tests/visual/references/`
+- `npm run test:visual`: runs visual regression tests
+- `npm run test:visual:update`: regenerates reference screenshots from scratch
+- `npm run generate-visual-pages`: generates HTML test pages
+- CI: Playwright visual regression tests run on every push
+- CI: Visual regression diffs uploaded as artifacts on failure
+- Extension icon (`icon.png`) - mushroom and stars on dark cosmic background
+- 7 marketplace screenshots in `screenshots/` directory
+- Marketplace metadata: description, keywords (cvd, accessibility, wcag, color-blind), gallery banner, screenshots
+- Homepage URL updated to GitHub Pages site
+
+### Changed
+
+- Version bumped to 1.0.0
+- `package.json` description updated with full feature summary
+- Keywords expanded from 4 to 16 (added: dark, light, cvd, color-blind, deuteranopia, protanopia, tritanopia, high-contrast, monochrome, accessibility, wcag)
+- `.gitignore` updated to exclude generated visual test artifacts (pages/, diffs/, test-results/)
+- ROADMAP updated: Phases 4 and 5 marked completed
+
 ## [0.3.0] - 2026-05-21
 
 ### Added

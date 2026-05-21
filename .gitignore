@@ -8,3 +8,7 @@ _site
 vendor
 exports/
 reports/
+tests/visual/pages/
+tests/visual/diffs/
+tests/visual/test-results/
+playwright-report/

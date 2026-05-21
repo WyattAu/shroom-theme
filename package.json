@@ -1,8 +1,8 @@
 {
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
-  "description": "VS Code theme extension",
-  "version": "0.3.0",
+  "description": "A cosmic dark theme with 7 variants including light, CVD-friendly (deuteranopia, protanopia, tritanopia), monochrome, and high contrast. WCAG 2.1 AA compliant. 620+ color tokens, comprehensive syntax highlighting for 15+ languages, and multi-editor export support.",
+  "version": "1.0.0",
   "publisher": "wyattau",
   "author": "Wyatt Au <wyatt_au@protonmail.com>",
   "license": "Apache-2.0",
@@ -14,9 +14,20 @@
     "vscode",
     "theme",
     "shroom",
-    "space"
+    "space",
+    "dark",
+    "light",
+    "cvd",
+    "color-blind",
+    "deuteranopia",
+    "protanopia",
+    "tritanopia",
+    "high-contrast",
+    "monochrome",
+    "accessibility",
+    "wcag"
   ],
-  "homepage": "https://github.com/WyattAu/shroom-theme#readme",
+  "homepage": "https://wyattau.github.io/shroom-theme/",
   "bugs": {
     "url": "https://github.com/WyattAu/shroom-theme/issues"
   },
@@ -25,6 +36,16 @@
   },
   "categories": [
     "Themes"
+  ],
+  "galleryBanner": {
+    "color": "#24212E",
+    "theme": "dark"
+  },
+  "icon": "icon.png",
+  "screenshots": [
+    { "path": "screenshots/shroom-space-theme.png" },
+    { "path": "screenshots/shroom-space-light-theme.png" },
+    { "path": "screenshots/shroom-space-deuteranopia-theme.png" }
   ],
   "contributes": {
     "themes": [
@@ -71,11 +92,15 @@
     "watch": "tsc -watch -p ./",
     "validate": "node validate-themes.js",
     "convert": "node tools/convert.js",
+    "generate-visual-pages": "node tools/generate-theme-html.js",
+    "test:visual": "npm run generate-visual-pages && npx playwright test -c tests/visual/playwright.config.ts",
+    "test:visual:update": "rm -rf tests/visual/references && npm run test:visual",
     "pretest": "npm run compile && npm run lint && npm run validate",
     "lint": "eslint src",
     "test": "vscode-test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
