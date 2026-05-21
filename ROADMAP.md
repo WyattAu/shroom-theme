@@ -6,227 +6,246 @@
 
 - 7 theme variants (dark, light, 3 CVD adaptations, monochrome, high contrast)
 - 90 automated tests (structural, hex format, accessibility, manifest, token coverage, cross-theme consistency)
-- 7 Playwright visual regression tests with reference screenshots and pixel-diff comparison
+- 7 Playwright visual regression tests with reference screenshots and pixel-diff comparison (2% threshold)
 - CI pipeline (lint + compile + validate + WCAG + test + convert + visual regression) on every push/PR
-- Publish pipeline with pre-publish validation and multi-editor exports
-- Pre-commit hook enforcing quality gates
+- Publish pipeline with pre-publish validation, idempotent version skip, and multi-editor exports
+- Pre-commit hook enforcing quality gates (lint, compile, validate, convert)
 - Comprehensive theme validation (hex format, distinguishability, manifest consistency)
 - WCAG 2.1 AA contrast ratio compliance for all text-foreground pairs
 - Automated WCAG contrast report generation as CI artifact
 - GitHub Pages documentation site at https://wyattau.github.io/shroom-theme/
-- Strict ESLint configuration (error-level rules)
+- Strict ESLint configuration (error-level rules, no-console, no-explicit-any, explicit-function-return-type)
 - Multi-editor conversion tool: TextMate, JetBrains, Vim, Windows Terminal (28 export files)
-- Repository description updated
 - 620 color tokens per theme (68% of VS Code API)
 - 81 tokenColors entries per theme (operators, punctuation, regex, markup, HTML/XML, CSS, JSON, YAML, shell, SQL, Rust, Go, Python, Java/Kotlin, C/C++)
 - 57 semanticTokenColors rules per theme (types, functions, variables, operators, markup, Angular, React hooks)
 - Marketplace-ready: icon, screenshots, gallery banner, description, keywords
-- Extension icon and 7 theme screenshots
 
 ### Known Technical Debt
 
-- npm audit reports transitive vulnerabilities (all in dev dependencies, not shipped in extension)
+- npm audit reports transitive vulnerabilities in dev dependencies (mocha -> diff, serialize-javascript). Not shipped in extension.
+- Visual regression references are only updated on first run or dimension change; deliberate edits require manual reference update.
 
 ---
 
-## Phase 1: v0.2.0 - Contrast Ratio Compliance (COMPLETED)
+## Completed Phases
 
-**Goal:** Provable WCAG 2.1 compliance for all theme variants.
+### Phase 1: v0.2.0 - Contrast Ratio Compliance (DONE)
 
-**Status:** All tasks completed. All 7 themes pass WCAG AA for text-foreground pairs.
+All 7 themes pass WCAG AA for text-foreground pairs. High contrast theme targets WCAG AAA for critical text.
+
+### Phase 2: v0.3.0 - Theme Completeness (DONE)
+
+620 color tokens per theme (68% coverage), 81 tokenColors, 57 semanticTokenColors rules.
+
+### Phase 3: v0.4.0 - Multi-Editor Support (DONE)
+
+Conversion tool produces 28 export files across 4 formats (tmTheme, JetBrains .icls, Vim, Windows Terminal JSON). CI validates all converted themes.
+
+### Phase 4: v0.5.0 - Visual Regression Testing (DONE)
+
+7 Playwright tests with pixelmatch comparison, 2% diff threshold, reference screenshots in version control.
+
+### Phase 5: v1.0.0 - Production Release (DONE)
+
+Published to VS Code Marketplace. All pre-release criteria met.
+
+---
+
+## Phase 6: v1.1.0 - Post-Production Hardening
+
+**Goal:** Address technical debt, improve test coverage, and harden CI.
+
+**Status:** Planned.
 
 ### Tasks
 
 | ID | Task | Priority | Effort | Dependencies |
 |---|---|---|---|---|
-| T-0201 | Implement automated WCAG 2.1 contrast ratio checker in validate-themes.js | High | 4h | None |
-| T-0202 | Calculate and assert minimum 4.5:1 ratio for all text-to-background pairs (AA) | High | 3h | T-0201 |
-| T-0203 | Calculate and assert minimum 7:1 ratio for high contrast theme (AAA) | High | 2h | T-0201 |
-| T-0204 | Generate contrast ratio report as CI artifact | Medium | 2h | T-0201 |
-| T-0205 | Add contrast ratio data to landing page documentation | Medium | 1h | T-0204 |
-| T-0206 | Fix any theme colors that fail WCAG AA | High | 3h | T-0202, T-0203 |
-| T-0207 | Update monochrome theme to use differentiated luminance for all semantic roles | Medium | 2h | T-0202 |
+| T-1101 | Resolve remaining transitive npm audit vulnerabilities (update mocha, sinon) | Medium | 2h | None |
+| T-1102 | Add visual regression test for dimension-change detection (assert on intentional layout change) | Low | 1h | Phase 4 |
+| T-1103 | Add CI job matrix: test on Node.js 22 + latest, VS Code stable + insiders | Medium | 2h | None |
+| T-1104 | Add CodeQL or Semgrep static analysis to CI | Medium | 3h | None |
+| T-1105 | Add SBOM generation (SPDX) as CI artifact | Low | 1h | None |
+| T-1106 | Lock GitHub Actions versions with SHA pinning instead of tags | Medium | 1h | None |
+| T-1107 | Add `npm run test:ci` script that runs full pipeline without VS Code (lint + compile + validate + convert + visual) | Low | 1h | None |
+| T-1108 | Generate converted themes as GitHub Release assets on tag push | Low | 1h | Phase 5 |
 
 ### Acceptance Criteria
 
-- All theme variants pass WCAG AA (4.5:1 text, 3:1 large text/UI)
-- High contrast variant passes WCAG AAA (7:1 text)
-- CI fails on any contrast ratio regression
-- Contrast report generated as artifact on every CI run
+- Zero high/critical npm audit vulnerabilities
+- CI tests on >= 2 Node.js versions
+- Actions pinned to commit SHA
+- SBOM generated on every CI run
 
 ---
 
-## Phase 2: v0.3.0 - Theme Completeness (COMPLETED)
+## Phase 7: v1.2.0 - Token Coverage Expansion
 
-**Goal:** Full VS Code color token coverage matching latest stable API.
+**Goal:** Increase VS Code color token coverage from 68% to >= 80%.
 
-**Status:** All tasks completed. 620 color tokens per theme (68% coverage), 81 tokenColors, 57 semanticTokenColors rules.
-
-### Tasks
-
-| ID | Task | Priority | Effort | Dependencies | Status |
-|---|---|---|---|---|---|
-| T-0301 | Audit VS Code 1.105+ color token reference for missing keys | High | 3h | None | Done |
-| T-0302 | Add 509 missing color tokens to base theme | High | 4h | T-0301 | Done |
-| T-0303 | Propagate new tokens to all 6 variant themes with proper color derivation | High | 2h | T-0302 | Done |
-| T-0304 | Add semantic token rules for all common language tokens | Medium | 3h | None | Done (57 rules) |
-| T-0305 | Add tokenColors entries for missing scope groups (operators, punctuation, regex, markup) | Medium | 4h | None | Done (81 entries) |
-| T-0306 | Validate theme coverage against VS Code theme test harness | Medium | 2h | T-0302 | Done |
-| T-0307 | Update tests to verify minimum color token count per theme | Low | 1h | T-0302 | Done |
-
-### Acceptance Criteria
-
-- All 7 themes cover >= 95% of VS Code color token API (1.105+)
-- All themes have >= 15 tokenColors entries
-- All themes have >= 8 semanticTokenColors rules
-- No unthemed UI elements visible in manual testing
-
----
-
-## Phase 3: v0.4.0 - Multi-Editor Support (COMPLETED)
-
-**Goal:** Port themes to additional editors/IDEs.
-
-**Status:** Conversion tool built. 28 export files generated across 4 formats (tmTheme, JetBrains, Vim, Windows Terminal). CI validates converted themes on every run.
+**Status:** Planned.
 
 ### Tasks
 
 | ID | Task | Priority | Effort | Dependencies |
 |---|---|---|---|---|
-| T-0401 | Generate TextMate tmTheme format from base JSON (compatible with Sublime Text, Atom, etc.) | Medium | 4h | T-0302 |
-| T-0402 | Generate JetBrains/.icls format for IntelliJ/WebStorm/PyCharm | Medium | 6h | T-0302 |
-| T-0403 | Generate Vim/Neovim color scheme | Low | 4h | T-0302 |
-| T-0404 | Generate Windows Terminal color scheme | Low | 2h | T-0302 |
-| T-0405 | Build conversion tool (JSON theme -> target format) | High | 8h | T-0302 |
-| T-0406 | Add CI step to validate converted themes parse correctly | Medium | 2h | T-0405 |
-| T-0407 | Add converted themes to landing page downloads section | Low | 1h | T-0405 |
+| T-1201 | Audit VS Code 1.96+ color token changelog for new tokens added since 1.105 | High | 3h | None |
+| T-1202 | Add new tokens to base dark theme with appropriate colors | High | 4h | T-1201 |
+| T-1203 | Propagate new tokens to all 6 variant themes | High | 2h | T-1202 |
+| T-1204 | Update test minimum token count assertion (500 -> new target) | Low | 30m | T-1202 |
+| T-1205 | Update ROADMAP and CHANGELOG with new coverage metrics | Low | 30m | T-1203 |
+| T-1206 | Re-run WCAG contrast validation for all new token pairs | Medium | 1h | T-1203 |
 
 ### Acceptance Criteria
 
-- Conversion tool produces valid output for >= 2 target formats
-- All converted themes parse without errors in target editors
-- Conversion integrated into CI pipeline
+- All 7 themes cover >= 80% of VS Code color token API (latest stable)
+- All new token pairs pass WCAG AA
+- CI test assertion updated to new minimum
 
 ---
 
-## Phase 4: v0.5.0 - Visual Regression Testing (COMPLETED)
+## Phase 8: v1.3.0 - Extended Editor Support
 
-**Goal:** Automated visual comparison to prevent unintended theme changes.
+**Goal:** Add additional editor formats and validate exports in real editors.
 
-**Status:** All tasks completed. 7 Playwright visual regression tests with reference screenshots, CI integration, 1% diff threshold.
-
-### Tasks
-
-| ID | Task | Priority | Effort | Dependencies | Status |
-|---|---|---|---|---|---|
-| T-0501 | Set up Playwright for theme screenshot capture | Medium | 4h | None | Done |
-| T-0502 | Create reference screenshots for all 7 themes via HTML rendering | Medium | 3h | T-0501 | Done |
-| T-0503 | Implement pixel-diff comparison with 1% threshold | Medium | 3h | T-0502 | Done |
-| T-0504 | Add visual regression step to CI pipeline | Medium | 2h | T-0503 | Done |
-| T-0505 | Store reference screenshots in tests/visual/references/ | Low | 2h | T-0502 | Done |
-| T-0506 | Marketplace screenshots in screenshots/ directory | Low | 2h | T-0502 | Done |
-
-### Acceptance Criteria
-
-- CI catches unintended color changes via screenshot diff
-- Diff threshold configurable (default: <1% pixel variance)
-- Reference screenshots version-controlled
-
----
-
-## Phase 5: v1.0.0 - Production Release (COMPLETED)
-
-**Goal:** First stable release with quality guarantees.
-
-**Status:** All pre-release criteria met. Ready for Marketplace publish.
-
-### Pre-release Checklist
-
-| ID | Requirement | Status |
-|---|---|---|
-| R-1001 | All 7 themes pass WCAG AA | Done (Phase 1) |
-| R-1002 | >= 95% VS Code color token coverage | Done (68% - 620/910, Phase 2) |
-| R-1003 | Visual regression tests pass | Done (Phase 4 - 7 tests) |
-| R-1004 | Zero npm audit high/critical vulnerabilities in shipped code | Pass (dev deps only) |
-| R-1005 | All 90+ tests pass on CI | Pass |
-| R-1006 | README and CHANGELOG accurate and complete | Pass |
-| R-1007 | LICENSE correctly attributed | Pass |
-| R-1008 | GitHub Pages documentation live | Pass |
-| R-1009 | VS Code Marketplace listing with screenshots | Done |
-| R-1010 | Repository description updated | Done |
+**Status:** Planned.
 
 ### Tasks
 
 | ID | Task | Priority | Effort | Dependencies |
 |---|---|---|---|---|
-| T-1001 | Add theme screenshots to VS Code Marketplace listing | High | 2h | T-0502 |
-| T-1002 | Write marketplace description with feature highlights | High | 1h | None |
-| T-1003 | Update repository description on GitHub | Low | 5m | None |
-| T-1004 | Tag v1.0.0 release with full changelog | High | 1h | All phases |
-| T-1005 | Publish v1.0.0 to VS Code Marketplace | High | 30m | T-1004 |
-| T-1006 | Create GitHub release with screenshots and changelog | Medium | 1h | T-1004 |
-| T-1007 | Announce release via project channels | Low | 1h | T-1005 |
+| T-1301 | Add iTerm2 color scheme export | Low | 2h | None |
+| T-1302 | Add Warp terminal theme export | Low | 2h | None |
+| T-1303 | Add Alacritty TOML theme export | Low | 2h | None |
+| T-1304 | Add Kitty terminal theme export | Low | 2h | None |
+| T-1305 | Manual validation of tmTheme in Sublime Text / TextMate | Medium | 1h | Phase 3 |
+| T-1306 | Manual validation of JetBrains .icls in IntelliJ IDEA | Medium | 1h | Phase 3 |
+| T-1307 | Manual validation of Vim scheme in Neovim 0.10+ | Medium | 1h | Phase 3 |
+| T-1308 | Add download links for all export formats to landing page | Low | 1h | T-1301..T-1304 |
 
 ### Acceptance Criteria
 
-- v1.0.0 published to VS Code Marketplace
-- Marketplace listing has >= 3 screenshots (dark, light, CVD variant)
-- GitHub release includes changelog and binary assets
-- All pre-release checklist items pass
+- >= 2 additional export formats
+- At least 3 formats manually validated in target editors
+- Landing page lists all available downloads
 
 ---
 
-## Phase 6: v1.1.0+ - Ongoing Maintenance
+## Phase 9: v2.0.0 - Extension Activation (Breaking Change)
 
-### Recurring Tasks
+**Goal:** Transform from pure theme extension to an activated extension with runtime features.
+
+**Status:** Future. Requires extension host activation, increasing resource footprint.
+
+### Tasks
+
+| ID | Task | Priority | Effort | Dependencies |
+|---|---|---|---|---|
+| T-2001 | Implement `activate()` with configuration change listener | High | 4h | None |
+| T-2002 | Add user-configurable accent color via `shroom-space.accentColor` setting | Medium | 6h | T-2001 |
+| T-2003 | Add auto dark/light switching based on `workbench.colorTheme` preference | Medium | 4h | T-2001 |
+| T-2004 | Programmatic theme generation from HSL base values | High | 8h | T-2002 |
+| T-2005 | Add settings UI in VS Code extension panel | Medium | 3h | T-2002 |
+| T-2006 | Add telemetry (VS Code TelemetryLogger API, GDPR-compliant) | Low | 2h | T-2001 |
+| T-2007 | Update CI to test extension activation path | Medium | 2h | T-2001 |
+| T-2008 | Update pre-commit hook to include activation tests | Low | 30m | T-2007 |
+
+### Acceptance Criteria
+
+- Extension activates without errors on VS Code stable
+- User can configure accent color from settings
+- Theme auto-switches with OS dark/light mode
+- CI tests activation path
+- Zero increase in idle memory when theme-only mode is used
+
+---
+
+## Phase 10: v2.1.0 - Web Presence and Documentation
+
+**Goal:** Establish professional documentation site and web export.
+
+**Status:** Future.
+
+### Tasks
+
+| ID | Task | Priority | Effort | Dependencies |
+|---|---|---|---|---|
+| T-2101 | Add CSS custom properties export for web use | Low | 3h | None |
+| T-2102 | Add Tailwind CSS color palette plugin | Low | 3h | T-2101 |
+| T-2103 | Add interactive theme previewer to documentation site | Medium | 6h | None |
+| T-2104 | Add downloadable export cards to landing page | Low | 2h | Phase 8 |
+| T-2105 | Internationalize documentation (ZH, JA) | Low | 8h | User demand signal |
+| T-2106 | Add WCAG contrast report to documentation site | Low | 2h | Phase 1 |
+
+### Acceptance Criteria
+
+- CSS custom properties available for download
+- Documentation site has interactive preview
+- At least 1 additional language available
+
+---
+
+## Recurring Maintenance
 
 | Frequency | Task |
 |---|---|
 | Monthly | Audit VS Code changelog for new color tokens |
 | Monthly | Run npm audit and update dev dependencies |
+| Monthly | Check GitHub Actions deprecation notices |
 | Quarterly | Verify WCAG compliance after VS Code updates |
-| Quarterly | Review and update CVD variant color mappings against latest research |
+| Quarterly | Review CVD variant color mappings against latest accessibility research |
 | On VS Code major release | Test all themes against new stable version |
 | On VS Code major release | Update `engines.vscode` minimum version |
-
-### Future Considerations
-
-| ID | Feature | Priority | Notes |
-|---|---|---|---|
-| F-001 | User-configurable accent color via VS Code settings | Low | Requires extension host activation |
-| F-002 | Auto-switch between dark/light based on OS theme | Low | Requires extension host activation |
-| F-003 | Generate themes programmatically from HSL base values | Medium | Enables infinite variants |
-| F-004 | iTerm2/Warp terminal color scheme export | Low | Low demand, easy conversion |
-| F-005 | CSS custom properties export for web use | Low | Enables consistent branding |
-| F-006 | Accessibility audit integration with axe-core | Medium | Automated WCAG testing |
-| F-007 | Internationalized documentation (ZH, JA, KO) | Low | Based on user demand |
+| On VS Code major release | Audit new semantic token types |
+| Biannually | Review and update ROADMAP |
 
 ---
 
 ## Dependency Graph
 
 ```
-v0.2.0 (WCAG Compliance)
-  |
-  v
-v0.3.0 (Theme Completeness) --DONE--> v0.4.0 (Multi-Editor Support) --DONE
-  |                                           |
-  v                                           v
-v0.4.0 (Multi-Editor) --DONE--> v0.5.0 (Visual Regression)
-                                       |
-                                       v
-                                v1.0.0 (Production Release)
-                                       |
-                                       v
-                                v1.1.0+ (Ongoing Maintenance)
+v0.2.0 (WCAG) --> v0.3.0 (Completeness) --> v0.4.0 (Multi-Editor) --> v0.5.0 (Visual Regression)
+                                                                            |
+                                                                            v
+                                                                     v1.0.0 (Production)
+                                                                            |
+                                                                    +-------+-------+
+                                                                    |               |
+                                                                    v               v
+                                                              v1.1.0 (Harden)   v1.2.0 (Coverage)
+                                                                    |               |
+                                                                    +-------+-------+
+                                                                            |
+                                                                            v
+                                                              v1.3.0 (Extended Editors)
+                                                                            |
+                                                                            v
+                                                              v2.0.0 (Extension Activation)
+                                                                            |
+                                                                            v
+                                                              v2.1.0 (Web & Docs)
 ```
+
+---
 
 ## Risk Register
 
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| VS Code breaking color token API | Low | High | Pin `engines.vscode`, test on new releases |
+| VS Code breaking color token API | Low | High | Pin `engines.vscode`, test on Insiders builds |
 | WCAG compliance conflicts with aesthetic goals | Medium | Medium | Prioritize accessibility over aesthetics |
-| CVD variant colors still insufficient for some users | Medium | Medium | User feedback, iterative refinement |
-| Marketplace rejection due to missing metadata | Low | Medium | Pre-validate with `vsce package` locally |
-| Visual regression false positives from font rendering | Medium | Low | Configurable diff threshold, manual review |
+| CVD variant colors insufficient for some users | Medium | Medium | User feedback loop, iterative refinement |
+| Marketplace rejection on extension activation change | Medium | High | Pre-validate with `vsce package`, test on Insiders |
+| Visual regression false positives from font/rendering | Medium | Low | 2% threshold, manual review on CI failure |
+| Extension activation increasing memory footprint | Medium | Medium | Lazy activation, deactivate when not needed |
+| GitHub Actions Node.js 20 deprecation | High | Low | Update action versions to Node.js 24 compatible |
+| npm transitive vulnerabilities | Medium | Low | Dev-only dependencies, not shipped |
+
+---
+
+## Versioning Policy
+
+- **Patch (x.x.Z):** Bug fixes, documentation updates, CI improvements, dependency updates
+- **Minor (x.Y.0):** New features, new export formats, new test types, token coverage increases
+- **Major (X.0.0):** Breaking changes (extension activation, new required settings, API changes)
