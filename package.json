@@ -2,7 +2,7 @@
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
   "description": "VS Code theme extension",
-  "version": "0.0.5",
+  "version": "0.2.0",
   "publisher": "wyattau",
   "author": "Wyatt Au <wyatt_au@protonmail.com>",
   "license": "Apache-2.0",
@@ -70,6 +70,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "validate": "node validate-themes.js",
+    "convert": "node tools/convert.js",
     "pretest": "npm run compile && npm run lint && npm run validate",
     "lint": "eslint src",
     "test": "vscode-test"

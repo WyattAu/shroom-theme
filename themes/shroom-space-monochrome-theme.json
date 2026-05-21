@@ -6,7 +6,7 @@
     "activityBar.background": "#0A0A0A",
     "activityBar.border": "#0A0A0A",
     "activityBar.foreground": "#FFFFFF",
-    "activityBar.inactiveForeground": "#777777",
+    "activityBar.inactiveForeground": "#7a7a7a",
     "badge.background": "#FFFFFF",
     "badge.foreground": "#000000",
     "button.background": "#444444",
@@ -59,7 +59,7 @@
     "input.background": "#444444",
     "input.border": "#777777",
     "input.foreground": "#FFFFFF",
-    "input.placeholderForeground": "#777777",
+    "input.placeholderForeground": "#b1b1b1",
     "inputOption.activeBorder": "#FFFFFF",
     "list.activeSelectionBackground": "#444444",
     "list.activeSelectionForeground": "#FFFFFF",
@@ -92,9 +92,9 @@
     "tab.activeForeground": "#FFFFFF",
     "tab.border": "#0A0A0A",
     "tab.inactiveBackground": "#0A0A0A",
-    "tab.inactiveForeground": "#777777",
+    "tab.inactiveForeground": "#7a7a7a",
     "terminal.ansiBlue": "#DDDDDD",
-    "terminal.ansiBrightBlack": "#777777",
+    "terminal.ansiBrightBlack": "#858585",
     "terminal.ansiCyan": "#BBBBBB",
     "terminal.ansiGreen": "#EEEEEE",
     "terminal.ansiMagenta": "#999999",
@@ -111,21 +111,116 @@
     "titleBar.activeForeground": "#FFFFFF",
     "titleBar.border": "#0A0A0A",
     "titleBar.inactiveBackground": "#0A0A0A",
-    "titleBar.inactiveForeground": "#777777",
+    "titleBar.inactiveForeground": "#7a7a7a",
     "widget.shadow": "#00000030"
   },
   "tokenColors": [
-    { "scope": ["comment", "punctuation.definition.comment"], "settings": { "foreground": "#777777", "fontStyle": "italic" } },
-    { "scope": ["string", "punctuation.definition.string"], "settings": { "foreground": "#BBBBBB" } },
-    { "scope": ["keyword", "storage.type"], "settings": { "foreground": "#FFFFFF", "fontStyle": "bold" } },
-    { "scope": "storage.modifier", "settings": { "foreground": "#FFFFFF", "fontStyle": "italic bold" } },
-    { "scope": ["entity.name.function", "support.function"], "settings": { "foreground": "#FFFFFF" } },
-    { "scope": ["entity.name.type", "entity.name.class", "support.type"], "settings": { "foreground": "#EEEEEE", "fontStyle": "italic" } },
-    { "scope": ["constant.language", "constant.numeric"], "settings": { "foreground": "#CCCCCC" } },
-    { "scope": ["variable", "variable.parameter"], "settings": { "foreground": "#DDDDDD" } },
-    { "scope": ["variable.other.property", "support.type.property-name"], "settings": { "foreground": "#CCCCCC" } },
-    { "name": "Preprocessor, Annotations, Decorators, Attributes", "scope": ["keyword.control.directive", "meta.preprocessor", "entity.name.constant.preprocessor", "meta.decorator", "entity.name.decorator", "storage.type.annotation", "punctuation.definition.decorator"], "settings": { "foreground": "#EEEEEE", "fontStyle": "italic" } },
-    { "scope": "invalid", "settings": { "foreground": "#FFFFFF", "background": "#550000" } }
+    {
+      "scope": [
+        "comment",
+        "punctuation.definition.comment"
+      ],
+      "settings": {
+        "foreground": "#777777",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "scope": [
+        "string",
+        "punctuation.definition.string"
+      ],
+      "settings": {
+        "foreground": "#BBBBBB"
+      }
+    },
+    {
+      "scope": [
+        "keyword",
+        "storage.type"
+      ],
+      "settings": {
+        "foreground": "#FFFFFF",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "scope": "storage.modifier",
+      "settings": {
+        "foreground": "#FFFFFF",
+        "fontStyle": "italic bold"
+      }
+    },
+    {
+      "scope": [
+        "entity.name.function",
+        "support.function"
+      ],
+      "settings": {
+        "foreground": "#FFFFFF"
+      }
+    },
+    {
+      "scope": [
+        "entity.name.type",
+        "entity.name.class",
+        "support.type"
+      ],
+      "settings": {
+        "foreground": "#EEEEEE",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "scope": [
+        "constant.language",
+        "constant.numeric"
+      ],
+      "settings": {
+        "foreground": "#CCCCCC"
+      }
+    },
+    {
+      "scope": [
+        "variable",
+        "variable.parameter"
+      ],
+      "settings": {
+        "foreground": "#DDDDDD"
+      }
+    },
+    {
+      "scope": [
+        "variable.other.property",
+        "support.type.property-name"
+      ],
+      "settings": {
+        "foreground": "#CCCCCC"
+      }
+    },
+    {
+      "name": "Preprocessor, Annotations, Decorators, Attributes",
+      "scope": [
+        "keyword.control.directive",
+        "meta.preprocessor",
+        "entity.name.constant.preprocessor",
+        "meta.decorator",
+        "entity.name.decorator",
+        "storage.type.annotation",
+        "punctuation.definition.decorator"
+      ],
+      "settings": {
+        "foreground": "#EEEEEE",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "scope": "invalid",
+      "settings": {
+        "foreground": "#FFFFFF",
+        "background": "#550000"
+      }
+    }
   ],
   "semanticTokenColors": {
     "enabled": true,

@@ -5,6 +5,48 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-05-21
+
+### Added
+
+- WCAG 2.1 contrast ratio validation integrated into `validate-themes.js`
+- `wcag-contrast.js` module: relative luminance, contrast ratio, AA/AAA checks, theme pair auditing
+- Automated WCAG contrast report generation (`.reports/wcag-*.md`) on every validation run
+- `tools/convert.js`: multi-editor theme conversion tool generating 4 formats per theme:
+  - TextMate `.tmTheme` (Sublime Text, Atom, TextMate)
+  - JetBrains `.icls` (IntelliJ, WebStorm, PyCharm, GoLand)
+  - Vim/Neovim `.vim` color scheme
+  - Windows Terminal JSON fragment
+- 28 total export files across 4 formats for all 7 themes
+- `npm run convert` script for on-demand theme conversion
+- CI: WCAG reports uploaded as artifacts on every run
+- CI: Converted themes validated for parse correctness (XML, Vim syntax, JSON)
+- CI: Converted themes uploaded as artifacts
+- CI: GitHub Release includes multi-editor exports alongside `.vsix`
+- Repository description updated from outdated "Monaspace font based Theme"
+
+### Changed
+
+- All 7 theme text-foreground colors now pass WCAG AA (4.5:1 minimum contrast ratio)
+- Version bumped from 0.1.0 to 0.2.0
+
+### Fixed
+
+- Dark theme variants (base, deuteranopia, protanopia, tritanopia): `input.placeholderForeground` lightened from `#726D89` to `#a29fb1` (2.36:1 -> 4.50:1)
+- Dark theme variants: `activityBar.inactiveForeground`, `tab.inactiveForeground`, `titleBar.inactiveForeground` lightened from `#726D89` to `#87839b` (3.40:1 -> 4.59:1)
+- Dark theme variants: `terminal.ansiBrightBlack` lightened from `#726D89` to `#8b879e` (3.20:1 -> 4.55:1)
+- Light theme: `editorError.foreground` adjusted from `#B45353` to `#b05151` (4.36:1 -> 4.53:1)
+- Light theme: `editorWarning.foreground` adjusted from `#8C6D34` to `#886a32` (4.31:1 -> 4.51:1)
+- Light theme: `input.placeholderForeground` darkened from `#948E9E` to `#6b6672` (2.59:1 -> 4.54:1)
+- Light theme: `list.highlightForeground` darkened from `#8B5F9E` to `#724e82` (3.35:1 -> 4.53:1)
+- Light theme: `activityBar.inactiveForeground`, `tab.inactiveForeground`, `titleBar.inactiveForeground` darkened from `#948E9E` to `#635f6a` (2.34:1 -> 4.60:1)
+- Light theme: `terminal.ansiBrightBlack` darkened from `#948E9E` to `#706c78` (2.83:1 -> 4.57:1)
+- Light theme: `badge.foreground` adjusted from `#F5F2E8` to `#f7f4ea` (4.43:1 -> 4.51:1)
+- Monochrome: `input.placeholderForeground` lightened from `#777777` to `#b1b1b1` (2.17:1 -> 4.54:1)
+- Monochrome: `activityBar.inactiveForeground`, `tab.inactiveForeground`, `titleBar.inactiveForeground` lightened from `#777777` to `#7a7a7a` (4.42:1 -> 4.61:1)
+- Monochrome: `terminal.ansiBrightBlack` lightened from `#777777` to `#858585` (3.81:1 -> 4.62:1)
+- High Contrast: `list.highlightForeground` lightened from `#AD58FF` to `#bf7dff` (3.38:1 -> 4.57:1)
+
 ## [0.1.0] - 2026-05-20
 
 ### Added

@@ -1,30 +1,35 @@
 # Shroom Space Theme - Production Roadmap
 
-## Current Status (v0.1.0)
+## Current Status (v0.2.0)
 
 ### Completed Infrastructure
 
 - 7 theme variants (dark, light, 3 CVD adaptations, monochrome, high contrast)
 - 76 automated tests (structural, hex format, accessibility, manifest)
-- CI pipeline (lint + compile + validate + test) on every push/PR
-- Publish pipeline with pre-publish validation
+- CI pipeline (lint + compile + validate + WCAG + test + convert) on every push/PR
+- Publish pipeline with pre-publish validation and multi-editor exports
 - Pre-commit hook enforcing quality gates
 - Comprehensive theme validation (hex format, distinguishability, manifest consistency)
+- WCAG 2.1 AA contrast ratio compliance for all text-foreground pairs
+- Automated WCAG contrast report generation as CI artifact
 - GitHub Pages documentation site at https://wyattau.github.io/shroom-theme/
 - Strict ESLint configuration (error-level rules)
+- Multi-editor conversion tool: TextMate, JetBrains, Vim, Windows Terminal (28 export files)
+- Repository description updated
 
 ### Known Technical Debt
 
 - npm audit reports 19 transitive vulnerabilities (all in dev dependencies, not shipped in extension)
 - showcase/ directory is not programmatically verified (visual-only testing)
-- No automated WCAG contrast ratio calculation in validation
-- GitHub repository description is outdated ("Monaspace font based Theme")
+- Theme color token coverage is ~12% of full VS Code API (111/910 tokens)
 
 ---
 
-## Phase 1: v0.2.0 - Contrast Ratio Compliance
+## Phase 1: v0.2.0 - Contrast Ratio Compliance (COMPLETED)
 
 **Goal:** Provable WCAG 2.1 compliance for all theme variants.
+
+**Status:** All tasks completed. All 7 themes pass WCAG AA for text-foreground pairs.
 
 ### Tasks
 
@@ -72,9 +77,11 @@
 
 ---
 
-## Phase 3: v0.4.0 - Multi-Editor Support
+## Phase 3: v0.4.0 - Multi-Editor Support (COMPLETED)
 
 **Goal:** Port themes to additional editors/IDEs.
+
+**Status:** Conversion tool built. 28 export files generated across 4 formats (tmTheme, JetBrains, Vim, Windows Terminal). CI validates converted themes on every run.
 
 ### Tasks
 
@@ -127,7 +134,7 @@
 
 | ID | Requirement | Status |
 |---|---|---|
-| R-1001 | All 7 themes pass WCAG AA | Pending (Phase 1) |
+| R-1001 | All 7 themes pass WCAG AA | Done (Phase 1) |
 | R-1002 | >= 95% VS Code color token coverage | Pending (Phase 2) |
 | R-1003 | Visual regression tests pass | Pending (Phase 4) |
 | R-1004 | Zero npm audit high/critical vulnerabilities in shipped code | Pass (dev deps only) |
@@ -136,7 +143,7 @@
 | R-1007 | LICENSE correctly attributed | Pass |
 | R-1008 | GitHub Pages documentation live | Pass |
 | R-1009 | VS Code Marketplace listing with screenshots | Pending |
-| R-1010 | Repository description updated | Pending |
+| R-1010 | Repository description updated | Done |
 
 ### Tasks
 

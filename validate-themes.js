@@ -10,6 +10,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const wcag = require('./wcag-contrast.js');
 
 const themesDir = path.join(__dirname, 'themes');
 
@@ -183,6 +184,88 @@ function validatePackageContribution() {
   }
 }
 
+/**
+ * Text-foreground color keys that MUST meet WCAG AA (4.5:1) against their background.
+ * Selection backgrounds, hover states, and line highlights are excluded because
+ * they are decorative/non-text and WCAG does not require 4.5:1 for them.
+ */
+const TEXT_FG_KEYS = [
+  'editor.foreground',
+  'editorError.foreground',
+  'editorWarning.foreground',
+  'editorInfo.foreground',
+  'input.foreground',
+  'input.placeholderForeground',
+  'button.foreground',
+  'dropdown.foreground',
+  'list.activeSelectionForeground',
+  'list.inactiveSelectionForeground',
+  'list.highlightForeground',
+  'activityBar.foreground',
+  'activityBar.inactiveForeground',
+  'sideBar.foreground',
+  'sideBarTitle.foreground',
+  'statusBar.foreground',
+  'terminal.foreground',
+  'terminal.ansiBrightBlack',
+  'tab.activeForeground',
+  'tab.inactiveForeground',
+  'titleBar.activeForeground',
+  'titleBar.inactiveForeground',
+  'badge.foreground',
+  'activityBarBadge.foreground',
+];
+
+/**
+ * For high-contrast themes, require AAA (7:1) for critical text.
+ */
+const HC_TEXT_KEYS = [
+  'editor.foreground',
+  'terminal.foreground',
+  'activityBar.foreground',
+  'sideBar.foreground',
+  'statusBar.foreground',
+  'tab.activeForeground',
+];
+
+/**
+ * @param {string} file
+ * @param {Record<string, string>} colors
+ * @param {string} themeType
+ */
+function validateWCAGContrast(file, colors, themeType) {
+  const isHC = themeType === 'hc';
+  const pairs = wcag.auditThemePairs(colors);
+  const pairMap = new Map(pairs.map(p => [p.foreground, p]));
+
+  for (const fgKey of TEXT_FG_KEYS) {
+    if (!colors[fgKey]) { continue; }
+    const pair = pairMap.get(fgKey);
+    if (!pair) { continue; }
+
+    const requireAAA = isHC && HC_TEXT_KEYS.includes(fgKey);
+    if (requireAAA && !pair.passesAAA) {
+      errors.push({
+        file,
+        message: `WCAG AAA FAIL: ${fgKey} on ${pair.background} = ${pair.ratio}:1 (need 7:1)`
+      });
+    } else if (!pair.passesAA) {
+      errors.push({
+        file,
+        message: `WCAG AA FAIL: ${fgKey} on ${pair.background} = ${pair.ratio}:1 (need 4.5:1)`
+      });
+    }
+  }
+
+  // Generate report
+  const reportDir = path.join(__dirname, 'reports');
+  if (!fs.existsSync(reportDir)) { fs.mkdirSync(reportDir, { recursive: true }); }
+  const themeName = file.replace('.json', '');
+  const reportPath = path.join(reportDir, `wcag-${themeName}.md`);
+  const report = wcag.generateReport(themeName, pairs);
+  fs.writeFileSync(reportPath, report);
+}
+
 function main() {
   if (!fs.existsSync(themesDir)) {
     console.error(`Themes directory '${themesDir}' does not exist`);
@@ -201,6 +284,7 @@ function main() {
       if (theme.colors) {
         validateColorHex(file, theme.colors);
         validateCriticalColors(file, theme.colors);
+        validateWCAGContrast(file, theme.colors, theme.type);
       }
       validateTokenColors(file, theme.tokenColors);
       validateSemanticTokens(file, theme);

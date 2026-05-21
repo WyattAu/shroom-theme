@@ -33,8 +33,52 @@ jobs:
       - name: Compile
         run: npm run compile
 
-      - name: Validate themes
+      - name: Validate themes (structure + WCAG AA)
         run: npm run validate
 
       - name: Test
         run: xvfb-run -a npm test
+
+      - name: Convert themes to multi-editor formats
+        run: npm run convert
+
+      - name: Validate converted themes
+        run: |
+          for f in exports/tmTheme/*.tmTheme; do
+            if [ ! -f "$f" ] || ! grep -q '<?xml' "$f"; then
+              echo "Invalid tmTheme: $f"
+              exit 1
+            fi
+          done
+          for f in exports/jetbrains/*.icls; do
+            if [ ! -f "$f" ] || ! grep -q '<scheme' "$f"; then
+              echo "Invalid JetBrains scheme: $f"
+              exit 1
+            fi
+          done
+          for f in exports/vim/*.vim; do
+            if [ ! -f "$f" ] || ! grep -q 'set background' "$f"; then
+              echo "Invalid Vim scheme: $f"
+              exit 1
+            fi
+          done
+          for f in exports/windows-terminal/*.json; do
+            if [ ! -f "$f" ] || ! python3 -c "import json; json.load(open('$f'))"; then
+              echo "Invalid Windows Terminal scheme: $f"
+              exit 1
+            fi
+          done
+          echo "All converted themes validated"
+
+      - name: Upload WCAG reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wcag-reports
+          path: reports/wcag-*.md
+
+      - name: Upload converted themes
+        uses: actions/upload-artifact@v4
+        with:
+          name: converted-themes
+          path: exports/
