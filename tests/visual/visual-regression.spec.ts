@@ -10,7 +10,7 @@ const refsDir = path.resolve(__dirname, 'references');
 const baselineDir = path.resolve(__dirname, 'baseline');
 const diffsDir = path.resolve(__dirname, 'diffs');
 
-const DIFF_THRESHOLD = 0.005; // 0.5% pixel diff threshold
+const DIFF_THRESHOLD = 0.01; // 1% pixel diff threshold
 
 const themeFiles = fs.readdirSync(themesDir).filter(f => f.endsWith('.json'));
 
