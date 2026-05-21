@@ -103,7 +103,9 @@
     "test:visual:update": "rm -rf tests/visual/references && npm run test:visual",
     "pretest": "npm run compile && npm run lint && npm run validate",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "sbom": "node tools/generate-sbom.js",
+    "test:ci": "npm run compile && npm run lint && npm run validate && npm run convert && npm run test:visual && npm run sbom"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
@@ -120,9 +122,10 @@
     "@vscode/vsce": "^3.6.2",
     "chai": "^6.2.0",
     "eslint": "^9.36.0",
+    "mocha": "^11.3.0",
     "pixelmatch": "^7.2.0",
     "pngjs": "^7.0.0",
-    "sinon": "^21.0.0",
+    "sinon": "^22.0.0",
     "typescript": "^5.9.3"
   }
 }

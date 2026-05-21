@@ -13,3 +13,4 @@ tests/visual/baseline/
 tests/visual/diffs/
 tests/visual/test-results/
 playwright-report/
+test-results/
