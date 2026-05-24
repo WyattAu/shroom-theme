@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@900f2210b1d28bbbd0bd22d17926b9e224e8f231
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@670825a89dc0abd596e7a3abd0f5e3f6e5faf37c
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
@@ -105,7 +105,7 @@ jobs:
         run: npm run sbom
 
       - name: Upload SBOM
-        uses: actions/upload-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: sbom
@@ -113,7 +113,7 @@ jobs:
 
       # Visual regression testing
       - name: Download previous visual baseline
-        uses: actions/download-artifact@45bfe0192ca1faeb007ade9deae92b16b8254a0d
+        uses: actions/download-artifact@v4
         continue-on-error: true
         with:
           name: visual-references
@@ -126,27 +126,27 @@ jobs:
         run: npm run test:visual
 
       - name: Upload visual references (for next run)
-        uses: actions/upload-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: visual-references
           path: tests/visual/references/
 
       - name: Upload WCAG reports
-        uses: actions/upload-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: wcag-reports
           path: reports/wcag-*.md
 
       - name: Upload converted themes
-        uses: actions/upload-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
+        uses: actions/upload-artifact@v4
         with:
           name: converted-themes
           path: exports/
 
       - name: Upload visual regression diffs
-        uses: actions/upload-artifact@484a0b528fb4d7bd804637ccb632e47a0e638317
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: visual-regression-diffs
@@ -161,10 +161,10 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@900f2210b1d28bbbd0bd22d17926b9e224e8f231
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@670825a89dc0abd596e7a3abd0f5e3f6e5faf37c
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
@@ -190,7 +190,7 @@ jobs:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
       - name: Create or update GitHub Release
-        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             *.vsix
