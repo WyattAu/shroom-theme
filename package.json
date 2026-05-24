@@ -2,8 +2,12 @@
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
   "description": "A cosmic dark theme with 7 variants including light, CVD-friendly (deuteranopia, protanopia, tritanopia), monochrome, and high contrast. WCAG 2.1 AA compliant. 620+ color tokens, comprehensive syntax highlighting for 15+ languages, and multi-editor export support.",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "publisher": "wyattau",
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "author": "Wyatt Au <wyatt_au@protonmail.com>",
   "license": "Apache-2.0",
   "repository": {
@@ -90,7 +94,35 @@
         "uiTheme": "hc-black",
         "path": "./themes/shroom-space-high-contrast-theme.json"
       }
-    ]
+    ],
+    "configuration": {
+    "title": "Shroom Space Theme",
+    "properties": {
+      "shroom-space.accentColor": {
+        "type": "string",
+        "enum": ["default", "purple", "teal", "green", "amber", "red", "pink", "cyan"],
+        "enumDescriptions": [
+          "Use theme default accent colors",
+          "Purple accent (keywords, highlights)",
+          "Teal accent (functions, info)",
+          "Green accent (strings, additions)",
+          "Amber accent (constants, types)",
+          "Red accent (errors, deletions)",
+          "Pink accent (variables, decorators)",
+          "Cyan accent (types, interfaces)"
+        ],
+        "default": "default",
+        "description": "Override the primary accent color for syntax highlighting",
+        "order": 1
+      },
+      "shroom-space.autoSwitch": {
+        "type": "boolean",
+        "default": false,
+        "description": "Automatically switch between dark and light themes based on OS appearance",
+        "order": 2
+      }
+    }
+  }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
