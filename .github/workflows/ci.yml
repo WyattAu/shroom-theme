@@ -93,6 +93,12 @@ jobs:
               exit 1
             fi
           done
+          for f in exports/css/*.css; do
+            if [ ! -f "$f" ] || ! grep -q ':root' "$f"; then
+              echo "Invalid CSS export: $f"
+              exit 1
+            fi
+          done
           echo "All converted themes validated"
 
       - name: Generate SBOM
@@ -192,4 +198,5 @@ jobs:
             exports/jetbrains/*.icls
             exports/vim/*.vim
             exports/windows-terminal/*.json
+            exports/css/*.css
           body_path: CHANGELOG.md

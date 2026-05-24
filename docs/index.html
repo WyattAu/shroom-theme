@@ -162,6 +162,8 @@
         <a href="#palette">Palette</a>
         <a href="#installation">Installation</a>
         <a href="#development">Development</a>
+        <a href="#downloads">Downloads</a>
+        <a href="#settings">Settings</a>
         <a href="https://github.com/WyattAu/shroom-theme">GitHub</a>
       </nav>
     </div>
@@ -170,7 +172,7 @@
   <div class="container">
     <section class="hero">
       <h2>Shroom Space Theme</h2>
-      <p>A dark VS Code color theme with accessibility-focused variants. 7 theme configurations covering standard dark, light, and color-vision-deficiency adapted palettes.</p>
+      <p>A VS Code color theme with accessibility-focused variants and runtime features. 7 theme configurations with user-configurable accent colors, auto dark/light switching, WCAG 2.1 AA compliance, and 8 export formats.</p>
       <div class="install-cmd">code --install-extension wyattau.shroom-space-theme</div>
     </section>
 
@@ -300,7 +302,7 @@
           <tr><td><code>npm run compile</code></td><td>TypeScript compilation</td></tr>
           <tr><td><code>npm run lint</code></td><td>ESLint with strict rules</td></tr>
           <tr><td><code>npm run validate</code></td><td>Theme JSON validation</td></tr>
-          <tr><td><code>npm test</code></td><td>Full pipeline (compile + lint + validate + 90 tests)</td></tr>
+          <tr><td><code>npm test</code></td><td>Full pipeline (compile + lint + validate + 92 tests)</td></tr>
         </tbody>
       </table>
     </section>
@@ -315,6 +317,37 @@
         <li>81 tokenColors entries per theme</li>
         <li>57 semanticTokenColors rules per theme</li>
       </ul>
+    </section>
+
+    <section class="content" id="downloads">
+      <h3>Downloads</h3>
+      <p>Theme exports available for 8 terminal/editor formats:</p>
+      <table class="palette-table">
+        <thead><tr><th>Format</th><th>Compatible With</th></tr></thead>
+        <tbody>
+          <tr><td><code>.css</code></td><td>Web (CSS Custom Properties)</td></tr>
+          <tr><td><code>.tmTheme</code></td><td>Sublime Text, TextMate, Atom</td></tr>
+          <tr><td><code>.icls</code></td><td>IntelliJ, WebStorm, PyCharm, GoLand</td></tr>
+          <tr><td><code>.vim</code></td><td>Vim, Neovim</td></tr>
+          <tr><td><code>.json</code> (Windows Terminal)</td><td>Windows Terminal</td></tr>
+          <tr><td><code>.itermcolors</code></td><td>iTerm2</td></tr>
+          <tr><td><code>.yaml</code></td><td>Warp Terminal</td></tr>
+          <tr><td><code>.toml</code></td><td>Alacritty</td></tr>
+          <tr><td><code>.conf</code></td><td>Kitty Terminal</td></tr>
+        </tbody>
+      </table>
+      <p>Download from <a href="https://github.com/WyattAu/shroom-theme/releases">GitHub Releases</a>.</p>
+    </section>
+
+    <section class="content" id="settings">
+      <h3>Extension Settings</h3>
+      <table class="palette-table">
+        <thead><tr><th>Setting</th><th>Values</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>shroom-space.accentColor</code></td><td>default, purple, teal, green, amber, red, pink, cyan</td><td>default</td><td>Override the primary accent color</td></tr>
+          <tr><td><code>shroom-space.autoSwitch</code></td><td>true, false</td><td>false</td><td>Auto-switch dark/light based on VS Code color theme</td></tr>
+        </tbody>
+      </table>
     </section>
   </div>
 

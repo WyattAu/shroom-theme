@@ -15,6 +15,7 @@ const DIRS = {
   warp: path.join(EXPORTS_DIR, "warp"),
   alacritty: path.join(EXPORTS_DIR, "alacritty"),
   kitty: path.join(EXPORTS_DIR, "kitty"),
+  css: path.join(EXPORTS_DIR, "css"),
 };
 
 function escapeXml(str) {
@@ -755,6 +756,87 @@ selection_foreground ${fg}
 `;
 }
 
+function convertToCss(theme) {
+  const colors = theme.colors || {};
+  const name = theme.name;
+  const slug = slugify(name);
+
+  const lines = [
+    `/* ${name} - CSS Custom Properties */`,
+    `/* Converted from ${name} VS Code theme */`,
+    ``,
+    `:root {`,
+  ];
+
+  const tokenColors = theme.tokenColors || [];
+  const tc = {};
+  for (const entry of tokenColors) {
+    const scopes = Array.isArray(entry.scope) ? entry.scope : [entry.scope];
+    for (const scope of scopes) {
+      tc[scope] = entry.settings;
+    }
+  }
+
+  const colorMap = {
+    "editor-background": "editor.background",
+    "editor-foreground": "editor.foreground",
+    "accent-purple": "terminal.ansiMagenta",
+    "accent-teal": "terminal.ansiCyan",
+    "accent-green": "terminal.ansiGreen",
+    "accent-amber": "terminal.ansiYellow",
+    "accent-red": "terminal.ansiRed",
+    "muted": "disabledForeground",
+    "border": "editor.selectionBackground",
+    "error": "editorError.foreground",
+    "warning": "editorWarning.foreground",
+    "info": "editorInfo.foreground",
+    "line-number": "editorLineNumber.foreground",
+    "line-number-active": "editorLineNumber.activeForeground",
+    "cursor": "editorCursor.foreground",
+    "selection": "editor.selectionBackground",
+    "sidebar-bg": "sideBar.background",
+    "sidebar-fg": "sideBar.foreground",
+    "activitybar-bg": "activityBar.background",
+    "activitybar-fg": "activityBar.foreground",
+    "statusbar-bg": "statusBar.background",
+    "statusbar-fg": "statusBar.foreground",
+    "tab-active-bg": "tab.activeBackground",
+    "tab-active-fg": "tab.activeForeground",
+    "tab-inactive-bg": "tab.inactiveBackground",
+    "tab-inactive-fg": "tab.inactiveForeground",
+  };
+
+  for (const [cssName, themeKey] of Object.entries(colorMap)) {
+    if (colors[themeKey]) {
+      lines.push(`  --shroom-${cssName}: ${colors[themeKey]};`);
+    }
+  }
+
+  const syntaxMap = {
+    "syntax-keyword": ["keyword", "storage.type"],
+    "syntax-string": ["string", "punctuation.definition.string"],
+    "syntax-comment": ["comment", "punctuation.definition.comment"],
+    "syntax-number": ["constant.numeric"],
+    "syntax-function": ["entity.name.function", "support.function"],
+    "syntax-type": ["entity.name.type", "support.type"],
+    "syntax-variable": ["variable"],
+    "syntax-operator": ["keyword.operator"],
+    "syntax-decorator": ["meta.decorator", "entity.name.decorator"],
+  };
+
+  for (const [cssName, scopes] of Object.entries(syntaxMap)) {
+    for (const scope of scopes) {
+      if (tc[scope] && tc[scope].foreground) {
+        lines.push(`  --shroom-${cssName}: ${tc[scope].foreground};`);
+        break;
+      }
+    }
+  }
+
+  lines.push("}");
+  return lines.join("\n") + "\n";
+}
+
 async function main() {
   for (const dir of Object.values(DIRS)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -806,6 +888,10 @@ async function main() {
     const kitty = convertToKitty(theme);
     fs.writeFileSync(path.join(DIRS.kitty, `${slug}.conf`), kitty);
     console.log(`  -> kitty/${slug}.conf`);
+
+    const css = convertToCss(theme);
+    fs.writeFileSync(path.join(DIRS.css, `${slug}.css`), css);
+    console.log(`  -> css/${slug}.css`);
 
     console.log();
   }
