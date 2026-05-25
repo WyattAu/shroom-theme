@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import * as vscode from "vscode";
+import { generateFromHsl } from "./theme-generator";
 
 const DARK_THEME_ID = "wyattau.shroom-space-theme";
 const LIGHT_THEME_ID = "wyattau.shroom-space-light-theme";
@@ -51,17 +52,28 @@ const ACCENT_MAP: Record<string, Record<string, string>> = {
 };
 
 export function activate(context: vscode.ExtensionContext): void {
+  const telemetryLogger = vscode.env.createTelemetryLogger({
+    sendEventData() { /* VS Code respects user telemetry opt-in */ },
+    sendErrorData() { /* noop */ },
+  });
+
   const config = vscode.workspace.getConfiguration("shroom-space");
 
-  applyAccentColor(config.get<string>("accentColor") ?? "default");
+  applyAccentColor(config.get<string>("accentColor") ?? "default", config);
+
+  telemetryLogger.logUsage("activated");
 
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((event) => {
       if (event.affectsConfiguration("shroom-space.accentColor")) {
-        applyAccentColor(config.get<string>("accentColor") ?? "default");
+        const accent = config.get<string>("accentColor") ?? "default";
+        applyAccentColor(accent, config);
+        telemetryLogger.logUsage("accentColorChanged", { color: accent });
       }
       if (event.affectsConfiguration("shroom-space.autoSwitch")) {
-        applyAutoSwitch(config.get<boolean>("autoSwitch") ?? false);
+        const enabled = config.get<boolean>("autoSwitch") ?? false;
+        applyAutoSwitch(enabled);
+        telemetryLogger.logUsage("autoSwitchToggled", { enabled: String(enabled) });
       }
     })
   );
@@ -78,7 +90,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 }
 
-function applyAccentColor(accent: string): void {
+function applyAccentColor(accent: string, config: vscode.WorkspaceConfiguration): void {
   if (accent === "default") {
     vscode.workspace.getConfiguration("workbench").update(
       "colorCustomizations",
@@ -88,7 +100,18 @@ function applyAccentColor(accent: string): void {
     return;
   }
 
-  const overrides = ACCENT_MAP[accent];
+  let overrides: Record<string, string> | undefined;
+
+  if (accent === "custom") {
+    const hslStr = config.get<string>("customAccentHsl") ?? "";
+    const parts = hslStr.split(",").map(Number);
+    if (parts.length === 3 && parts.every((n) => !isNaN(n))) {
+      overrides = generateFromHsl(parts[0], parts[1], parts[2]);
+    }
+  } else {
+    overrides = ACCENT_MAP[accent];
+  }
+
   if (!overrides) {
     return;
   }

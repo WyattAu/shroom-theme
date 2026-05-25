@@ -1,0 +1,9 @@
+name: Shroom Space Theme CodeQL Config
+paths:
+  - src
+  - tools
+  - tests
+paths-ignore:
+  - node_modules
+  - out
+  - exports

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shroom Space Theme - VS Code 颜色主题</title>
+  <style>
+    :root {
+      --bg: #24212E;
+      --bg-surface: #1E1C29;
+      --fg: #CCC8D9;
+      --fg-muted: #726D89;
+      --accent: #BE9AF7;
+      --accent-teal: #74D7C8;
+      --accent-green: #A6C18B;
+      --accent-amber: #E8C990;
+      --accent-red: #E68484;
+      --border: #393552;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: var(--accent-teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+
+    /* Header */
+    header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 1.25rem; color: var(--accent); }
+    nav a {
+      color: var(--fg-muted);
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+    nav a:hover { color: var(--accent); text-decoration: none; }
+    .lang-switch { color: var(--accent) !important; font-weight: 600; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 4rem 0 3rem;
+    }
+    .hero h2 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.75rem; }
+    .hero p { color: var(--fg-muted); font-size: 1.125rem; max-width: 600px; margin: 0 auto 2rem; }
+    .hero .install-cmd {
+      display: inline-block;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.875rem;
+      color: var(--accent-green);
+    }
+
+    /* Theme Grid */
+    .themes { margin: 2rem 0; }
+    .themes h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.25rem; }
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .theme-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+    .theme-card h4 { color: var(--accent); margin-bottom: 0.5rem; }
+    .theme-card .type-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      background: var(--border);
+      color: var(--fg-muted);
+      margin-bottom: 0.5rem;
+    }
+    .theme-card p { color: var(--fg-muted); font-size: 0.875rem; }
+    .color-swatch {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    /* Palette */
+    .palette { margin: 2rem 0; }
+    .palette h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.25rem; }
+    .palette-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .palette-table th, .palette-table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    .palette-table th { color: var(--fg-muted); font-weight: 500; }
+
+    /* Content */
+    .content { margin: 2rem 0; }
+    .content h3 { color: var(--accent); margin: 1.5rem 0 0.75rem; }
+    .content p { margin-bottom: 0.75rem; }
+    .content ul { margin-left: 1.5rem; margin-bottom: 0.75rem; }
+    .content li { margin-bottom: 0.25rem; }
+    .content code {
+      background: var(--bg-surface);
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      color: var(--accent-amber);
+    }
+    .content pre {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .content pre code {
+      background: none;
+      padding: 0;
+      color: var(--fg);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 0;
+      text-align: center;
+      color: var(--fg-muted);
+      font-size: 0.8rem;
+    }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Shroom Space Theme</h1>
+      <nav>
+        <a href="index.html" class="lang-switch">EN</a>
+        <a href="#themes">主题</a>
+        <a href="#palette">调色板</a>
+        <a href="#installation">安装</a>
+        <a href="#development">开发</a>
+        <a href="#downloads">下载</a>
+        <a href="#settings">设置</a>
+        <a href="https://github.com/WyattAu/shroom-theme">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <h2>Shroom Space Theme</h2>
+      <p>一款注重无障碍访问的 VS Code 颜色主题，包含多种变体和运行时功能。7 种主题配置，支持用户自定义强调色、自动深浅色切换、WCAG 2.1 AA 合规性，以及 8 种导出格式。</p>
+      <div class="install-cmd">code --install-extension wyattau.shroom-space-theme</div>
+    </section>
+
+    <section class="themes" id="themes">
+      <h3>可用主题</h3>
+      <div class="theme-grid">
+        <div class="theme-card">
+          <h4>Shroom Space</h4>
+          <span class="type-badge">深色</span>
+          <p>基础深色主题。紫色/青色/绿色调色板，搭配暖琥珀色常量。</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#CCC8D9"></span>
+            <span class="color-swatch" style="background:#BE9AF7"></span>
+            <span class="color-swatch" style="background:#74D7C8"></span>
+            <span class="color-swatch" style="background:#A6C18B"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Shroom Space Light</h4>
+          <span class="type-badge">浅色</span>
+          <p>浅色变体，采用温暖的大地色调背景和柔和的强调色。</p>
+          <div>
+            <span class="color-swatch" style="background:#F5F2E8"></span>
+            <span class="color-swatch" style="background:#4A4555"></span>
+            <span class="color-swatch" style="background:#8B5F9E"></span>
+            <span class="color-swatch" style="background:#007A7A"></span>
+            <span class="color-swatch" style="background:#5A785A"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Deuteranopia</h4>
+          <span class="type-badge">深色</span>
+          <p>针对绿色弱（Deuteranopia）适配。增加蓝色偏移，避免红绿混淆。</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#BE9AF7"></span>
+            <span class="color-swatch" style="background:#82AAFF"></span>
+            <span class="color-swatch" style="background:#E8C990"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Protanopia</h4>
+          <span class="type-badge">深色</span>
+          <p>针对红色盲（Protanopia）适配。珊瑚色偏移的错误提示，搭配蓝色补充。</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#BE9AF7"></span>
+            <span class="color-swatch" style="background:#82AAFF"></span>
+            <span class="color-swatch" style="background:#F07178"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Tritanopia</h4>
+          <span class="type-badge">深色</span>
+          <p>针对蓝黄色盲（Tritanopia）适配。粉色/青色偏移的强调色，搭配绿色字符串。</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#FF79C6"></span>
+            <span class="color-swatch" style="background:#89DDFF"></span>
+            <span class="color-swatch" style="background:#C3E88D"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Monochrome</h4>
+          <span class="type-badge">深色</span>
+          <p>灰度调色板。错误指示器使用亮度对比。最大化文本清晰度。</p>
+          <div>
+            <span class="color-swatch" style="background:#1C1C1C"></span>
+            <span class="color-swatch" style="background:#CCCCCC"></span>
+            <span class="color-swatch" style="background:#FFFFFF"></span>
+            <span class="color-swatch" style="background:#777777"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>High Contrast</h4>
+          <span class="type-badge">高对比度</span>
+          <p>最大对比度。纯黑背景。完全符合 WCAG AAA 标准。</p>
+          <div>
+            <span class="color-swatch" style="background:#000000"></span>
+            <span class="color-swatch" style="background:#FFFFFF"></span>
+            <span class="color-swatch" style="background:#AD58FF"></span>
+            <span class="color-swatch" style="background:#4AF8E1"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="palette" id="palette">
+      <h3>基础深色调色板</h3>
+      <table class="palette-table">
+        <thead>
+          <tr><th>角色</th><th>十六进制</th><th>用途</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="color-swatch" style="background:#24212E"></span> 背景</td><td><code>#24212E</code></td><td>编辑器背景</td></tr>
+          <tr><td><span class="color-swatch" style="background:#CCC8D9"></span> 前景</td><td><code>#CCC8D9</code></td><td>默认文本</td></tr>
+          <tr><td><span class="color-swatch" style="background:#BE9AF7"></span> 强调色（紫色）</td><td><code>#BE9AF7</code></td><td>关键字、徽章</td></tr>
+          <tr><td><span class="color-swatch" style="background:#74D7C8"></span> 强调色（青色）</td><td><code>#74D7C8</code></td><td>函数、信息</td></tr>
+          <tr><td><span class="color-swatch" style="background:#A6C18B"></span> 强调色（绿色）</td><td><code>#A6C18B</code></td><td>字符串、新增内容</td></tr>
+          <tr><td><span class="color-swatch" style="background:#E8C990"></span> 强调色（琥珀色）</td><td><code>#E8C990</code></td><td>常量、类型</td></tr>
+          <tr><td><span class="color-swatch" style="background:#E68484"></span> 强调色（红色）</td><td><code>#E68484</code></td><td>错误、删除内容</td></tr>
+          <tr><td><span class="color-swatch" style="background:#726D89"></span> 柔和色</td><td><code>#726D89</code></td><td>注释、禁用状态</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content" id="installation">
+      <h3>安装</h3>
+      <p>在 VS Code 扩展面板中搜索 "Shroom Space"，或通过命令行安装：</p>
+      <pre><code>code --install-extension wyattau.shroom-space-theme</code></pre>
+      <p>通过 <code>Ctrl+K Ctrl+T</code>（macOS：<code>Cmd+K Cmd+T</code>）选择主题。</p>
+
+      <h3>手动安装</h3>
+      <ol>
+        <li>从 <a href="https://github.com/WyattAu/shroom-theme/releases">releases</a> 下载最新的 <code>.vsix</code> 文件。</li>
+        <li>运行：<code>code --install-extension shroom-space-theme-*.vsix</code></li>
+      </ol>
+    </section>
+
+    <section class="content" id="development">
+      <h3>开发</h3>
+      <p>前置条件：Node.js 22+、npm 10+、VS Code 1.105.0+。</p>
+      <table class="palette-table">
+        <thead><tr><th>命令</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>npm run compile</code></td><td>TypeScript 编译</td></tr>
+          <tr><td><code>npm run lint</code></td><td>ESLint 严格规则检查</td></tr>
+          <tr><td><code>npm run validate</code></td><td>主题 JSON 验证</td></tr>
+          <tr><td><code>npm test</code></td><td>完整流程（编译 + lint + 验证 + 92 项测试）</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content" id="features">
+      <h3>功能特性</h3>
+      <ul>
+        <li>WCAG 2.1 AA 对比度合规（全部 7 个主题）</li>
+        <li>视觉回归测试（7 项 Playwright 测试）</li>
+        <li>多编辑器导出（TextMate、JetBrains、Vim、Windows Terminal）</li>
+        <li>每个主题 620 个颜色标记（覆盖 VS Code API 的 68%）</li>
+        <li>每个主题 81 个 tokenColors 条目</li>
+        <li>每个主题 57 条 semanticTokenColors 规则</li>
+      </ul>
+    </section>
+
+    <section class="content" id="downloads">
+      <h3>下载</h3>
+      <p>主题导出支持 8 种终端/编辑器格式：</p>
+      <table class="palette-table">
+        <thead><tr><th>格式</th><th>兼容平台</th></tr></thead>
+        <tbody>
+          <tr><td><code>.css</code></td><td>Web（CSS 自定义属性）</td></tr>
+          <tr><td><code>.tmTheme</code></td><td>Sublime Text、TextMate、Atom</td></tr>
+          <tr><td><code>.icls</code></td><td>IntelliJ、WebStorm、PyCharm、GoLand</td></tr>
+          <tr><td><code>.vim</code></td><td>Vim、Neovim</td></tr>
+          <tr><td><code>.json</code>（Windows Terminal）</td><td>Windows Terminal</td></tr>
+          <tr><td><code>.itermcolors</code></td><td>iTerm2</td></tr>
+          <tr><td><code>.yaml</code></td><td>Warp Terminal</td></tr>
+          <tr><td><code>.toml</code></td><td>Alacritty</td></tr>
+          <tr><td><code>.conf</code></td><td>Kitty Terminal</td></tr>
+        </tbody>
+      </table>
+      <p>从 <a href="https://github.com/WyattAu/shroom-theme/releases">GitHub Releases</a> 下载。</p>
+    </section>
+
+    <section class="content" id="settings">
+      <h3>扩展设置</h3>
+      <table class="palette-table">
+        <thead><tr><th>设置</th><th>可选值</th><th>默认值</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>shroom-space.accentColor</code></td><td>default、purple、teal、green、amber、red、pink、cyan</td><td>default</td><td>覆盖主强调色</td></tr>
+          <tr><td><code>shroom-space.autoSwitch</code></td><td>true、false</td><td>false</td><td>根据 VS Code 颜色主题自动切换深色/浅色</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Shroom Space Theme -- <a href="https://github.com/WyattAu/shroom-theme">GitHub</a> -- <a href="https://github.com/WyattAu/shroom-theme/issues">问题</a> -- Apache License 2.0</p>
+    </div>
+  </footer>
+</body>
+</html>

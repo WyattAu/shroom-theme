@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shroom Space Theme - VS Code カラーテーマ</title>
+  <style>
+    :root {
+      --bg: #24212E;
+      --bg-surface: #1E1C29;
+      --fg: #CCC8D9;
+      --fg-muted: #726D89;
+      --accent: #BE9AF7;
+      --accent-teal: #74D7C8;
+      --accent-green: #A6C18B;
+      --accent-amber: #E8C990;
+      --accent-red: #E68484;
+      --border: #393552;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: var(--accent-teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+
+    /* Header */
+    header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 1.25rem; color: var(--accent); }
+    nav a {
+      color: var(--fg-muted);
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+    nav a:hover { color: var(--accent); text-decoration: none; }
+    .lang-switch { color: var(--accent) !important; font-weight: 600; }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 4rem 0 3rem;
+    }
+    .hero h2 { font-size: 2.5rem; color: var(--accent); margin-bottom: 0.75rem; }
+    .hero p { color: var(--fg-muted); font-size: 1.125rem; max-width: 600px; margin: 0 auto 2rem; }
+    .hero .install-cmd {
+      display: inline-block;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.875rem;
+      color: var(--accent-green);
+    }
+
+    /* Theme Grid */
+    .themes { margin: 2rem 0; }
+    .themes h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.25rem; }
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .theme-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+    .theme-card h4 { color: var(--accent); margin-bottom: 0.5rem; }
+    .theme-card .type-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      background: var(--border);
+      color: var(--fg-muted);
+      margin-bottom: 0.5rem;
+    }
+    .theme-card p { color: var(--fg-muted); font-size: 0.875rem; }
+    .color-swatch {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    /* Palette */
+    .palette { margin: 2rem 0; }
+    .palette h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.25rem; }
+    .palette-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .palette-table th, .palette-table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    .palette-table th { color: var(--fg-muted); font-weight: 500; }
+
+    /* Content */
+    .content { margin: 2rem 0; }
+    .content h3 { color: var(--accent); margin: 1.5rem 0 0.75rem; }
+    .content p { margin-bottom: 0.75rem; }
+    .content ul { margin-left: 1.5rem; margin-bottom: 0.75rem; }
+    .content li { margin-bottom: 0.25rem; }
+    .content code {
+      background: var(--bg-surface);
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      color: var(--accent-amber);
+    }
+    .content pre {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .content pre code {
+      background: none;
+      padding: 0;
+      color: var(--fg);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 0;
+      text-align: center;
+      color: var(--fg-muted);
+      font-size: 0.8rem;
+    }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Shroom Space Theme</h1>
+      <nav>
+        <a href="index.html" class="lang-switch">EN</a>
+        <a href="index.zh.html" class="lang-switch">中文</a>
+        <a href="#themes">テーマ</a>
+        <a href="#palette">パレット</a>
+        <a href="#installation">インストール</a>
+        <a href="#development">開発</a>
+        <a href="#downloads">ダウンロード</a>
+        <a href="#settings">設定</a>
+        <a href="https://github.com/WyattAu/shroom-theme">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <h2>Shroom Space Theme</h2>
+      <p>アクセシビリティ重視のバリアントとランタイム機能を備えた VS Code カラーテーマ。7つのテーマ設定、カスタマイズ可能なアクセントカラー、ダーク/ライト自動切り替え、WCAG 2.1 AA 準拠、8つのエクスポート形式に対応。</p>
+      <div class="install-cmd">code --install-extension wyattau.shroom-space-theme</div>
+    </section>
+
+    <section class="themes" id="themes">
+      <h3>テーマ一覧</h3>
+      <div class="theme-grid">
+        <div class="theme-card">
+          <h4>Shroom Space</h4>
+          <span class="type-badge">ダーク</span>
+          <p>ベースダークテーマ。紫/ティール/グリーンのパレットに、温かみのあるアンバー色の定数を組み合わせ。</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#CCC8D9"></span>
+            <span class="color-swatch" style="background:#BE9AF7"></span>
+            <span class="color-swatch" style="background:#74D7C8"></span>
+            <span class="color-swatch" style="background:#A6C18B"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Shroom Space Light</h4>
+          <span class="type-badge">ライト</span>
+          <p>ライトバリアント。温かみのあるアーストーンの背景と落ち着いたアクセントカラー。</p>
+          <div>
+            <span class="color-swatch" style="background:#F5F2E8"></span>
+            <span class="color-swatch" style="background:#4A4555"></span>
+            <span class="color-swatch" style="background:#8B5F9E"></span>
+            <span class="color-swatch" style="background:#007A7A"></span>
+            <span class="color-swatch" style="background:#5A785A"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Deuteranopia</h4>
+          <span class="type-badge">ダーク</span>
+          <p>緑色弱（Deuteranopia）向けに適応。青色シフトを追加し、赤緑の混同を回避。</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#BE9AF7"></span>
+            <span class="color-swatch" style="background:#82AAFF"></span>
+            <span class="color-swatch" style="background:#E8C990"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Protanopia</h4>
+          <span class="type-badge">ダーク</span>
+          <p>赤色盲（Protanopia）向けに適応。コーラルシフトのエラー表示に青色を追加。</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#BE9AF7"></span>
+            <span class="color-swatch" style="background:#82AAFF"></span>
+            <span class="color-swatch" style="background:#F07178"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Tritanopia</h4>
+          <span class="type-badge">ダーク</span>
+          <p>青黄色盲（Tritanopia）向けに適応。ピンク/シアンシフトのアクセントにグリーンの文字列。</p>
+          <div>
+            <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#FF79C6"></span>
+            <span class="color-swatch" style="background:#89DDFF"></span>
+            <span class="color-swatch" style="background:#C3E88D"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>Monochrome</h4>
+          <span class="type-badge">ダーク</span>
+          <p>グレースケールパレット。エラー表示は輝度コントラストを使用。最大限のテキストの明瞭さ。</p>
+          <div>
+            <span class="color-swatch" style="background:#1C1C1C"></span>
+            <span class="color-swatch" style="background:#CCCCCC"></span>
+            <span class="color-swatch" style="background:#FFFFFF"></span>
+            <span class="color-swatch" style="background:#777777"></span>
+          </div>
+        </div>
+        <div class="theme-card">
+          <h4>High Contrast</h4>
+          <span class="type-badge">ハイコントラスト</span>
+          <p>最大コントラスト比。純黒背景。WCAG AAA 完全準拠を目標。</p>
+          <div>
+            <span class="color-swatch" style="background:#000000"></span>
+            <span class="color-swatch" style="background:#FFFFFF"></span>
+            <span class="color-swatch" style="background:#AD58FF"></span>
+            <span class="color-swatch" style="background:#4AF8E1"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="palette" id="palette">
+      <h3>ベースダークカラーパレット</h3>
+      <table class="palette-table">
+        <thead>
+          <tr><th>役割</th><th>Hex</th><th>用途</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="color-swatch" style="background:#24212E"></span> 背景</td><td><code>#24212E</code></td><td>エディタ背景</td></tr>
+          <tr><td><span class="color-swatch" style="background:#CCC8D9"></span> 前景</td><td><code>#CCC8D9</code></td><td>デフォルトテキスト</td></tr>
+          <tr><td><span class="color-swatch" style="background:#BE9AF7"></span> アクセント（紫）</td><td><code>#BE9AF7</code></td><td>キーワード、バッジ</td></tr>
+          <tr><td><span class="color-swatch" style="background:#74D7C8"></span> アクセント（ティール）</td><td><code>#74D7C8</code></td><td>関数、情報</td></tr>
+          <tr><td><span class="color-swatch" style="background:#A6C18B"></span> アクセント（グリーン）</td><td><code>#A6C18B</code></td><td>文字列、追加</td></tr>
+          <tr><td><span class="color-swatch" style="background:#E8C990"></span> アクセント（アンバー）</td><td><code>#E8C990</code></td><td>定数、型</td></tr>
+          <tr><td><span class="color-swatch" style="background:#E68484"></span> アクセント（赤）</td><td><code>#E68484</code></td><td>エラー、削除</td></tr>
+          <tr><td><span class="color-swatch" style="background:#726D89"></span> ミュート</td><td><code>#726D89</code></td><td>コメント、無効</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content" id="installation">
+      <h3>インストール</h3>
+      <p>VS Code 拡張機能パネルで "Shroom Space" を検索するか、CLI でインストール：</p>
+      <pre><code>code --install-extension wyattau.shroom-space-theme</code></pre>
+      <p><code>Ctrl+K Ctrl+T</code>（macOS：<code>Cmd+K Cmd+T</code>）でテーマを選択。</p>
+
+      <h3>手動インストール</h3>
+      <ol>
+        <li><a href="https://github.com/WyattAu/shroom-theme/releases">releases</a> から最新の <code>.vsix</code> をダウンロード。</li>
+        <li>実行：<code>code --install-extension shroom-space-theme-*.vsix</code></li>
+      </ol>
+    </section>
+
+    <section class="content" id="development">
+      <h3>開発</h3>
+      <p>前提条件：Node.js 22+、npm 10+、VS Code 1.105.0+。</p>
+      <table class="palette-table">
+        <thead><tr><th>コマンド</th><th>説明</th></tr></thead>
+        <tbody>
+          <tr><td><code>npm run compile</code></td><td>TypeScript コンパイル</td></tr>
+          <tr><td><code>npm run lint</code></td><td>ESLint 厳格ルールチェック</td></tr>
+          <tr><td><code>npm run validate</code></td><td>テーマ JSON バリデーション</td></tr>
+          <tr><td><code>npm test</code></td><td>フルパイプライン（コンパイル + lint + バリデーション + 92 テスト）</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content" id="features">
+      <h3>機能</h3>
+      <ul>
+        <li>WCAG 2.1 AA コントラスト準拠（全7テーマ）</li>
+        <li>ビジュアルリグレッションテスト（7 Playwright テスト）</li>
+        <li>マルチエディタエクスポート（TextMate、JetBrains、Vim、Windows Terminal）</li>
+        <li>テーマあたり 620 カラートークン（VS Code API の 68%）</li>
+        <li>テーマあたり 81 tokenColors エントリ</li>
+        <li>テーマあたり 57 semanticTokenColors ルール</li>
+      </ul>
+    </section>
+
+    <section class="content" id="downloads">
+      <h3>ダウンロード</h3>
+      <p>8つのターミナル/エディタ形式でテーマエクスポートが利用可能：</p>
+      <table class="palette-table">
+        <thead><tr><th>形式</th><th>互換性</th></tr></thead>
+        <tbody>
+          <tr><td><code>.css</code></td><td>Web（CSS カスタムプロパティ）</td></tr>
+          <tr><td><code>.tmTheme</code></td><td>Sublime Text、TextMate、Atom</td></tr>
+          <tr><td><code>.icls</code></td><td>IntelliJ、WebStorm、PyCharm、GoLand</td></tr>
+          <tr><td><code>.vim</code></td><td>Vim、Neovim</td></tr>
+          <tr><td><code>.json</code>（Windows Terminal）</td><td>Windows Terminal</td></tr>
+          <tr><td><code>.itermcolors</code></td><td>iTerm2</td></tr>
+          <tr><td><code>.yaml</code></td><td>Warp Terminal</td></tr>
+          <tr><td><code>.toml</code></td><td>Alacritty</td></tr>
+          <tr><td><code>.conf</code></td><td>Kitty Terminal</td></tr>
+        </tbody>
+      </table>
+      <p><a href="https://github.com/WyattAu/shroom-theme/releases">GitHub Releases</a> からダウンロード。</p>
+    </section>
+
+    <section class="content" id="settings">
+      <h3>拡張機能の設定</h3>
+      <table class="palette-table">
+        <thead><tr><th>設定</th><th>値</th><th>デフォルト</th><th>説明</th></tr></thead>
+        <tbody>
+          <tr><td><code>shroom-space.accentColor</code></td><td>default、purple、teal、green、amber、red、pink、cyan</td><td>default</td><td>プライマリアクセントカラーを上書き</td></tr>
+          <tr><td><code>shroom-space.autoSwitch</code></td><td>true、false</td><td>false</td><td>VS Code カラーテーマに基づきダーク/ライトを自動切替</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Shroom Space Theme -- <a href="https://github.com/WyattAu/shroom-theme">GitHub</a> -- <a href="https://github.com/WyattAu/shroom-theme/issues">Issues</a> -- Apache License 2.0</p>
+    </div>
+  </footer>
+</body>
+</html>

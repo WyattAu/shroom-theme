@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WCAG 2.1 Contrast Report - Shroom Space Theme</title>
+  <style>
+    :root {
+      --bg: #24212E;
+      --bg-surface: #1E1C29;
+      --fg: #CCC8D9;
+      --fg-muted: #726D89;
+      --accent: #BE9AF7;
+      --accent-teal: #74D7C8;
+      --accent-green: #A6C18B;
+      --accent-amber: #E8C990;
+      --accent-red: #E68484;
+      --border: #393552;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: var(--accent-teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+
+    header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 1.25rem; color: var(--accent); }
+    nav a {
+      color: var(--fg-muted);
+      margin-left: 1.5rem;
+      font-size: 0.875rem;
+    }
+    nav a:hover { color: var(--accent); text-decoration: none; }
+
+    .report-title {
+      text-align: center;
+      padding: 2rem 0 1rem;
+    }
+    .report-title h2 { font-size: 1.75rem; color: var(--accent); margin-bottom: 0.5rem; }
+    .report-title p { color: var(--fg-muted); font-size: 0.95rem; }
+
+    .theme-section { margin: 2rem 0; }
+    .theme-section h3 { color: var(--accent); margin-bottom: 0.75rem; font-size: 1.15rem; }
+
+    .contrast-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+    .contrast-table th, .contrast-table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    .contrast-table th { color: var(--fg-muted); font-weight: 500; }
+    .contrast-table code {
+      background: var(--bg-surface);
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+    }
+
+    .swatch {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      margin-right: 6px;
+      vertical-align: middle;
+      border: 1px solid var(--border);
+    }
+
+    .pass { color: #A6C18B; font-weight: 600; }
+    .fail { color: #E68484; font-weight: 600; }
+
+    .summary {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .summary h3 { color: var(--accent); margin-bottom: 0.75rem; }
+    .summary p { margin-bottom: 0.5rem; color: var(--fg-muted); font-size: 0.9rem; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 0;
+      text-align: center;
+      color: var(--fg-muted);
+      font-size: 0.8rem;
+    }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Shroom Space Theme</h1>
+      <nav>
+        <a href="index.html">Docs</a>
+        <a href="https://github.com/WyattAu/shroom-theme">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="report-title">
+      <h2>WCAG 2.1 Contrast Report</h2>
+      <p>Contrast ratios calculated using relative luminance per WCAG 2.1 specification. AA requires 4.5:1 for normal text and 3:1 for large text.</p>
+    </div>
+
+    <div id="reports"></div>
+
+    <div class="summary">
+      <h3>Thresholds</h3>
+      <p><strong>AA Normal Text:</strong> Minimum 4.5:1 contrast ratio</p>
+      <p><strong>AA Large Text:</strong> Minimum 3:1 contrast ratio (14pt bold / 18pt regular)</p>
+      <p><strong>AAA Normal Text:</strong> Minimum 7:1 contrast ratio</p>
+      <p><strong>AAA Large Text:</strong> Minimum 4.5:1 contrast ratio</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>Shroom Space Theme -- <a href="https://github.com/WyattAu/shroom-theme">GitHub</a> -- Apache License 2.0</p>
+    </div>
+  </footer>
+
+  <script>
+    var themes = [
+      {
+        name: "Shroom Space (Dark)",
+        bg: "#24212E",
+        colors: [
+          { label: "Foreground", hex: "#CCC8D9" },
+          { label: "Accent (purple)", hex: "#BE9AF7" },
+          { label: "Muted", hex: "#726D89" },
+          { label: "Accent (teal)", hex: "#74D7C8" },
+          { label: "Accent (green)", hex: "#A6C18B" },
+          { label: "Accent (amber)", hex: "#E8C990" },
+          { label: "Accent (red)", hex: "#E68484" }
+        ]
+      },
+      {
+        name: "Shroom Space Light",
+        bg: "#F5F2E8",
+        colors: [
+          { label: "Foreground", hex: "#4A4555" },
+          { label: "Accent (purple)", hex: "#8B5F9E" },
+          { label: "Muted", hex: "#8A8598" },
+          { label: "Accent (teal)", hex: "#007A7A" },
+          { label: "Accent (green)", hex: "#5A785A" },
+          { label: "Accent (amber)", hex: "#8B6914" },
+          { label: "Accent (red)", hex: "#A03030" }
+        ]
+      },
+      {
+        name: "Deuteranopia (Dark)",
+        bg: "#24212E",
+        colors: [
+          { label: "Foreground", hex: "#CCC8D9" },
+          { label: "Accent (purple)", hex: "#BE9AF7" },
+          { label: "Muted", hex: "#726D89" },
+          { label: "Accent (teal)", hex: "#74D7C8" },
+          { label: "Accent (blue-shifted)", hex: "#82AAFF" },
+          { label: "Accent (amber)", hex: "#E8C990" },
+          { label: "Accent (red)", hex: "#E68484" }
+        ]
+      },
+      {
+        name: "Protanopia (Dark)",
+        bg: "#24212E",
+        colors: [
+          { label: "Foreground", hex: "#CCC8D9" },
+          { label: "Accent (purple)", hex: "#BE9AF7" },
+          { label: "Muted", hex: "#726D89" },
+          { label: "Accent (teal)", hex: "#74D7C8" },
+          { label: "Accent (blue-shifted)", hex: "#82AAFF" },
+          { label: "Accent (amber)", hex: "#E8C990" },
+          { label: "Accent (coral)", hex: "#F07178" }
+        ]
+      },
+      {
+        name: "Tritanopia (Dark)",
+        bg: "#24212E",
+        colors: [
+          { label: "Foreground", hex: "#CCC8D9" },
+          { label: "Accent (pink)", hex: "#FF79C6" },
+          { label: "Muted", hex: "#726D89" },
+          { label: "Accent (cyan)", hex: "#89DDFF" },
+          { label: "Accent (green)", hex: "#C3E88D" },
+          { label: "Accent (amber)", hex: "#E8C990" },
+          { label: "Accent (red)", hex: "#E68484" }
+        ]
+      },
+      {
+        name: "Monochrome (Dark)",
+        bg: "#1C1C1C",
+        colors: [
+          { label: "Foreground", hex: "#CCCCCC" },
+          { label: "Accent (white)", hex: "#FFFFFF" },
+          { label: "Muted", hex: "#777777" },
+          { label: "Accent (teal-gray)", hex: "#AAAAAA" },
+          { label: "Accent (green-gray)", hex: "#999999" },
+          { label: "Accent (amber-gray)", hex: "#BBBBBB" },
+          { label: "Accent (light)", hex: "#EEEEEE" }
+        ]
+      },
+      {
+        name: "High Contrast",
+        bg: "#000000",
+        colors: [
+          { label: "Foreground", hex: "#FFFFFF" },
+          { label: "Accent (purple)", hex: "#AD58FF" },
+          { label: "Muted", hex: "#AAAAAA" },
+          { label: "Accent (teal)", hex: "#4AF8E1" },
+          { label: "Accent (green)", hex: "#A6C18B" },
+          { label: "Accent (amber)", hex: "#E8C990" },
+          { label: "Accent (red)", hex: "#FF6B6B" }
+        ]
+      }
+    ];
+
+    function hexToRgb(hex) {
+      var r = parseInt(hex.slice(1, 3), 16);
+      var g = parseInt(hex.slice(3, 5), 16);
+      var b = parseInt(hex.slice(5, 7), 16);
+      return [r, g, b];
+    }
+
+    function relativeLuminance(r, g, b) {
+      var rs = r / 255;
+      var gs = g / 255;
+      var bs = b / 255;
+      rs = rs <= 0.03928 ? rs / 12.92 : Math.pow((rs + 0.055) / 1.055, 2.4);
+      gs = gs <= 0.03928 ? gs / 12.92 : Math.pow((gs + 0.055) / 1.055, 2.4);
+      bs = bs <= 0.03928 ? bs / 12.92 : Math.pow((bs + 0.055) / 1.055, 2.4);
+      return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+    }
+
+    function contrastRatio(hex1, hex2) {
+      var rgb1 = hexToRgb(hex1);
+      var rgb2 = hexToRgb(hex2);
+      var l1 = relativeLuminance(rgb1[0], rgb1[1], rgb1[2]);
+      var l2 = relativeLuminance(rgb2[0], rgb2[1], rgb2[2]);
+      var lighter = Math.max(l1, l2);
+      var darker = Math.min(l1, l2);
+      return (lighter + 0.05) / (darker + 0.05);
+    }
+
+    function statusBadge(ratio, threshold) {
+      return ratio >= threshold
+        ? '<span class="pass">PASS</span>'
+        : '<span class="fail">FAIL</span>';
+    }
+
+    var container = document.getElementById("reports");
+
+    themes.forEach(function(theme) {
+      var section = document.createElement("section");
+      section.className = "theme-section";
+
+      var html = '<h3>' + theme.name + '</h3>';
+      html += '<table class="contrast-table">';
+      html += '<thead><tr>';
+      html += '<th>Color Role</th>';
+      html += '<th>Background</th>';
+      html += '<th>Foreground</th>';
+      html += '<th>Contrast Ratio</th>';
+      html += '<th>AA Normal (4.5:1)</th>';
+      html += '<th>AA Large (3:1)</th>';
+      html += '</tr></thead><tbody>';
+
+      theme.colors.forEach(function(color) {
+        var ratio = contrastRatio(theme.bg, color.hex);
+        var ratioStr = ratio.toFixed(2) + ":1";
+
+        html += '<tr>';
+        html += '<td>' + color.label + '</td>';
+        html += '<td><span class="swatch" style="background:' + theme.bg + '"></span><code>' + theme.bg + '</code></td>';
+        html += '<td><span class="swatch" style="background:' + color.hex + '"></span><code>' + color.hex + '</code></td>';
+        html += '<td>' + ratioStr + '</td>';
+        html += '<td>' + statusBadge(ratio, 4.5) + '</td>';
+        html += '<td>' + statusBadge(ratio, 3.0) + '</td>';
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      section.innerHTML = html;
+      container.appendChild(section);
+    });
+  </script>
+</body>
+</html>

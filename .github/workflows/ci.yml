@@ -8,8 +8,34 @@ on:
     branches: [main]
 
 jobs:
+  analyze:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          config-file: ./.github/codeql-config.yml
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"
+
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22, 24]
+      fail-fast: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -17,7 +43,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '${{ matrix.node-version }}'
           cache: 'npm'
 
       - name: Install dependencies
@@ -108,7 +134,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: sbom
+          name: sbom-node-${{ matrix.node-version }}
           path: reports/sbom.spdx.json
 
       # Visual regression testing
@@ -142,7 +168,7 @@ jobs:
       - name: Upload converted themes
         uses: actions/upload-artifact@v4
         with:
-          name: converted-themes
+          name: converted-themes-node-${{ matrix.node-version }}
           path: exports/
 
       - name: Upload visual regression diffs

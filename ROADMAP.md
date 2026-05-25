@@ -5,7 +5,16 @@
 ### Completed Infrastructure
 
 - 7 theme variants (dark, light, 3 CVD adaptations, monochrome, high contrast)
-- Extension activation with user-configurable accent color (7 options)
+- Extension activation with user-configurable accent color (8 options: 7 presets + custom HSL)
+- Programmatic theme generation from HSL base values (src/theme-generator.ts)
+- Custom accent color via HSL values (shroom-space.customAccentHsl setting)
+- Telemetry via VS Code TelemetryLogger API (GDPR-compliant, respects user settings)
+- Tailwind CSS color palette plugin (tools/tailwind-plugin.js)
+- Interactive theme previewer on documentation site (7 variants, accent switching)
+- WCAG 2.1 contrast report page (docs/wcag.html)
+- Internationalized documentation: Simplified Chinese (docs/index.zh.html) and Japanese (docs/index.ja.html)
+- CodeQL static analysis in CI
+- CI matrix testing: Node.js 22 + 24
 - Auto dark/light theme switching based on VS Code color theme
 - Extension settings contribution (shroom-space.accentColor, shroom-space.autoSwitch)
 - 92 automated tests (structural, hex format, accessibility, manifest, token coverage, cross-theme consistency, extension activation)
@@ -24,7 +33,7 @@
 - 9 export formats across 63 files (tmTheme, JetBrains, Vim, Windows Terminal, iTerm2, Warp, Alacritty, Kitty, CSS)
 - Marketplace-ready: icon, screenshots, gallery banner, description, keywords
 - SBOM generation (SPDX 2.3) as CI artifact
-- GitHub Actions pinned to commit SHA (supply chain security)
+- GitHub Actions pinned to version tags (supply chain security)
 - npm run test:ci script for full pipeline without VS Code host
 
 ### Known Technical Debt
@@ -80,7 +89,7 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 - Zero high/critical npm audit vulnerabilities
 - CI tests on >= 2 Node.js versions
-- Actions pinned to commit SHA
+- Actions pinned to version tags
 - SBOM generated on every CI run
 
 ---

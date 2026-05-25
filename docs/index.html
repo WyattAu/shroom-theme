@@ -151,6 +151,57 @@
       font-size: 0.8rem;
     }
     footer a { color: var(--accent); }
+
+    /* Previewer */
+    .previewer { margin: 2rem 0; }
+    .previewer h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.25rem; }
+    .previewer-controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .previewer-controls label {
+      font-size: 0.875rem;
+      color: var(--fg-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .previewer-controls select {
+      background: var(--bg-surface);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .previewer-controls select:focus {
+      outline: 1px solid var(--accent);
+    }
+    .code-preview {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .code-preview .line { display: block; white-space: pre; }
+    .code-preview .kw { color: var(--accent); }
+    .code-preview .fn { color: var(--accent-teal); }
+    .code-preview .str { color: var(--accent-green); }
+    .code-preview .num { color: var(--accent-amber); }
+    .code-preview .cmt { color: var(--fg-muted); font-style: italic; }
+    .code-preview .typ { color: var(--accent-teal); }
+    .code-preview .var { color: var(--fg); }
+    .code-preview .punc { color: var(--fg-muted); }
   </style>
 </head>
 <body>
@@ -164,6 +215,10 @@
         <a href="#development">Development</a>
         <a href="#downloads">Downloads</a>
         <a href="#settings">Settings</a>
+        <a href="#previewer">Previewer</a>
+        <a href="wcag.html">WCAG</a>
+        <a href="index.zh.html">中文</a>
+        <a href="index.ja.html">日本語</a>
         <a href="https://github.com/WyattAu/shroom-theme">GitHub</a>
       </nav>
     </div>
@@ -172,7 +227,7 @@
   <div class="container">
     <section class="hero">
       <h2>Shroom Space Theme</h2>
-      <p>A VS Code color theme with accessibility-focused variants and runtime features. 7 theme configurations with user-configurable accent colors, auto dark/light switching, WCAG 2.1 AA compliance, and 8 export formats.</p>
+      <p>A VS Code color theme with accessibility-focused variants and runtime features. 7 theme configurations with user-configurable accent colors, auto dark/light switching, WCAG 2.1 AA compliance, and 9 export formats.</p>
       <div class="install-cmd">code --install-extension wyattau.shroom-space-theme</div>
     </section>
 
@@ -312,8 +367,8 @@
       <ul>
         <li>WCAG 2.1 AA contrast compliance (all 7 themes)</li>
         <li>Visual regression testing (7 Playwright tests)</li>
-        <li>Multi-editor export (TextMate, JetBrains, Vim, Windows Terminal)</li>
-        <li>620 color tokens per theme (68% of VS Code API)</li>
+        <li>Multi-editor export (9 formats: TextMate, JetBrains, Vim, Windows Terminal, iTerm2, Warp, Alacritty, Kitty, CSS)</li>
+        <li>630 color tokens per theme (69% of VS Code API)</li>
         <li>81 tokenColors entries per theme</li>
         <li>57 semanticTokenColors rules per theme</li>
       </ul>
@@ -321,7 +376,7 @@
 
     <section class="content" id="downloads">
       <h3>Downloads</h3>
-      <p>Theme exports available for 8 terminal/editor formats:</p>
+      <p>Theme exports available for 9 terminal/editor formats:</p>
       <table class="palette-table">
         <thead><tr><th>Format</th><th>Compatible With</th></tr></thead>
         <tbody>
@@ -349,7 +404,130 @@
         </tbody>
       </table>
     </section>
+
+    <section class="previewer" id="previewer">
+      <h3>Theme Previewer</h3>
+      <div class="previewer-controls">
+        <label>
+          Theme:
+          <select id="theme-select">
+            <option value="shroom-space">Shroom Space</option>
+            <option value="shroom-space-light">Shroom Space Light</option>
+            <option value="deuteranopia">Deuteranopia</option>
+            <option value="protanopia">Protanopia</option>
+            <option value="tritanopia">Tritanopia</option>
+            <option value="monochrome">Monochrome</option>
+            <option value="high-contrast">High Contrast</option>
+          </select>
+        </label>
+        <label>
+          Accent:
+          <select id="accent-select">
+            <option value="accent">Purple (default)</option>
+            <option value="teal">Teal</option>
+            <option value="green">Green</option>
+            <option value="amber">Amber</option>
+            <option value="red">Red</option>
+            <option value="pink">Pink</option>
+            <option value="cyan">Cyan</option>
+          </select>
+        </label>
+      </div>
+      <div class="code-preview" id="code-preview">
+<span class="line"><span class="cmt">// Theme preview - Shroom Space</span></span>
+<span class="line"><span class="kw">const</span> <span class="var">result</span> <span class="punc">=</span> <span class="num">42</span><span class="punc">;</span></span>
+<span class="line"><span class="kw">function</span> <span class="fn">greet</span><span class="punc">(</span><span class="var">name</span><span class="punc">:</span> <span class="typ">string</span><span class="punc">)</span><span class="punc">:</span> <span class="typ">string</span> <span class="punc">{</span></span>
+<span class="line">  <span class="kw">if</span> <span class="punc">(</span><span class="var">name</span> <span class="punc">===</span> <span class="str">"hello world"</span><span class="punc">)</span> <span class="punc">{</span></span>
+<span class="line">    <span class="fn">console</span><span class="punc">.</span><span class="fn">log</span><span class="punc">(</span><span class="var">name</span><span class="punc">);</span></span>
+<span class="line">    <span class="kw">return</span> <span class="str">"matched"</span><span class="punc">;</span></span>
+<span class="line">  <span class="punc">}</span></span>
+<span class="line">  <span class="kw">return</span> <span class="var">data</span> <span class="punc">?</span> <span class="num">true</span> <span class="punc">:</span> <span class="num">false</span><span class="punc">;</span></span>
+<span class="line"><span class="punc">}</span></span>
+      </div>
+    </section>
   </div>
+
+  <script>
+    (function () {
+      var themes = {
+        'shroom-space': {
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7',
+          teal: '#74D7C8', green: '#A6C18B', amber: '#E8C990', red: '#E68484', border: '#393552'
+        },
+        'shroom-space-light': {
+          bg: '#F5F2E8', fg: '#4A4555', muted: '#8A8598', accent: '#8B5F9E',
+          teal: '#007A7A', green: '#5A785A', amber: '#8B6914', red: '#A03030', border: '#D4CFC5'
+        },
+        'deuteranopia': {
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7',
+          teal: '#74D7C8', green: '#82AAFF', amber: '#E8C990', red: '#E68484', border: '#393552'
+        },
+        'protanopia': {
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7',
+          teal: '#74D7C8', green: '#82AAFF', amber: '#E8C990', red: '#F07178', border: '#393552'
+        },
+        'tritanopia': {
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#FF79C6',
+          teal: '#89DDFF', green: '#C3E88D', amber: '#E8C990', red: '#E68484', border: '#393552'
+        },
+        'monochrome': {
+          bg: '#1C1C1C', fg: '#CCCCCC', muted: '#777777', accent: '#FFFFFF',
+          teal: '#AAAAAA', green: '#999999', amber: '#BBBBBB', red: '#EEEEEE', border: '#444444'
+        },
+        'high-contrast': {
+          bg: '#000000', fg: '#FFFFFF', muted: '#AAAAAA', accent: '#AD58FF',
+          teal: '#4AF8E1', green: '#A6C18B', amber: '#E8C990', red: '#FF6B6B', border: '#555555'
+        }
+      };
+
+      var accentColors = {
+        purple: 'accent',
+        teal: 'teal',
+        green: 'green',
+        amber: 'amber',
+        red: 'red',
+        pink: '#FF79C6',
+        cyan: '#89DDFF'
+      };
+
+      var preview = document.getElementById('code-preview');
+      var themeSelect = document.getElementById('theme-select');
+      var accentSelect = document.getElementById('accent-select');
+      var commentLine = preview.querySelector('.cmt');
+
+      function update() {
+        var t = themes[themeSelect.value];
+        if (!t) return;
+
+        preview.style.background = t.bg;
+        preview.style.borderColor = t.border;
+
+        preview.querySelectorAll('.kw').forEach(function (el) { el.style.color = t.accent; });
+        preview.querySelectorAll('.fn').forEach(function (el) { el.style.color = t.teal; });
+        preview.querySelectorAll('.str').forEach(function (el) { el.style.color = t.green; });
+        preview.querySelectorAll('.num').forEach(function (el) { el.style.color = t.amber; });
+        preview.querySelectorAll('.cmt').forEach(function (el) { el.style.color = t.muted; });
+        preview.querySelectorAll('.typ').forEach(function (el) { el.style.color = t.teal; });
+        preview.querySelectorAll('.var').forEach(function (el) { el.style.color = t.fg; });
+        preview.querySelectorAll('.punc').forEach(function (el) { el.style.color = t.muted; });
+
+        commentLine.textContent = '// Theme preview - ' + themeSelect.options[themeSelect.selectedIndex].text;
+
+        var accentChoice = accentSelect.value;
+        var keywordColor;
+        if (accentColors[accentChoice] && accentColors[accentChoice].charAt(0) === '#') {
+          keywordColor = accentColors[accentChoice];
+        } else {
+          keywordColor = t[accentColors[accentChoice]] || t.accent;
+        }
+        preview.querySelectorAll('.kw').forEach(function (el) { el.style.color = keywordColor; });
+      }
+
+      themeSelect.addEventListener('change', update);
+      accentSelect.addEventListener('change', update);
+      update();
+    })();
+  </script>
 
   <footer>
     <div class="container">

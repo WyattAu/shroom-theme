@@ -5,6 +5,91 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-05-25
+
+### Added
+
+- CSS custom properties export (`exports/css/*.css`) with `--shroom-*` variables for web use
+- Tailwind CSS color palette plugin (`tools/tailwind-plugin.js`) with `bg-shroom-*`, `text-shroom-*` utilities
+- Interactive theme previewer on documentation site with 7 theme variants and accent color switching
+- WCAG 2.1 contrast report page (`docs/wcag.html`) with calculated contrast ratios per theme
+- Simplified Chinese documentation (`docs/index.zh.html`)
+- Japanese documentation (`docs/index.ja.html`)
+- Programmatic theme generation from HSL base values (`src/theme-generator.ts`)
+- Custom accent color via HSL values (`shroom-space.customAccentHsl` setting with `accentColor: "custom"`)
+- Telemetry via VS Code TelemetryLogger API (activated, accentColorChanged, autoSwitchToggled events)
+- GitHub CodeQL static analysis workflow (TypeScript/JavaScript)
+- CI job matrix: Node.js 22 + 24
+
+### Changed
+
+- Landing page updated: 630 tokens (69% coverage), 9 export formats, Downloads section, Settings section, Previewer
+- Landing page nav: added Previewer, WCAG, language switcher (ZH, JA) links
+- `package.json` description updated to reflect 630+ tokens and 9-format export
+- CI workflow: artifact names suffixed with Node.js version for matrix compatibility
+- Pages workflow: no changes
+
+## [2.0.0] - 2026-05-24
+
+### Added
+
+- Extension activation lifecycle (`src/extension.ts` rewrite with `activate()`/`deactivate()`)
+- User-configurable accent color override (7 options: purple, teal, green, amber, red, pink, cyan) via `shroom-space.accentColor` setting
+- Auto dark/light theme switching based on VS Code color theme changes via `shroom-space.autoSwitch` setting
+- Extension settings contribution in `package.json` (`contributes.configuration`)
+- `main` and `activationEvents` fields in `package.json`
+- 2 extension activation tests (module exports, accent color map coverage)
+- `@types/sinon` dev dependency for test mocking
+
+### Changed
+
+- Version bumped to 2.0.0
+- 92 total tests (up from 90)
+
+## [1.3.0] - 2026-05-24
+
+### Added
+
+- iTerm2 color scheme export (`.itermcolors` XML format)
+- Warp terminal theme export (`.yaml` format)
+- Alacritty TOML theme export (`.toml` format)
+- Kitty terminal theme export (`.conf` format)
+- CI validation for all 4 new export formats
+- Download links for all export formats on landing page
+
+### Changed
+
+- Total export formats: 4 -> 8 (32 -> 56 export files)
+- `tools/convert.js`: added `convertToITerm2`, `convertToWarp`, `convertToAlacritty`, `convertToKitty` functions
+- Warp export uses `simpleYamlStringify` instead of YAML dependency
+
+## [1.2.0] - 2026-05-24
+
+### Added
+
+- 10 missing VS Code color tokens added to all 7 themes (620 -> 630 total, 69% of VS Code API)
+
+### Changed
+
+- Visual regression test references updated for new token colors
+- Test minimum token count assertion updated to 500 (unchanged, within range)
+
+## [1.1.0] - 2026-05-24
+
+### Added
+
+- SBOM generation tool (`tools/generate-sbom.js`) producing SPDX 2.3 format
+- `npm run sbom` script
+- `npm run test:ci` script for full pipeline without VS Code host
+- Converted themes as GitHub Release assets on tag push
+- `test-results/` added to `.gitignore`
+
+### Changed
+
+- Updated mocha@11.7.6 and sinon@22.0.0
+- GitHub Actions pinned to version tags (v4/v5)
+- CI: added SBOM generation and upload step
+
 ## [1.0.0] - 2026-05-21
 
 ### Added

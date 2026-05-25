@@ -1,7 +1,7 @@
 {
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
-  "description": "A cosmic dark theme with 7 variants including light, CVD-friendly (deuteranopia, protanopia, tritanopia), monochrome, and high contrast. WCAG 2.1 AA compliant. 620+ color tokens, comprehensive syntax highlighting for 15+ languages, and multi-editor export support.",
+  "description": "A cosmic dark theme with 7 variants including light, CVD-friendly (deuteranopia, protanopia, tritanopia), monochrome, and high contrast. WCAG 2.1 AA compliant. 630+ color tokens, comprehensive syntax highlighting for 15+ languages, and 9-format multi-editor export support.",
   "version": "2.0.0",
   "publisher": "wyattau",
   "main": "./out/extension.js",
@@ -100,7 +100,7 @@
     "properties": {
       "shroom-space.accentColor": {
         "type": "string",
-        "enum": ["default", "purple", "teal", "green", "amber", "red", "pink", "cyan"],
+        "enum": ["default", "purple", "teal", "green", "amber", "red", "pink", "cyan", "custom"],
         "enumDescriptions": [
           "Use theme default accent colors",
           "Purple accent (keywords, highlights)",
@@ -109,11 +109,18 @@
           "Amber accent (constants, types)",
           "Red accent (errors, deletions)",
           "Pink accent (variables, decorators)",
-          "Cyan accent (types, interfaces)"
+          "Cyan accent (types, interfaces)",
+          "Custom accent from HSL values (set via customAccentHsl)"
         ],
         "default": "default",
         "description": "Override the primary accent color for syntax highlighting",
         "order": 1
+      },
+      "shroom-space.customAccentHsl": {
+        "type": "string",
+        "default": "",
+        "description": "Custom accent color as HSL values (format: 'hue,saturation,lightness' e.g. '280,70,80'). Only used when accentColor is 'custom'.",
+        "order": 3
       },
       "shroom-space.autoSwitch": {
         "type": "boolean",
