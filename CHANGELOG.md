@@ -5,6 +5,31 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-05-25
+
+### Added
+
+- 211 new VS Code color tokens (732 -> 943 total, 100% of known VS Code API):
+  - activityBarTop: foreground, inactive foreground, border
+  - agentSession: background, foreground, border, icon colors
+  - chart: lines, bars, grid, axis colors
+  - gauge: background, foreground, border, tick marks
+  - inlineEdit: background, border, foreground, stroke colors
+  - scmGraph: history item, node, reference colors
+  - terminalSymbolIcon: foreground, variable, method, class, interface, enum, more
+  - workspaceOverlay: foreground, background, border
+  - radio: background, border, foreground, active states
+  - merge: incoming/outgoing/current content, headers, borders
+  - markdownAlert: tip, note, error, warning, caution colors
+  - Additional tokens across editor, debug, notebook, and UI categories
+- Full VS Code color token API coverage achieved (943/943 known tokens)
+- Updated GitHub Actions: CodeQL v3 -> v4
+
+### Changed
+
+- Token coverage increased from 80% to 100% (943 known VS Code API tokens)
+- Updated metrics across documentation (EN, ZH, JA), ROADMAP, and package.json
+
 ## [2.2.0] - 2026-05-25
 
 ### Added

@@ -1,6 +1,6 @@
 # Shroom Space Theme - Production Roadmap
 
-## Current Status (v2.2.0)
+## Current Status (v3.0.0)
 
 ### Completed Infrastructure
 
@@ -27,7 +27,7 @@
 - Automated WCAG contrast report generation as CI artifact
 - GitHub Pages documentation site at https://wyattau.github.io/shroom-theme/
 - Strict ESLint configuration (error-level rules, no-console, no-explicit-any, explicit-function-return-type)
-- 732 color tokens per theme (80% of VS Code API)
+- 943 color tokens per theme (100% of known VS Code API)
 - 81 tokenColors entries per theme (operators, punctuation, regex, markup, HTML/XML, CSS, JSON, YAML, shell, SQL, Rust, Go, Python, Java/Kotlin, C/C++)
 - 57 semanticTokenColors rules per theme (types, functions, variables, operators, markup, Angular, React hooks)
 - 9 export formats across 63 files (tmTheme, JetBrains, Vim, Windows Terminal, iTerm2, Warp, Alacritty, Kitty, CSS)
@@ -204,7 +204,7 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 **Goal:** Reach 80%+ VS Code color token coverage and close quality gaps.
 
-**Status:** Completed. 732 tokens per theme (80.4% of VS Code API).
+**Status:** Completed. 943 tokens per theme (100% of known VS Code API).
 
 ### Tasks
 
@@ -222,6 +222,31 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 - Token coverage >= 80% (achieved: 80.4%)
 - Pre-commit hook works in slow environments
+- All documentation consistent across languages
+
+---
+
+## Phase 12: v3.0.0 - Complete API Coverage (COMPLETED)
+
+**Goal:** Achieve 100% coverage of all known VS Code color tokens.
+
+**Status:** Completed. 943 tokens per theme (100% of known VS Code API).
+
+### Tasks
+
+| ID | Task | Status |
+|---|---|---|
+| T-3001 | Audit VS Code API for all remaining color tokens (943 total, 211 missing) | Done |
+| T-3002 | Add 211 tokens: activityBarTop, agentSession, chart, gauge, inlineEdit, scmGraph, terminalSymbolIcon, workspaceOverlay, radio, merge, markdownAlert, and more | Done |
+| T-3003 | Propagate new tokens to all 6 variant themes with correct color derivation | Done |
+| T-3004 | Update metrics across all docs (EN, ZH, JA), ROADMAP, CHANGELOG, package.json | Done |
+| T-3005 | Re-run WCAG contrast validation for all new token pairs | Done |
+| T-3006 | Update GitHub Actions: CodeQL v3 -> v4 | Done |
+
+### Acceptance Criteria
+
+- Token coverage = 100% of known VS Code API (achieved: 943 tokens)
+- All new token pairs pass WCAG AA
 - All documentation consistent across languages
 
 ---
@@ -267,7 +292,10 @@ v0.2.0 (WCAG) --> v0.3.0 (Completeness) --> v0.4.0 (Multi-Editor) --> v0.5.0 (Vi
                                                                v2.1.0 (Web & Docs)
                                                                              |
                                                                              v
-                                                               v2.2.0 (Coverage 80%)
+                                                                v2.2.0 (Coverage 80%)
+                                                                              |
+                                                                              v
+                                                                v3.0.0 (Coverage 100%)
 
 All phases COMPLETED.
 ```

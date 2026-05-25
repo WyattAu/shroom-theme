@@ -1,8 +1,8 @@
 {
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
-  "description": "A cosmic dark theme with 7 variants including light, CVD-friendly (deuteranopia, protanopia, tritanopia), monochrome, and high contrast. WCAG 2.1 AA compliant. 732+ color tokens, comprehensive syntax highlighting for 15+ languages, and 9-format multi-editor export support.",
-  "version": "2.1.1",
+  "description": "A cosmic dark theme with 7 variants including light, CVD-friendly (deuteranopia, protanopia, tritanopia), monochrome, and high contrast. WCAG 2.1 AA compliant. 943+ color tokens, comprehensive syntax highlighting for 15+ languages, and 9-format multi-editor export support.",
+  "version": "3.0.0",
   "publisher": "wyattau",
   "main": "./out/extension.js",
   "activationEvents": [
