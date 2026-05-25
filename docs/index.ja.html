@@ -47,7 +47,6 @@
       font-size: 0.875rem;
     }
     nav a:hover { color: var(--accent); text-decoration: none; }
-    .lang-switch { color: var(--accent) !important; font-weight: 600; }
 
     /* Hero */
     .hero {
@@ -152,6 +151,57 @@
       font-size: 0.8rem;
     }
     footer a { color: var(--accent); }
+
+    /* Previewer */
+    .previewer { margin: 2rem 0; }
+    .previewer h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.25rem; }
+    .previewer-controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .previewer-controls label {
+      font-size: 0.875rem;
+      color: var(--fg-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .previewer-controls select {
+      background: var(--bg-surface);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.875rem;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .previewer-controls select:focus {
+      outline: 1px solid var(--accent);
+    }
+    .code-preview {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .code-preview .line { display: block; white-space: pre; }
+    .code-preview .kw { color: var(--accent); }
+    .code-preview .fn { color: var(--accent-teal); }
+    .code-preview .str { color: var(--accent-green); }
+    .code-preview .num { color: var(--accent-amber); }
+    .code-preview .cmt { color: var(--fg-muted); font-style: italic; }
+    .code-preview .typ { color: var(--accent-teal); }
+    .code-preview .var { color: var(--fg); }
+    .code-preview .punc { color: var(--fg-muted); }
   </style>
 </head>
 <body>
@@ -159,14 +209,16 @@
     <div class="container">
       <h1>Shroom Space Theme</h1>
       <nav>
-        <a href="index.html" class="lang-switch">EN</a>
-        <a href="index.zh.html" class="lang-switch">中文</a>
         <a href="#themes">テーマ</a>
         <a href="#palette">パレット</a>
         <a href="#installation">インストール</a>
         <a href="#development">開発</a>
         <a href="#downloads">ダウンロード</a>
         <a href="#settings">設定</a>
+        <a href="#previewer">プレビュー</a>
+        <a href="wcag.html">WCAG</a>
+        <a href="index.html">EN</a>
+        <a href="index.zh.html">中文</a>
         <a href="https://github.com/WyattAu/shroom-theme">GitHub</a>
       </nav>
     </div>
@@ -175,7 +227,7 @@
   <div class="container">
     <section class="hero">
       <h2>Shroom Space Theme</h2>
-      <p>アクセシビリティ重視のバリアントとランタイム機能を備えた VS Code カラーテーマ。7つのテーマ設定、カスタマイズ可能なアクセントカラー、ダーク/ライト自動切り替え、WCAG 2.1 AA 準拠、8つのエクスポート形式に対応。</p>
+      <p>アクセシビリティ重視のバリアントとランタイム機能を備えた VS Code カラーテーマ。7つのテーマ設定、ユーザー設定可能なアクセントカラー、ダーク/ライト自動切替、WCAG 2.1 AA 準拠、9つのエクスポート形式に対応。</p>
       <div class="install-cmd">code --install-extension wyattau.shroom-space-theme</div>
     </section>
 
@@ -184,8 +236,8 @@
       <div class="theme-grid">
         <div class="theme-card">
           <h4>Shroom Space</h4>
-          <span class="type-badge">ダーク</span>
-          <p>ベースダークテーマ。紫/ティール/グリーンのパレットに、温かみのあるアンバー色の定数を組み合わせ。</p>
+          <span class="type-badge">dark</span>
+          <p>ベースダークテーマ。紫/ティール/グリーンのパレットに、ウォームなアンバーの定数を組み合わせ。</p>
           <div>
             <span class="color-swatch" style="background:#24212E"></span>
             <span class="color-swatch" style="background:#CCC8D9"></span>
@@ -196,8 +248,8 @@
         </div>
         <div class="theme-card">
           <h4>Shroom Space Light</h4>
-          <span class="type-badge">ライト</span>
-          <p>ライトバリアント。温かみのあるアーストーンの背景と落ち着いたアクセントカラー。</p>
+          <span class="type-badge">light</span>
+          <p>ライトバリアント。ウォームなアーストーンの背景とミュートされたアクセント。</p>
           <div>
             <span class="color-swatch" style="background:#F5F2E8"></span>
             <span class="color-swatch" style="background:#4A4555"></span>
@@ -208,8 +260,8 @@
         </div>
         <div class="theme-card">
           <h4>Deuteranopia</h4>
-          <span class="type-badge">ダーク</span>
-          <p>緑色弱（Deuteranopia）向けに適応。青色シフトを追加し、赤緑の混同を回避。</p>
+          <span class="type-badge">dark</span>
+          <p>2型色覚（緑色弱）向けに適応。ブルーシフトで補完、赤緑の混同を回避。</p>
           <div>
             <span class="color-swatch" style="background:#24212E"></span>
             <span class="color-swatch" style="background:#BE9AF7"></span>
@@ -219,8 +271,8 @@
         </div>
         <div class="theme-card">
           <h4>Protanopia</h4>
-          <span class="type-badge">ダーク</span>
-          <p>赤色盲（Protanopia）向けに適応。コーラルシフトのエラー表示に青色を追加。</p>
+          <span class="type-badge">dark</span>
+          <p>1型色覚（赤色盲）向けに適応。コーラルシフトのエラー表示にブルーの補色を追加。</p>
           <div>
             <span class="color-swatch" style="background:#24212E"></span>
             <span class="color-swatch" style="background:#BE9AF7"></span>
@@ -230,8 +282,8 @@
         </div>
         <div class="theme-card">
           <h4>Tritanopia</h4>
-          <span class="type-badge">ダーク</span>
-          <p>青黄色盲（Tritanopia）向けに適応。ピンク/シアンシフトのアクセントにグリーンの文字列。</p>
+          <span class="type-badge">dark</span>
+          <p>3型色覚（青黄色覚異常）向けに適応。ピンク/シアンシフトのアクセントにグリーンの文字列。</p>
           <div>
             <span class="color-swatch" style="background:#24212E"></span>
             <span class="color-swatch" style="background:#FF79C6"></span>
@@ -241,8 +293,8 @@
         </div>
         <div class="theme-card">
           <h4>Monochrome</h4>
-          <span class="type-badge">ダーク</span>
-          <p>グレースケールパレット。エラー表示は輝度コントラストを使用。最大限のテキストの明瞭さ。</p>
+          <span class="type-badge">dark</span>
+          <p>グレースケールパレット。エラー表示は輝度コントラストを使用。最大のテキスト明瞭度。</p>
           <div>
             <span class="color-swatch" style="background:#1C1C1C"></span>
             <span class="color-swatch" style="background:#CCCCCC"></span>
@@ -252,7 +304,7 @@
         </div>
         <div class="theme-card">
           <h4>High Contrast</h4>
-          <span class="type-badge">ハイコントラスト</span>
+          <span class="type-badge">hc</span>
           <p>最大コントラスト比。純黒背景。WCAG AAA 完全準拠を目標。</p>
           <div>
             <span class="color-swatch" style="background:#000000"></span>
@@ -268,7 +320,7 @@
       <h3>ベースダークカラーパレット</h3>
       <table class="palette-table">
         <thead>
-          <tr><th>役割</th><th>Hex</th><th>用途</th></tr>
+          <tr><th>役割</th><th>色値</th><th>用途</th></tr>
         </thead>
         <tbody>
           <tr><td><span class="color-swatch" style="background:#24212E"></span> 背景</td><td><code>#24212E</code></td><td>エディタ背景</td></tr>
@@ -285,13 +337,13 @@
 
     <section class="content" id="installation">
       <h3>インストール</h3>
-      <p>VS Code 拡張機能パネルで "Shroom Space" を検索するか、CLI でインストール：</p>
+      <p>VS Code の拡張機能パネルで "Shroom Space" を検索するか、CLI でインストール：</p>
       <pre><code>code --install-extension wyattau.shroom-space-theme</code></pre>
       <p><code>Ctrl+K Ctrl+T</code>（macOS：<code>Cmd+K Cmd+T</code>）でテーマを選択。</p>
 
       <h3>手動インストール</h3>
       <ol>
-        <li><a href="https://github.com/WyattAu/shroom-theme/releases">releases</a> から最新の <code>.vsix</code> をダウンロード。</li>
+        <li><a href="https://github.com/WyattAu/shroom-theme/releases">リリース</a>ページから最新の <code>.vsix</code> をダウンロード。</li>
         <li>実行：<code>code --install-extension shroom-space-theme-*.vsix</code></li>
       </ol>
     </section>
@@ -303,7 +355,7 @@
         <thead><tr><th>コマンド</th><th>説明</th></tr></thead>
         <tbody>
           <tr><td><code>npm run compile</code></td><td>TypeScript コンパイル</td></tr>
-          <tr><td><code>npm run lint</code></td><td>ESLint 厳格ルールチェック</td></tr>
+          <tr><td><code>npm run lint</code></td><td>ESLint 厳格ルール</td></tr>
           <tr><td><code>npm run validate</code></td><td>テーマ JSON バリデーション</td></tr>
           <tr><td><code>npm test</code></td><td>フルパイプライン（コンパイル + lint + バリデーション + 92 テスト）</td></tr>
         </tbody>
@@ -314,21 +366,21 @@
       <h3>機能</h3>
       <ul>
         <li>WCAG 2.1 AA コントラスト準拠（全7テーマ）</li>
-        <li>ビジュアルリグレッションテスト（7 Playwright テスト）</li>
-        <li>マルチエディタエクスポート（TextMate、JetBrains、Vim、Windows Terminal）</li>
-        <li>テーマあたり 620 カラートークン（VS Code API の 68%）</li>
-        <li>テーマあたり 81 tokenColors エントリ</li>
-        <li>テーマあたり 57 semanticTokenColors ルール</li>
+        <li>ビジュアルリグレッションテスト（7つの Playwright テスト）</li>
+        <li>マルチエディタエクスポート（9形式：TextMate、JetBrains、Vim、Windows Terminal、iTerm2、Warp、Alacritty、Kitty、CSS）</li>
+        <li>テーマごとに732カラートークン（VS Code API の80%をカバー）</li>
+        <li>テーマごとに81の tokenColors エントリ</li>
+        <li>テーマごとに57の semanticTokenColors ルール</li>
       </ul>
     </section>
 
     <section class="content" id="downloads">
       <h3>ダウンロード</h3>
-      <p>8つのターミナル/エディタ形式でテーマエクスポートが利用可能：</p>
+      <p>9つのターミナル/エディタ形式でテーマエクスポートを利用可能：</p>
       <table class="palette-table">
         <thead><tr><th>形式</th><th>互換性</th></tr></thead>
         <tbody>
-          <tr><td><code>.css</code></td><td>Web（CSS カスタムプロパティ）</td></tr>
+          <tr><td><code>.css</code></td><td>Web（CSS Custom Properties）</td></tr>
           <tr><td><code>.tmTheme</code></td><td>Sublime Text、TextMate、Atom</td></tr>
           <tr><td><code>.icls</code></td><td>IntelliJ、WebStorm、PyCharm、GoLand</td></tr>
           <tr><td><code>.vim</code></td><td>Vim、Neovim</td></tr>
@@ -347,12 +399,135 @@
       <table class="palette-table">
         <thead><tr><th>設定</th><th>値</th><th>デフォルト</th><th>説明</th></tr></thead>
         <tbody>
-          <tr><td><code>shroom-space.accentColor</code></td><td>default、purple、teal、green、amber、red、pink、cyan</td><td>default</td><td>プライマリアクセントカラーを上書き</td></tr>
-          <tr><td><code>shroom-space.autoSwitch</code></td><td>true、false</td><td>false</td><td>VS Code カラーテーマに基づきダーク/ライトを自動切替</td></tr>
+          <tr><td><code>shroom-space.accentColor</code></td><td>default, purple, teal, green, amber, red, pink, cyan</td><td>default</td><td>プライマリアクセントカラーを上書き</td></tr>
+          <tr><td><code>shroom-space.autoSwitch</code></td><td>true, false</td><td>false</td><td>VS Code のカラーテーマに基づきダーク/ライトを自動切替</td></tr>
         </tbody>
       </table>
     </section>
+
+    <section class="previewer" id="previewer">
+      <h3>テーマプレビュー</h3>
+      <div class="previewer-controls">
+        <label>
+          テーマ：
+          <select id="theme-select">
+            <option value="shroom-space">Shroom Space</option>
+            <option value="shroom-space-light">Shroom Space Light</option>
+            <option value="deuteranopia">Deuteranopia</option>
+            <option value="protanopia">Protanopia</option>
+            <option value="tritanopia">Tritanopia</option>
+            <option value="monochrome">Monochrome</option>
+            <option value="high-contrast">High Contrast</option>
+          </select>
+        </label>
+        <label>
+          アクセント：
+          <select id="accent-select">
+            <option value="accent">Purple（デフォルト）</option>
+            <option value="teal">Teal</option>
+            <option value="green">Green</option>
+            <option value="amber">Amber</option>
+            <option value="red">Red</option>
+            <option value="pink">Pink</option>
+            <option value="cyan">Cyan</option>
+          </select>
+        </label>
+      </div>
+      <div class="code-preview" id="code-preview">
+<span class="line"><span class="cmt">// Theme preview - Shroom Space</span></span>
+<span class="line"><span class="kw">const</span> <span class="var">result</span> <span class="punc">=</span> <span class="num">42</span><span class="punc">;</span></span>
+<span class="line"><span class="kw">function</span> <span class="fn">greet</span><span class="punc">(</span><span class="var">name</span><span class="punc">:</span> <span class="typ">string</span><span class="punc">)</span><span class="punc">:</span> <span class="typ">string</span> <span class="punc">{</span></span>
+<span class="line">  <span class="kw">if</span> <span class="punc">(</span><span class="var">name</span> <span class="punc">===</span> <span class="str">"hello world"</span><span class="punc">)</span> <span class="punc">{</span></span>
+<span class="line">    <span class="fn">console</span><span class="punc">.</span><span class="fn">log</span><span class="punc">(</span><span class="var">name</span><span class="punc">);</span></span>
+<span class="line">    <span class="kw">return</span> <span class="str">"matched"</span><span class="punc">;</span></span>
+<span class="line">  <span class="punc">}</span></span>
+<span class="line">  <span class="kw">return</span> <span class="var">data</span> <span class="punc">?</span> <span class="num">true</span> <span class="punc">:</span> <span class="num">false</span><span class="punc">;</span></span>
+<span class="line"><span class="punc">}</span></span>
+      </div>
+    </section>
   </div>
+
+  <script>
+    (function () {
+      var themes = {
+        'shroom-space': {
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7',
+          teal: '#74D7C8', green: '#A6C18B', amber: '#E8C990', red: '#E68484', border: '#393552'
+        },
+        'shroom-space-light': {
+          bg: '#F5F2E8', fg: '#4A4555', muted: '#8A8598', accent: '#8B5F9E',
+          teal: '#007A7A', green: '#5A785A', amber: '#8B6914', red: '#A03030', border: '#D4CFC5'
+        },
+        'deuteranopia': {
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7',
+          teal: '#74D7C8', green: '#82AAFF', amber: '#E8C990', red: '#E68484', border: '#393552'
+        },
+        'protanopia': {
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7',
+          teal: '#74D7C8', green: '#82AAFF', amber: '#E8C990', red: '#F07178', border: '#393552'
+        },
+        'tritanopia': {
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#FF79C6',
+          teal: '#89DDFF', green: '#C3E88D', amber: '#E8C990', red: '#E68484', border: '#393552'
+        },
+        'monochrome': {
+          bg: '#1C1C1C', fg: '#CCCCCC', muted: '#777777', accent: '#FFFFFF',
+          teal: '#AAAAAA', green: '#999999', amber: '#BBBBBB', red: '#EEEEEE', border: '#444444'
+        },
+        'high-contrast': {
+          bg: '#000000', fg: '#FFFFFF', muted: '#AAAAAA', accent: '#AD58FF',
+          teal: '#4AF8E1', green: '#A6C18B', amber: '#E8C990', red: '#FF6B6B', border: '#555555'
+        }
+      };
+
+      var accentColors = {
+        purple: 'accent',
+        teal: 'teal',
+        green: 'green',
+        amber: 'amber',
+        red: 'red',
+        pink: '#FF79C6',
+        cyan: '#89DDFF'
+      };
+
+      var preview = document.getElementById('code-preview');
+      var themeSelect = document.getElementById('theme-select');
+      var accentSelect = document.getElementById('accent-select');
+      var commentLine = preview.querySelector('.cmt');
+
+      function update() {
+        var t = themes[themeSelect.value];
+        if (!t) return;
+
+        preview.style.background = t.bg;
+        preview.style.borderColor = t.border;
+
+        preview.querySelectorAll('.kw').forEach(function (el) { el.style.color = t.accent; });
+        preview.querySelectorAll('.fn').forEach(function (el) { el.style.color = t.teal; });
+        preview.querySelectorAll('.str').forEach(function (el) { el.style.color = t.green; });
+        preview.querySelectorAll('.num').forEach(function (el) { el.style.color = t.amber; });
+        preview.querySelectorAll('.cmt').forEach(function (el) { el.style.color = t.muted; });
+        preview.querySelectorAll('.typ').forEach(function (el) { el.style.color = t.teal; });
+        preview.querySelectorAll('.var').forEach(function (el) { el.style.color = t.fg; });
+        preview.querySelectorAll('.punc').forEach(function (el) { el.style.color = t.muted; });
+
+        commentLine.textContent = '// Theme preview - ' + themeSelect.options[themeSelect.selectedIndex].text;
+
+        var accentChoice = accentSelect.value;
+        var keywordColor;
+        if (accentColors[accentChoice] && accentColors[accentChoice].charAt(0) === '#') {
+          keywordColor = accentColors[accentChoice];
+        } else {
+          keywordColor = t[accentColors[accentChoice]] || t.accent;
+        }
+        preview.querySelectorAll('.kw').forEach(function (el) { el.style.color = keywordColor; });
+      }
+
+      themeSelect.addEventListener('change', update);
+      accentSelect.addEventListener('change', update);
+      update();
+    })();
+  </script>
 
   <footer>
     <div class="container">

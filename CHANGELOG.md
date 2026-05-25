@@ -5,6 +5,33 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-05-25
+
+### Added
+
+- 102 new VS Code color tokens across 7 categories (630 -> 732 total, 80% of VS Code API):
+  - Testing (32): coverage badges, test icons, message styles, peek borders
+  - Notebook (23): cell borders, backgrounds, scrollbar sliders, status icons
+  - Inline Chat (10): background, border, input styles, diff indicators
+  - Merge Editor (13): change backgrounds, conflict borders, common content
+  - List (5): icon foregrounds, focus backgrounds, inactive outlines
+  - Debug (11): token expression types, view labels, state backgrounds
+  - Diff Editor (8): move borders, unchanged regions, gutter backgrounds
+- Export format validation report (`docs/validation.md`)
+- Pre-commit hook: added `SKIP_HOOKS=1` escape hatch and 120s timeout
+
+### Changed
+
+- Token coverage increased from 69% to 80% (732/910 VS Code API tokens)
+- Updated metrics across documentation (EN, ZH, JA), ROADMAP, and package.json
+
+## [2.1.1] - 2026-05-25
+
+### Fixed
+
+- Pre-commit hook: added timeout (120s) and `SKIP_HOOKS=1` environment variable bypass for slow environments
+- Internationalized docs (ZH, JA) synced with EN page: added interactive previewer, WCAG report link, language switcher, updated metrics
+
 ## [2.1.0] - 2026-05-25
 
 ### Added
@@ -23,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Landing page updated: 630 tokens (69% coverage), 9 export formats, Downloads section, Settings section, Previewer
+- Landing page updated: 732 tokens (80% coverage), 9 export formats, Downloads section, Settings section, Previewer
 - Landing page nav: added Previewer, WCAG, language switcher (ZH, JA) links
 - `package.json` description updated to reflect 630+ tokens and 9-format export
 - CI workflow: artifact names suffixed with Node.js version for matrix compatibility
