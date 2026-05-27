@@ -223,3 +223,92 @@ suite('Extension Activation Tests', () => {
     assert.ok(accents.length === 7, 'Should have 7 accent color options');
   });
 });
+
+const VS_CODE_SEMANTIC_TYPES = new Set([
+  'namespace', 'class', 'enum', 'interface', 'struct', 'typeParameter',
+  'type', 'parameter', 'variable', 'property', 'enumMember', 'decorator',
+  'event', 'function', 'method', 'macro', 'label', 'comment', 'string',
+  'keyword', 'number', 'regexp', 'operator',
+]);
+
+const VS_CODE_SEMANTIC_MODIFIERS = new Set([
+  'declaration', 'definition', 'readonly', 'static', 'deprecated',
+  'abstract', 'async', 'modification', 'documentation', 'defaultLibrary',
+]);
+
+suite('Semantic Token Validation Tests', () => {
+
+  const themeFiles = fs.readdirSync(themesDir).filter(f => f.endsWith('.json'));
+
+  for (const file of themeFiles) {
+    const filePath = path.join(themesDir, file);
+
+    suite(`Semantic Tokens: ${file}`, () => {
+
+      let theme: Record<string, unknown>;
+
+      suiteSetup(() => {
+        const raw = fs.readFileSync(filePath, 'utf8');
+        theme = JSON.parse(raw);
+      });
+
+      test('has "semanticHighlighting" set to true', () => {
+        assert.strictEqual(theme.semanticHighlighting, true,
+          'semanticHighlighting must be true for semantic tokens to activate');
+      });
+
+      test('has "semanticTokenColors" as flat object', () => {
+        const stc = theme.semanticTokenColors;
+        assert.ok(stc !== undefined && stc !== null,
+          'semanticTokenColors must exist');
+        assert.ok(typeof stc === 'object' && !Array.isArray(stc),
+          'semanticTokenColors must be a flat object');
+        assert.ok(!('enabled' in stc) && !('rules' in stc),
+          'semanticTokenColors must not have nested "enabled" or "rules" wrapper');
+      });
+
+      test('has minimum 20 semantic token rules', () => {
+        const stc = theme.semanticTokenColors as Record<string, unknown>;
+        const count = Object.keys(stc).length;
+        assert.ok(count >= 20,
+          `Expected >= 20 semantic token rules, got ${count}`);
+      });
+
+      test('all selectors use valid VS Code token types', () => {
+        const stc = theme.semanticTokenColors as Record<string, unknown>;
+        for (const selector of Object.keys(stc)) {
+          const baseType = selector.split('.')[0].split(':')[0];
+          if (baseType !== '*') {
+            assert.ok(VS_CODE_SEMANTIC_TYPES.has(baseType),
+              `Invalid semantic token type "${baseType}" in selector "${selector}"`);
+          }
+        }
+      });
+
+      test('all selectors use valid VS Code token modifiers', () => {
+        const stc = theme.semanticTokenColors as Record<string, unknown>;
+        for (const selector of Object.keys(stc)) {
+          const noLang = selector.split(':')[0];
+          const parts = noLang.split('.');
+          for (let i = 1; i < parts.length; i++) {
+            assert.ok(VS_CODE_SEMANTIC_MODIFIERS.has(parts[i]),
+              `Invalid semantic token modifier "${parts[i]}" in selector "${selector}"`);
+          }
+        }
+      });
+
+      test('all semantic token colors are valid hex', () => {
+        const stc = theme.semanticTokenColors as Record<string, { foreground?: string }>;
+        const hexPattern = /^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$/;
+        for (const [selector, style] of Object.entries(stc)) {
+          const fg = style.foreground;
+          if (fg) {
+            assert.ok(hexPattern.test(fg),
+              `Semantic token "${selector}" has invalid foreground hex: "${fg}"`);
+          }
+        }
+      });
+
+    });
+  }
+});
