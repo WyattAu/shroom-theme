@@ -2,7 +2,7 @@
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
   "description": "A cosmic dark theme with 7 variants including light, CVD-friendly (deuteranopia, protanopia, tritanopia), monochrome, and high contrast. WCAG 2.1 AA compliant. 943+ color tokens, comprehensive syntax highlighting for 15+ languages, and 9-format multi-editor export support.",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "publisher": "wyattau",
   "main": "./out/extension.js",
   "activationEvents": [
@@ -36,7 +36,8 @@
     "url": "https://github.com/WyattAu/shroom-theme/issues"
   },
   "engines": {
-    "vscode": "^1.105.0"
+    "vscode": "^1.105.0",
+    "node": ">=24.0.0"
   },
   "categories": [
     "Themes"
@@ -150,21 +151,21 @@
     "@playwright/test": "^1.60.0",
     "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
-    "@types/node": "22.x",
+    "@types/node": "24.x",
     "@types/pixelmatch": "^5.2.6",
     "@types/sinon": "^21.0.1",
-    "@types/vscode": "^1.105.0",
-    "@typescript-eslint/eslint-plugin": "^8.45.0",
-    "@typescript-eslint/parser": "^8.45.0",
-    "@vscode/test-cli": "^0.0.11",
+    "@types/vscode": "^1.120.0",
+    "@typescript-eslint/eslint-plugin": "^8.60.0",
+    "@typescript-eslint/parser": "^8.60.0",
+    "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
-    "@vscode/vsce": "^3.6.2",
-    "chai": "^6.2.0",
-    "eslint": "^9.36.0",
-    "mocha": "^11.3.0",
+    "@vscode/vsce": "^3.9.1",
+    "chai": "^6.2.2",
+    "eslint": "^10.4.0",
+    "mocha": "^11.7.6",
     "pixelmatch": "^7.2.0",
     "pngjs": "^7.0.0",
     "sinon": "^22.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }

@@ -5,6 +5,26 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-05-27
+
+### Changed
+
+- Update Node.js minimum to 24 LTS (CI matrix: 24 + 26)
+- Update TypeScript 5 -> 6
+- Update ESLint 9 -> 10
+- Update @types/vscode 1.105.0 -> 1.120.0
+- Update @typescript-eslint 8.45 -> 8.60
+- Update mocha 11.3 -> 11.7.6
+- Update chai 6.2 -> 6.2.2
+- Update @vscode/test-cli 0.0.11 -> 0.0.12
+- Update @vscode/vsce 3.6 -> 3.9
+- Add `engines.node: ">=24.0.0"` to package.json
+- Add `skipLibCheck: true` and explicit `types` to tsconfig.json for TypeScript 6 compatibility
+
+### Fixed
+
+- TypeScript 6 type resolution: added explicit `types: ["node", "mocha"]` to tsconfig.json
+
 ## [3.0.0] - 2026-05-25
 
 ### Added

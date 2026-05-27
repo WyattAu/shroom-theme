@@ -6,7 +6,9 @@
     "rootDir": "src",
     "outDir": "out",
     "strict": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "types": ["node", "mocha"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", ".vscode-test"]

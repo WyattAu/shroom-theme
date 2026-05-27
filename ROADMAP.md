@@ -14,7 +14,7 @@
 - WCAG 2.1 contrast report page (docs/wcag.html)
 - Internationalized documentation: Simplified Chinese (docs/index.zh.html) and Japanese (docs/index.ja.html)
 - CodeQL static analysis in CI
-- CI matrix testing: Node.js 22 + 24
+- CI matrix testing: Node.js 24 + 26
 - Auto dark/light theme switching based on VS Code color theme
 - Extension settings contribution (shroom-space.accentColor, shroom-space.autoSwitch)
 - 92 automated tests (structural, hex format, accessibility, manifest, token coverage, cross-theme consistency, extension activation)
@@ -78,7 +78,7 @@ Published to VS Code Marketplace. All pre-release criteria met.
 |---|---|---|
 | T-1101 | Resolve remaining transitive npm audit vulnerabilities (update mocha, sinon) | Done |
 | T-1102 | Add visual regression test for dimension-change detection (assert on intentional layout change) | Done |
-| T-1103 | Add CI job matrix: test on Node.js 22 + latest, VS Code stable + insiders | Done |
+| T-1103 | Add CI job matrix: test on Node.js 24 + 26, VS Code stable + insiders | Done |
 | T-1104 | Add CodeQL or Semgrep static analysis to CI | Done |
 | T-1105 | Add SBOM generation (SPDX) as CI artifact | Done |
 | T-1106 | Lock GitHub Actions versions with SHA pinning instead of tags | Done |
