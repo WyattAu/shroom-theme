@@ -1,6 +1,6 @@
 # Shroom Space Theme
 
-A dark VS Code color theme extension with accessibility-focused variants. Provides 7 theme configurations covering standard dark, light, and color-vision-deficiency (CVD) adapted palettes.
+A cosmic dark theme for VS Code with 7 variants, including accessibility-focused CVD adaptations. 943 color tokens (100% of VS Code API), 32 semantic token rules, WCAG 2.1 AA compliant, and 9-format multi-editor export.
 
 ## Themes
 
@@ -8,91 +8,89 @@ A dark VS Code color theme extension with accessibility-focused variants. Provid
 |---|---|---|
 | Shroom Space | Dark | Base dark theme. Purple/teal/green palette. |
 | Shroom Space Light | Light | Light variant. Warm earth-tone backgrounds. |
-| Shroom Space (Deuteranopia) | Dark | Adapted for deuteranopia (green-weak CVD). Blue-shifted additions. |
-| Shroom Space (Protanopia) | Dark | Adapted for protanopia (red-blind CVD). Coral-shifted errors. |
-| Shroom Space (Tritanopia) | Dark | Adapted for tritanopia (blue-yellow CVD). Pink/cyan-shifted accents. |
-| Shroom Space (Monochrome) | Dark | Grayscale palette. Error indicators use luminance contrast. |
-| Shroom Space (High Contrast) | High Contrast | Maximum contrast ratios. Pure black background. |
+| Shroom Space (Deuteranopia) | Dark | Adapted for deuteranopia (green-weak CVD). |
+| Shroom Space (Protanopia) | Dark | Adapted for protanopia (red-blind CVD). |
+| Shroom Space (Tritanopia) | Dark | Adapted for tritanopia (blue-yellow CVD). |
+| Shroom Space (Monochrome) | Dark | Grayscale palette. Luminance-based contrast. |
+| Shroom Space (High Contrast) | High Contrast | Maximum contrast. Pure black background. |
+
+## Features
+
+- **Accent color customization** -- 7 presets (purple, teal, green, amber, rose, sky, coral) + custom HSL via settings
+- **Auto dark/light switching** -- follows OS appearance automatically
+- **Semantic token support** -- 32 rules covering all VS Code standard types and modifiers
+- **9 export formats** -- tmTheme, JetBrains (.icls), Vim, Windows Terminal, iTerm2, Warp, Alacritty, Kitty, CSS
+- **Tailwind CSS plugin** -- `tools/tailwind-plugin.js` for use in Tailwind projects
+- **WCAG 2.1 AA** -- all text-foreground pairs pass contrast requirements
+- **i18n docs** -- English, Simplified Chinese, Japanese
 
 ## Installation
 
 ### VS Code Marketplace
 
-Search for "Shroom Space" in the VS Code Extensions panel, or install via CLI:
-
-```bash
+```
 code --install-extension wyattau.shroom-space-theme
 ```
 
+Or search "Shroom Space" in the Extensions panel.
+
 ### Manual
 
-1. Download the latest `.vsix` from [releases](https://github.com/WyattAu/shroom-theme/releases).
-2. Run: `code --install-extension shroom-space-theme-*.vsix`
+Download the `.vsix` from [releases](https://github.com/WyattAu/shroom-theme/releases):
 
-## Activation
-
-Select a theme via `Ctrl+K Ctrl+T` (or `Cmd+K Cmd+T` on macOS) and choose a Shroom Space variant.
-
-## Architecture
-
-```
-shroom-theme/
-  themes/             # 7 JSON theme definitions (VS Code tmTheme schema)
-  src/
-    extension.ts      # Minimal activation stub (theme extensions need no logic)
-    test/
-      extension.test.ts  # 90 tests: hex format, structural, accessibility, manifest
-  validate-themes.js  # CI-integrated validation (structure, hex, accessibility, manifest)
-  showcase/           # Sample files for visual theme testing across 8 languages
+```bash
+code --install-extension shroom-space-theme-*.vsix
 ```
 
-### Theme Validation
+## Accent Color
 
-`validate-themes.js` enforces:
-- Required fields (`name`, `type`, `colors`, `tokenColors`)
-- Valid hex color format (`#RRGGBB` or `#RRGGBBAA`)
-- Error/warning color distinguishability
-- Package manifest and disk file consistency
-- Correct `uiTheme` values (`vs` for light, `hc-black` for high contrast)
+Use the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and search **Shroom: Set Accent Color**. Or configure in settings:
 
-### Test Pipeline
-
+```jsonc
+{
+  "shroom-space.accentColor": "purple",     // purple | teal | green | amber | rose | sky | coral | custom
+  "shroom-space.autoSwitch": true,          // auto dark/light on OS change
+  "shroom-space.customAccentHsl": "280,70,80"  // only when accentColor is "custom"
+}
 ```
-npm test  =>  compile  ->  lint  ->  validate  ->  vscode-test (90 tests)
-```
+
+## Preview
+
+Interactive preview with all 7 variants: [wyattau.github.io/shroom-theme](https://wyattau.github.io/shroom-theme/)
+
+WCAG contrast report: [wyattau.github.io/shroom-theme/wcag.html](https://wyattau.github.io/shroom-theme/wcag.html)
+
+## Color Palette
+
+| Role | Hex | Usage |
+|---|---|---|
+| Background | `#24212E` | Primary editor background |
+| Foreground | `#CCC8D9` | Default text |
+| Accent (purple) | `#BE9AF7` | Keywords, highlights |
+| Accent (teal) | `#74D7C8` | Functions, info |
+| Accent (green) | `#A6C18B` | Strings, git additions |
+| Accent (amber) | `#E8C990` | Constants, types, warnings |
+| Accent (red) | `#E68484` | Errors, deletions |
+| Muted | `#726D89` | Comments, disabled |
 
 ## Development
 
 ### Prerequisites
 
-- Node.js >= 22
+- Node.js >= 24
 - npm >= 10
-- VS Code >= 1.105.0
 
 ### Commands
 
 | Command | Description |
 |---|---|
 | `npm run compile` | TypeScript compilation |
-| `npm run lint` | ESLint with strict rules |
+| `npm run lint` | ESLint |
 | `npm run validate` | Theme JSON validation |
-| `npm test` | Full pipeline: compile + lint + validate + VS Code tests |
-| `npm run watch` | TypeScript watch mode |
-
-## Color Palette Reference
-
-### Base Dark Theme
-
-| Role | Hex | Usage |
-|---|---|---|
-| Background (editor) | `#24212E` | Primary editor background |
-| Foreground (editor) | `#CCC8D9` | Default text color |
-| Accent (purple) | `#BE9AF7` | Keywords, highlights, badges |
-| Accent (teal) | `#74D7C8` | Functions, info indicators |
-| Accent (green) | `#A6C18B` | Strings, git additions |
-| Accent (amber) | `#E8C990` | Constants, types, warnings |
-| Accent (red) | `#E68484` | Errors, deletions |
-| Muted | `#726D89` | Comments, disabled states |
+| `npm test` | Full pipeline: compile + lint + validate + 134 tests |
+| `npm run convert` | Generate 9-format exports |
+| `npm run sbom` | SPDX 2.3 SBOM |
+| `npm run test:ci` | Full CI pipeline (no VS Code host) |
 
 ## License
 
@@ -103,3 +101,4 @@ Apache License 2.0. See [LICENSE](./LICENSE).
 - [Repository](https://github.com/WyattAu/shroom-theme)
 - [Issues](https://github.com/WyattAu/shroom-theme/issues)
 - [Changelog](./CHANGELOG.md)
+- [Roadmap](./ROADMAP.md)

@@ -5,6 +5,23 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2026-05-27
+
+### Fixed
+
+- Fix critical semantic token format: flattened `{ enabled, rules }` wrapper to flat `semanticTokenColors` object matching VS Code API spec
+- Added `"semanticHighlighting": true` to all 7 theme files
+- Fixed invalid selectors (`readonly` -> `*.readonly`, `static` -> `*.static`, removed `variable.global`)
+- Removed 24 non-standard semantic token types that VS Code ignores (module, tag, attribute, heading, bold, italic, strikethrough, link, punctuation, separator, bracket, controlKeyword, arithmeticOperator, bitwiseOperator, comparisonOperator, logicalOperator, assignmentOperator, component, directive, pipe, service, hook, component.tag, constant)
+- Result: 32 valid VS Code standard semantic token rules per theme (down from 57 non-functional)
+
+### Changed
+
+- Updated dev dependencies (mocha 11.7.6 -> 11.3.0, @vscode/test-cli 0.0.12 -> 0.0.11) via npm audit fix
+- Improved marketplace discoverability: added keywords (cosmic, purple, teal, pastel, minimal, modern, retina, comfortable, low-vision, a11y)
+- Rewrote README with current feature set and accurate version requirements
+- Updated package.json description for better marketplace search ranking
+
 ## [3.1.0] - 2026-05-27
 
 ### Changed

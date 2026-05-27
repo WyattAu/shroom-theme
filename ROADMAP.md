@@ -1,6 +1,6 @@
 # Shroom Space Theme - Production Roadmap
 
-## Current Status (v3.0.0)
+## Current Status (v4.0.0)
 
 ### Completed Infrastructure
 
@@ -17,7 +17,7 @@
 - CI matrix testing: Node.js 24 + 26
 - Auto dark/light theme switching based on VS Code color theme
 - Extension settings contribution (shroom-space.accentColor, shroom-space.autoSwitch)
-- 92 automated tests (structural, hex format, accessibility, manifest, token coverage, cross-theme consistency, extension activation)
+- 134 automated tests (structural, hex format, accessibility, manifest, token coverage, cross-theme consistency, extension activation, semantic token validation)
 - 7 Playwright visual regression tests with reference screenshots and pixel-diff comparison (2% threshold)
 - CI pipeline (lint + compile + validate + WCAG + test + convert + visual regression) on every push/PR
 - Publish pipeline with pre-publish validation, idempotent version skip, and multi-editor exports
@@ -29,7 +29,7 @@
 - Strict ESLint configuration (error-level rules, no-console, no-explicit-any, explicit-function-return-type)
 - 943 color tokens per theme (100% of known VS Code API)
 - 81 tokenColors entries per theme (operators, punctuation, regex, markup, HTML/XML, CSS, JSON, YAML, shell, SQL, Rust, Go, Python, Java/Kotlin, C/C++)
-- 57 semanticTokenColors rules per theme (types, functions, variables, operators, markup, Angular, React hooks)
+- 32 semanticTokenColors rules per theme (all VS Code standard types/modifiers, properly flattened)
 - 9 export formats across 63 files (tmTheme, JetBrains, Vim, Windows Terminal, iTerm2, Warp, Alacritty, Kitty, CSS)
 - Marketplace-ready: icon, screenshots, gallery banner, description, keywords
 - SBOM generation (SPDX 2.3) as CI artifact
@@ -39,6 +39,7 @@
 ### Known Technical Debt
 
 - Visual regression references are only updated on first run or dimension change; deliberate edits require manual reference update.
+- Non-standard semantic token types (component, directive, pipe, service, hook, tag, heading, punctuation, etc.) removed in v4.0.0. These were being silently ignored by VS Code. If language extensions define custom semantic token types in the future, re-addition may be needed.
 
 ---
 
@@ -251,6 +252,130 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 ---
 
+## Phase 13: v4.0.0 - Semantic Token Fix & Marketplace Polish (COMPLETED)
+
+**Goal:** Fix the critical semantic token format bug, improve marketplace discoverability, and refresh documentation.
+
+### Tasks
+
+| ID | Task | Status |
+|---|---|---|
+| T-4001 | Fix semanticTokenColors: flatten `{ enabled, rules }` to flat object, add `"semanticHighlighting": true` | Done |
+| T-4002 | Audit 57 semantic rules against VS Code standard types/modifiers (26 types, 11 modifiers), remove non-standard, add missing | Done |
+| T-4003 | Propagate fixed semantic tokens to all 7 variant themes | Done |
+| T-4004 | Add semantic token tests to test suite | Done |
+| T-4005 | Rewrite README: update stale info (92 tests, not 90; Node >= 24; accent color docs; semantic tokens; export formats) | Done |
+| T-4006 | Add marketplace keywords for discoverability (cosmic, purple, teal, pastel, comfortable, minimal, modern, retina, retina-theme) | Done |
+| T-4007 | Add CHANGELOG entry for v4.0.0 | Done |
+| T-4008 | Bump package.json version, publish v4.0.0 to marketplace | Done |
+
+### Acceptance Criteria
+
+- `semanticHighlighting: true` present in all 7 theme JSON files
+- `semanticTokenColors` is a flat object (no wrapper)
+- Only VS Code standard token types/modifiers used (26 types + 11 modifiers)
+- README reflects current state accurately
+- Marketplace listing updated
+
+---
+
+## Phase 14: v4.1.0 - Neovim & Helix Native Themes
+
+**Goal:** Ship proper native theme plugins for Neovim and Helix, not just hex color exports.
+
+### Tasks
+
+| ID | Task | Status |
+|---|---|---|
+| T-4101 | Create Neovim colorscheme plugin: `lua/shroom/init.lua` with proper highlight groups | Pending |
+| T-4102 | Map all VS Code semantic token types to Neovim `@` syntax highlight groups | Pending |
+| T-4103 | Support `vim.o.background = "dark"` / `"light"` switching | Pending |
+| T-4104 | Create Helix theme TOML file mapping VS Code tokens to Helix palette keys | Pending |
+| T-4105 | Add Neovim/Helix themes to CI validation | Pending |
+| T-4106 | Document Neovim/Helix installation in README | Pending |
+| T-4107 | Add to export tooling (tools/convert.js) | Pending |
+
+### Acceptance Criteria
+
+- `use 'wyattau/shroom-theme'` works in Neovim lazy.nvim / packer
+- `theme = "shroom"` works in Helix config.toml
+- Light/dark variants available in both editors
+- CVD variants available as separate sub-themes
+
+---
+
+## Phase 15: v4.2.0 - Icon Theme Pairing
+
+**Goal:** Ship a matching file icon theme or recommend a compatible one.
+
+### Tasks
+
+| ID | Task | Status |
+|---|---|---|
+| T-4201 | Evaluate existing icon themes for palette compatibility (catppuccin, nord, material) | Pending |
+| T-4202 | If no compatible theme found: create minimal shroom-icon-theme with matching palette | Pending |
+| T-4203 | If compatible theme found: document recommendation, add to README and extension | Pending |
+| T-4204 | Add icon theme contribution point to package.json (if creating) | Pending |
+| T-4205 | Validate icon theme with VS Code extension host | Pending |
+
+### Acceptance Criteria
+
+- Matching icon theme available (created or documented)
+- Consistent palette between color theme and icon theme
+- Documented in README
+
+---
+
+## Phase 16: v5.0.0 - WASM Theme Previewer (Rust/Leptos)
+
+**Goal:** Build an interactive, client-side theme previewer using Rust compiled to WASM via Leptos SSR.
+
+### Tasks
+
+| ID | Task | Status |
+|---|---|---|
+| T-5001 | Scaffold Leptos project (trunk, wasm-bindgen, leptos 0.7+) | Pending |
+| T-5002 | Load all 7 theme JSON files at build time | Pending |
+| T-5003 | Implement code editor component with syntax highlighting (tree-sitter or highlight.js via wasm) | Pending |
+| T-5004 | Implement theme switcher UI (7 variants + accent color picker) | Pending |
+| T-5005 | Implement VS Code workbench mock (sidebar, activity bar, terminal, editor) | Pending |
+| T-5006 | Implement WCAG contrast checker per-token | Pending |
+| T-5007 | Deploy to GitHub Pages (replacing current static previewer) | Pending |
+| T-5008 | Add i18n support (EN, ZH, JA) | Pending |
+| T-5009 | Optimize WASM binary size (< 500KB gzipped) | Pending |
+
+### Acceptance Criteria
+
+- Previewer loads in < 2s on 3G connection
+- All 7 themes previewable with live accent color switching
+- Code samples render with proper syntax highlighting
+- Workbench mock shows realistic VS Code layout
+- Deployed at https://wyattau.github.io/shroom-theme/
+
+---
+
+## Phase 17: v5.1.0 - AI Color Variants
+
+**Goal:** Let users generate accent color variants from wallpaper images.
+
+### Tasks
+
+| ID | Task | Status |
+|---|---|---|
+| T-5101 | Implement dominant color extraction (k-means or median cut) in Rust/WASM | Pending |
+| T-5102 | Map extracted colors to accent presets using HSL distance | Pending |
+| T-5103 | Add image upload UI to previewer | Pending |
+| T-5104 | Generate theme preview with extracted accent | Pending |
+| T-5105 | Export custom .vsix with embedded accent color | Pending |
+
+### Acceptance Criteria
+
+- User uploads image, gets suggested accent colors
+- Generated accent applies to live preview
+- Export to VS Code settings JSON
+
+---
+
 ## Recurring Maintenance
 
 | Frequency | Task |
@@ -271,33 +396,49 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 ```
 v0.2.0 (WCAG) --> v0.3.0 (Completeness) --> v0.4.0 (Multi-Editor) --> v0.5.0 (Visual Regression)
-                                                                            |
-                                                                            v
-                                                                     v1.0.0 (Production)
-                                                                            |
-                                                                    +-------+-------+
-                                                                    |               |
-                                                                    v               v
-                                                              v1.1.0 (Harden)   v1.2.0 (Coverage)
-                                                                    |               |
-                                                                    +-------+-------+
-                                                                            |
-                                                                            v
-                                                              v1.3.0 (Extended Editors)
-                                                                            |
-                                                                            v
-                                                              v2.0.0 (Extension Activation)
-                                                                            |
-                                                                            v
-                                                               v2.1.0 (Web & Docs)
                                                                              |
                                                                              v
-                                                                v2.2.0 (Coverage 80%)
+                                                                      v1.0.0 (Production)
+                                                                             |
+                                                                     +-------+-------+
+                                                                     |               |
+                                                                     v               v
+                                                               v1.1.0 (Harden)   v1.2.0 (Coverage)
+                                                                     |               |
+                                                                     +-------+-------+
+                                                                             |
+                                                                             v
+                                                               v1.3.0 (Extended Editors)
+                                                                             |
+                                                                             v
+                                                               v2.0.0 (Extension Activation)
+                                                                             |
+                                                                             v
+                                                                v2.1.0 (Web & Docs)
                                                                               |
                                                                               v
-                                                                v3.0.0 (Coverage 100%)
+                                                                 v2.2.0 (Coverage 80%)
+                                                                               |
+                                                                               v
+                                                                 v3.0.0 (Coverage 100%)
+                                                                               |
+                                                                               v
+                                                                    v3.1.0 (Node 24 LTS)
+                                                                               |
+                                                                               v
+                                                                    v4.0.0 (Semantic Fix + Polish)
+                                                                               |
+                                                                     +---------+---------+
+                                                                     |         |         |
+                                                                     v         v         v
+                                                              v4.1.0    v4.2.0    v5.0.0
+                                                              (Neovim/   (Icons)   (WASM
+                                                               Helix)              Previewer)
+                                                                                  |
+                                                                                  v
+                                                                             v5.1.0 (AI)
 
-All phases COMPLETED.
+Phases 1-13 COMPLETED. Phases 14-17 PLANNED.
 ```
 
 ---
