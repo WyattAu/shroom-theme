@@ -92,6 +92,15 @@ WCAG contrast report: [wyattau.github.io/shroom-theme/wcag.html](https://wyattau
 | `npm run sbom` | SPDX 2.3 SBOM |
 | `npm run test:ci` | Full CI pipeline (no VS Code host) |
 
+## Recommended Icon Theme
+
+**[Catppuccin Icons](https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc-icons)** (Mocha flavor) pairs naturally -- its palette (mauve `#cba6f7`, teal `#94e2d5`, blue `#89b4fa`) is within 10-15 hex of Shroom Space's accents. No configuration needed.
+
+For pixel-perfect control, **[Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)** with:
+```jsonc
+{ "material-icon-theme.folders.color": "#BE9AF7", "material-icon-theme.files.color": "#CCC8D9", "material-icon-theme.saturation": 0.75 }
+```
+
 ## Neovim
 
 ```lua

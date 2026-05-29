@@ -5,6 +5,36 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2026-05-29
+
+### Added
+
+- WASM theme previewer (previewer/): Rust/Leptos 0.7 CSR app compiled to WASM
+  - VS Code workbench mock (activity bar, sidebar, editor with syntax highlighting, terminal, status bar)
+  - Live theme switching across all 7 variants
+  - Rust syntax highlighting (keywords, strings, numbers, types, comments)
+  - i18n support (EN, ZH, JA)
+  - Color palette display
+  - Themes embedded at compile time via include_str!()
+  - WASM binary: 1.1MB release profile
+  - Build: cargo build --target wasm32-unknown-unknown --release
+
+- Neovim colorscheme: 7 Lua files with 150+ highlight groups (editors/neovim/)
+  - TreeSitter groups, LSP semantic tokens, diagnostics, git signs
+  - Telescope, nvim-tree, which-key, indent-blankline support
+  - Terminal 16-color palette
+  - lazy.nvim compatible plugin structure
+
+- Helix theme: 7 TOML files with full palette/syntax/UI sections (editors/helix/)
+
+- Editor theme generator: tools/generate-editors.js
+
+### Changed
+
+- README: added Neovim, Helix, icon theme recommendations
+- Icon theme recommendation: Catppuccin Icons (Mocha) -- near-identical palette
+- Material Icon Theme fallback config documented
+
 ## [4.1.0] - 2026-05-29
 
 ### Added

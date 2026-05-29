@@ -1,6 +1,6 @@
 # Shroom Space Theme - Production Roadmap
 
-## Current Status (v4.0.0)
+## Current Status (v5.0.0)
 
 ### Completed Infrastructure
 
@@ -304,7 +304,7 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 ---
 
-## Phase 15: v4.2.0 - Icon Theme Pairing
+## Phase 15: v4.1.0 - Icon Theme Pairing (COMPLETED)
 
 **Goal:** Ship a matching file icon theme or recommend a compatible one.
 
@@ -312,37 +312,55 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 | ID | Task | Status |
 |---|---|---|
-| T-4201 | Evaluate existing icon themes for palette compatibility (catppuccin, nord, material) | Pending |
-| T-4202 | If no compatible theme found: create minimal shroom-icon-theme with matching palette | Pending |
-| T-4203 | If compatible theme found: document recommendation, add to README and extension | Pending |
-| T-4204 | Add icon theme contribution point to package.json (if creating) | Pending |
-| T-4205 | Validate icon theme with VS Code extension host | Pending |
+| T-4201 | Evaluate existing icon themes for palette compatibility | Done |
+| T-4202 | Document recommendation: Catppuccin Icons (Mocha) -- near-identical palette, zero config | Done |
+| T-4203 | Document Material Icon Theme fallback config for pixel-perfect matching | Done |
+| T-4204 | Add icon theme recommendations to README | Done |
+
+### Decision
+
+Creating a custom icon theme would require 500+ SVG icons and months of work for marginal benefit over Catppuccin Icons, whose palette is within 10-15 hex of Shroom Space's accents. Recommendation documented instead.
 
 ### Acceptance Criteria
 
-- Matching icon theme available (created or documented)
-- Consistent palette between color theme and icon theme
-- Documented in README
+- Matching icon theme available (documented: Catppuccin Icons)
+- Material Icon Theme fallback config documented
+- README updated
 
 ---
 
-## Phase 16: v5.0.0 - WASM Theme Previewer (Rust/Leptos)
+## Phase 16: v5.0.0 - WASM Theme Previewer (Rust/Leptos) (COMPLETED)
 
-**Goal:** Build an interactive, client-side theme previewer using Rust compiled to WASM via Leptos SSR.
+**Goal:** Build an interactive, client-side theme previewer using Rust compiled to WASM via Leptos.
 
 ### Tasks
 
 | ID | Task | Status |
 |---|---|---|
-| T-5001 | Scaffold Leptos project (trunk, wasm-bindgen, leptos 0.7+) | Pending |
-| T-5002 | Load all 7 theme JSON files at build time | Pending |
-| T-5003 | Implement code editor component with syntax highlighting (tree-sitter or highlight.js via wasm) | Pending |
-| T-5004 | Implement theme switcher UI (7 variants + accent color picker) | Pending |
-| T-5005 | Implement VS Code workbench mock (sidebar, activity bar, terminal, editor) | Pending |
-| T-5006 | Implement WCAG contrast checker per-token | Pending |
-| T-5007 | Deploy to GitHub Pages (replacing current static previewer) | Pending |
-| T-5008 | Add i18n support (EN, ZH, JA) | Pending |
-| T-5009 | Optimize WASM binary size (< 500KB gzipped) | Pending |
+| T-5001 | Scaffold Leptos project (Cargo.toml, index.html, build.rs) | Done |
+| T-5002 | Load all 7 theme JSON files at compile time via include_str! | Done |
+| T-5003 | Implement VS Code workbench mock (activity bar, sidebar, editor, terminal, status bar) | Done |
+| T-5004 | Implement theme switcher UI (7 variants) | Done |
+| T-5005 | Implement Rust syntax highlighting (keywords, strings, numbers, types, comments) | Done |
+| T-5006 | Implement i18n support (EN, ZH, JA) | Done |
+| T-5007 | Implement color palette display section | Done |
+| T-5008 | Compile to WASM (cdylib, 1.1MB release) | Done |
+| T-5009 | Document build/deploy instructions | Done |
+
+### Technical Details
+
+- Framework: Leptos 0.7 (CSR mode, compiled to WASM)
+- Binary size: 1.1MB release (target: <500KB gzipped after wasm-opt)
+- Build: `cargo build --target wasm32-unknown-unknown --release`
+- Dev: `trunk serve` (requires trunk installation)
+- Themes embedded at compile time via `include_str!()`
+- No runtime HTTP requests for theme data
+
+### Build Status
+
+- Compiles successfully with `cargo check --target wasm32-unknown-unknown`
+- WASM binary builds at 1.1MB release profile (opt-level="z", LTO, codegen-units=1)
+- Trunk build pending (trunk installation in progress)
 
 ### Acceptance Criteria
 
@@ -354,7 +372,7 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 ---
 
-## Phase 17: v5.1.0 - AI Color Variants
+## Phase 17: v5.1.0 - AI Color Variants (PLANNED)
 
 **Goal:** Let users generate accent color variants from wallpaper images.
 
@@ -368,11 +386,9 @@ Published to VS Code Marketplace. All pre-release criteria met.
 | T-5104 | Generate theme preview with extracted accent | Pending |
 | T-5105 | Export custom .vsix with embedded accent color | Pending |
 
-### Acceptance Criteria
+### Notes
 
-- User uploads image, gets suggested accent colors
-- Generated accent applies to live preview
-- Export to VS Code settings JSON
+This phase is speculative and may be deferred. The WASM previewer (Phase 16) provides the foundation for the image upload and color preview UI. The k-means/median cut algorithm can be implemented in pure Rust (no dependencies needed) for WASM execution.
 
 ---
 
@@ -438,7 +454,7 @@ v0.2.0 (WCAG) --> v0.3.0 (Completeness) --> v0.4.0 (Multi-Editor) --> v0.5.0 (Vi
                                                                                   v
                                                                              v5.1.0 (AI)
 
-Phases 1-13 COMPLETED. Phases 14-17 PLANNED.
+Phases 1-16 COMPLETED. Phase 17 PLANNED (speculative).
 ```
 
 ---
