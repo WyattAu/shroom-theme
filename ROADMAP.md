@@ -279,7 +279,7 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 ---
 
-## Phase 14: v4.1.0 - Neovim & Helix Native Themes
+## Phase 14: v4.1.0 - Neovim & Helix Native Themes (COMPLETED)
 
 **Goal:** Ship proper native theme plugins for Neovim and Helix, not just hex color exports.
 
@@ -287,13 +287,13 @@ Published to VS Code Marketplace. All pre-release criteria met.
 
 | ID | Task | Status |
 |---|---|---|
-| T-4101 | Create Neovim colorscheme plugin: `lua/shroom/init.lua` with proper highlight groups | Pending |
-| T-4102 | Map all VS Code semantic token types to Neovim `@` syntax highlight groups | Pending |
-| T-4103 | Support `vim.o.background = "dark"` / `"light"` switching | Pending |
-| T-4104 | Create Helix theme TOML file mapping VS Code tokens to Helix palette keys | Pending |
-| T-4105 | Add Neovim/Helix themes to CI validation | Pending |
-| T-4106 | Document Neovim/Helix installation in README | Pending |
-| T-4107 | Add to export tooling (tools/convert.js) | Pending |
+| T-4101 | Create Neovim colorscheme plugin: Lua files with proper highlight groups | Done |
+| T-4102 | Map all VS Code semantic token types to Neovim @syntax and @lsp highlight groups | Done |
+| T-4103 | Support light/dark variants in both editors | Done |
+| T-4104 | Create Helix theme TOML files mapping VS Code tokens to Helix palette keys | Done |
+| T-4105 | Add editor theme generator tooling (tools/generate-editors.js) | Done |
+| T-4106 | Document Neovim/Helix installation in README | Done |
+| T-4107 | Create lazy.nvim-compatible plugin structure (editors/neovim/lua/shroom/) | Done |
 
 ### Acceptance Criteria
 

@@ -2,7 +2,7 @@
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
   "description": "Cosmic dark theme with 7 variants: dark, light, deuteranopia, protanopia, tritanopia, monochrome, high contrast. WCAG 2.1 AA, 943 tokens, semantic highlighting, accent color customization, 9-format export.",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "publisher": "wyattau",
   "main": "./out/extension.js",
   "activationEvents": [

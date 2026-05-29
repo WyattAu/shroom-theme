@@ -1,0 +1,209 @@
+# Shroom Space Light for Helix
+# Generated from VS Code theme. Do not edit manually.
+# Install: copy to ~/.config/helix/themes/shroom_space_light.toml
+
+[palette]
+bg = "#F5F2E8"
+fg = "#4A4555"
+bg_dark = "#E1DECC"
+bg_light = "#EBE8DD"
+bg_highlight = "#EBE8DD"
+selection = "#D9D4C3"
+cursor_line = "#EBE8DD"
+line_number = "#4A455550"
+line_number_active = "#4A4555"
+accent = "#948E9E"
+comment = "#948E9E"
+keyword = "#8B5F9E"
+string = "#5A785A"
+number = "#8C6D34"
+constant = "#8C6D34"
+variable = "#585FB5"
+func = "#007A7A"
+type = "#8C6D34"
+class = "#8C6D34"
+namespace = "#8C6D34"
+operator = "#8B5F9E"
+punctuation = "#8A859A"
+regexp = "#8C6D34"
+tag = "#8B5F9E"
+attribute = "#8C6D34"
+decorator = "#8C6D34"
+purple = "#BE9AF7"
+teal = "#74D7C8"
+green = "#A6C18B"
+amber = "#E8C990"
+red = "#E68484"
+blue = "#82AAFF"
+muted = "#726D89"
+error = "#b05151"
+warning = "#886a32"
+info = "#007A7A"
+
+[ui]
+background = "bg"
+foreground = "fg"
+cursorline = "cursor_line"
+color-columns = "bg_light"
+
+[ui.cursor]
+foreground = "bg"
+background = "fg"
+
+[ui.cursor.primary]
+foreground = "bg"
+background = "cursor"
+
+[ui.cursor.match]
+foreground = "purple"
+
+[ui.linenr]
+foreground = "line_number"
+
+[ui.linenr.selected]
+foreground = "line_number_active"
+
+[ui.statusline]
+foreground = "fg"
+background = "bg_dark"
+
+[ui.statusline.inactive]
+foreground = "muted"
+background = "bg_darker"
+
+[ui.statusline.normal]
+foreground = "bg"
+background = "purple"
+
+[ui.statusline.insert]
+foreground = "bg"
+background = "teal"
+
+[ui.statusline.select]
+foreground = "bg"
+background = "amber"
+
+[ui.popup]
+foreground = "fg"
+background = "bg_light"
+
+[ui.window]
+foreground = "accent"
+
+[ui.help]
+foreground = "fg"
+background = "bg_light"
+
+[ui.text]
+foreground = "fg"
+
+[ui.text.focus]
+foreground = "purple"
+
+[ui.text.inactive]
+foreground = "muted"
+
+[ui.text.info]
+foreground = "teal"
+
+[ui.virtual]
+foreground = "muted"
+
+[ui.virtual.ruler]
+foreground = "bg_highlight"
+
+[ui.virtual.whitespace]
+foreground = "muted"
+
+[ui.virtual.indent-guide]
+foreground = "muted"
+
+[ui.virtual.inlay-hint]
+foreground = "muted"
+italic = true
+
+[ui.selection]
+background = "selection"
+
+[ui.cursorline.primary]
+background = "cursor_line"
+
+[ui.bufferline]
+foreground = "muted"
+background = "bg_dark"
+
+[ui.bufferline.active]
+foreground = "fg"
+background = "bg"
+
+[syntax]
+"type" = "type"
+"type.builtin" = "amber"
+"type.enum" = "type"
+"type.enum.variant" = "amber"
+"constructor" = "amber"
+"constant" = "constant"
+"constant.builtin" = "amber"
+"constant.builtin.boolean" = "constant"
+"constant.character" = "string"
+"constant.character.escape" = "amber"
+"constant.numeric" = "number"
+"constant.numeric.integer" = "number"
+"constant.numeric.float" = "number"
+"string" = "string"
+"string.regexp" = "regexp"
+"string.special" = "amber"
+"string.special.path" = "blue"
+"string.special.url" = "blue"
+"string.special.symbol" = "amber"
+"comment" = "comment"
+"comment.line" = "comment"
+"comment.block" = "comment"
+"comment.block.documentation" = "comment"
+"variable" = "variable"
+"variable.builtin" = "constant"
+"variable.parameter" = "blue"
+"variable.other" = "fg"
+"variable.other.member" = "fg"
+"label" = "blue"
+"punctuation" = "punctuation"
+"punctuation.delimiter" = "punctuation"
+"punctuation.bracket" = "punctuation"
+"punctuation.special" = "amber"
+"keyword" = "keyword"
+"keyword.control" = "keyword"
+"keyword.control.conditional" = "keyword"
+"keyword.control.repeat" = "keyword"
+"keyword.control.import" = "keyword"
+"keyword.control.return" = "keyword"
+"keyword.control.exception" = "keyword"
+"keyword.operator" = "operator"
+"keyword.directive" = "keyword"
+"keyword.storage" = "keyword"
+"keyword.storage.type" = "keyword"
+"keyword.storage.modifier" = "keyword"
+"operator" = "operator"
+"function" = "func"
+"function.builtin" = "teal"
+"function.method" = "func"
+"function.macro" = "keyword"
+"function.special" = "amber"
+"tag" = "tag"
+"tag.attribute" = "attribute"
+"tag.delimiter" = "punctuation"
+"namespace" = "namespace"
+"module" = "namespace"
+"special" = "amber"
+"attribute" = "decorator"
+
+[marker]
+error = "error"
+warning = "warning"
+info = "info"
+hint = "teal"
+
+[diagnostic]
+error = { fg = "error", underline-style = "curl" }
+warning = { fg = "warning", underline-style = "curl" }
+info = { fg = "info", underline-style = "curl" }
+hint = { fg = "teal", underline-style = "curl" }

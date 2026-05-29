@@ -5,6 +5,19 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-05-29
+
+### Added
+
+- Neovim colorscheme: 7 Lua files with 150+ highlight groups including TreeSitter, LSP semantic tokens, diagnostics, git signs, telescope, nvim-tree, which-key, and terminal colors (editors/neovim/)
+- Helix theme: 7 TOML files with full palette, UI, syntax, diagnostic, and marker sections (editors/helix/)
+- Editor theme generator: tools/generate-editors.js produces both Neovim and Helix themes from VS Code JSON
+- lazy.nvim-compatible plugin structure with lua/shroom/init.lua loader
+
+### Changed
+
+- README updated with Neovim and Helix installation instructions
+
 ## [4.0.0] - 2026-05-27
 
 ### Fixed

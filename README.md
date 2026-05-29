@@ -92,6 +92,27 @@ WCAG contrast report: [wyattau.github.io/shroom-theme/wcag.html](https://wyattau
 | `npm run sbom` | SPDX 2.3 SBOM |
 | `npm run test:ci` | Full CI pipeline (no VS Code host) |
 
+## Neovim
+
+```lua
+-- lazy.nvim
+{ "wyattau/shroom-theme", name = "shroom-theme", lazy = false, priority = 1000, config = function() vim.cmd.colorscheme("shroom-space") end }
+```
+
+Or copy `editors/neovim/colors/*.lua` to `~/.config/nvim/colors/` and `:colorscheme shroom-space`.
+
+7 variants: `shroom-space`, `shroom-space-light`, `shroom-space-deuteranopia`, `shroom-space-protanopia`, `shroom-space-tritanopia`, `shroom-space-monochrome`, `shroom-space-high-contrast`.
+
+## Helix
+
+Copy `editors/helix/shroom_space.toml` to `~/.config/helix/themes/` and set in `config.toml`:
+
+```toml
+theme = "shroom_space"
+```
+
+7 variants available as `shroom_space`, `shroom_space_light`, `shroom_space_deuteranopia`, etc.
+
 ## License
 
 Apache License 2.0. See [LICENSE](./LICENSE).
