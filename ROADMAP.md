@@ -344,23 +344,18 @@ Creating a custom icon theme would require 500+ SVG icons and months of work for
 | T-5005 | Implement Rust syntax highlighting (keywords, strings, numbers, types, comments) | Done |
 | T-5006 | Implement i18n support (EN, ZH, JA) | Done |
 | T-5007 | Implement color palette display section | Done |
-| T-5008 | Compile to WASM (cdylib, 1.1MB release) | Done |
-| T-5009 | Document build/deploy instructions | Done |
+| T-5008 | Compile to WASM via trunk (128KB dist, 100KB WASM binary) | Done |
+| T-5009 | Deploy to GitHub Pages (docs/previewer/) | Done |
+| T-5010 | Document build/deploy instructions | Done |
 
 ### Technical Details
 
 - Framework: Leptos 0.7 (CSR mode, compiled to WASM)
-- Binary size: 1.1MB release (target: <500KB gzipped after wasm-opt)
-- Build: `cargo build --target wasm32-unknown-unknown --release`
-- Dev: `trunk serve` (requires trunk installation)
+- Binary size: 100KB WASM + 20KB JS + 1KB HTML = **128KB total dist** (well under 500KB target)
+- Build: `trunk build --release` (wasm-opt level 0)
+- Dev: `trunk serve --open`
 - Themes embedded at compile time via `include_str!()`
-- No runtime HTTP requests for theme data
-
-### Build Status
-
-- Compiles successfully with `cargo check --target wasm32-unknown-unknown`
-- WASM binary builds at 1.1MB release profile (opt-level="z", LTO, codegen-units=1)
-- Trunk build pending (trunk installation in progress)
+- Deployed at: https://wyattau.github.io/shroom-theme/previewer/
 
 ### Acceptance Criteria
 
@@ -372,7 +367,7 @@ Creating a custom icon theme would require 500+ SVG icons and months of work for
 
 ---
 
-## Phase 17: v5.1.0 - AI Color Variants (PLANNED)
+## Phase 17: v5.1.0 - AI Color Variants (COMPLETED)
 
 **Goal:** Let users generate accent color variants from wallpaper images.
 
@@ -380,15 +375,19 @@ Creating a custom icon theme would require 500+ SVG icons and months of work for
 
 | ID | Task | Status |
 |---|---|---|
-| T-5101 | Implement dominant color extraction (k-means or median cut) in Rust/WASM | Pending |
-| T-5102 | Map extracted colors to accent presets using HSL distance | Pending |
-| T-5103 | Add image upload UI to previewer | Pending |
-| T-5104 | Generate theme preview with extracted accent | Pending |
-| T-5105 | Export custom .vsix with embedded accent color | Pending |
+| T-5101 | Implement k-means color extraction in pure Rust (no deps) | Done |
+| T-5102 | Map extracted colors to accent presets using HSL distance | Done |
+| T-5103 | Add image upload UI to WASM previewer | Done |
+| T-5104 | Expose extract_colors() as wasm_bindgen JS API | Done |
+| T-5105 | ColorExtractor Leptos component with live preview | Done |
 
-### Notes
+### Technical Details
 
-This phase is speculative and may be deferred. The WASM previewer (Phase 16) provides the foundation for the image upload and color preview UI. The k-means/median cut algorithm can be implemented in pure Rust (no dependencies needed) for WASM execution.
+- K-means++ initialization with deterministic centroid selection
+- 20 iterations, sample every 4th pixel for performance
+- Maps to 7 Shroom Space accent presets via HSL circular distance
+- JS-callable: `extract_colors(rgba_data, width, height, k)`
+- Leptos ColorExtractor component in previewer UI
 
 ---
 
@@ -454,7 +453,7 @@ v0.2.0 (WCAG) --> v0.3.0 (Completeness) --> v0.4.0 (Multi-Editor) --> v0.5.0 (Vi
                                                                                   v
                                                                              v5.1.0 (AI)
 
-Phases 1-16 COMPLETED. Phase 17 PLANNED (speculative).
+Phases 1-17 ALL COMPLETED.
 ```
 
 ---

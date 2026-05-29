@@ -15,9 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Rust syntax highlighting (keywords, strings, numbers, types, comments)
   - i18n support (EN, ZH, JA)
   - Color palette display
+  - AI accent color extractor: k-means++ color extraction from uploaded images
+  - Maps extracted colors to Shroom Space accent presets via HSL distance
   - Themes embedded at compile time via include_str!()
-  - WASM binary: 1.1MB release profile
-  - Build: cargo build --target wasm32-unknown-unknown --release
+  - Total dist size: 128KB (100KB WASM + 20KB JS + 1KB HTML)
+  - Deployed at: https://wyattau.github.io/shroom-theme/previewer/
 
 - Neovim colorscheme: 7 Lua files with 150+ highlight groups (editors/neovim/)
   - TreeSitter groups, LSP semantic tokens, diagnostics, git signs

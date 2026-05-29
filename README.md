@@ -56,7 +56,9 @@ Use the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and search **Shroom: Se
 
 ## Preview
 
-Interactive preview with all 7 variants: [wyattau.github.io/shroom-theme](https://wyattau.github.io/shroom-theme/)
+**WASM Previewer** (Rust/Leptos, 128KB): [wyattau.github.io/shroom-theme/previewer](https://wyattau.github.io/shroom-theme/previewer/)
+
+Static preview with all 7 variants: [wyattau.github.io/shroom-theme](https://wyattau.github.io/shroom-theme/)
 
 WCAG contrast report: [wyattau.github.io/shroom-theme/wcag.html](https://wyattau.github.io/shroom-theme/wcag.html)
 
