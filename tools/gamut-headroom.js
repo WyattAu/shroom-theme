@@ -77,7 +77,7 @@ function main() {
     const seen = new Set();
     for (const entry of theme.tokenColors) {
       const fg = String(entry.settings.foreground || "").toUpperCase();
-      if (/^#[0-9A-F]{6}$/.test(fg) && fg !== bg.toUpperCase()) seen.add(fg);
+      if (/^#[0-9A-F]{6}$/.test(fg) && fg !== bg.toUpperCase()) {seen.add(fg);}
     }
 
     const rows = [...seen]
@@ -92,7 +92,7 @@ function main() {
     console.log("  hex      L*     C   hue   maxC  used  |Lc|");
     for (const r of rows) {
       const tight = r.used >= HEADROOM_WARN * 100;
-      if (tight) warned++;
+      if (tight) {warned++;}
       const flag = tight ? `  <- tight, ${r.used.toFixed(0)}% of gamut` : "";
       console.log(
         `  ${r.hex} ${r.L.toFixed(1).padStart(5)} ${r.C.toFixed(1).padStart(6)} ` +
@@ -115,6 +115,6 @@ function main() {
   );
 }
 
-if (require.main === module) main();
+if (require.main === module) {main();}
 
 module.exports = { maxChroma, HEADROOM_WARN };
