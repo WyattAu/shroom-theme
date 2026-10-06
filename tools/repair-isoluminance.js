@@ -456,4 +456,4 @@ function main() {
 
 if (require.main === module) {main();}
 
-module.exports = { repairThemeFile, paletteOf, ISOLUMINANT_LC };
+module.exports = { repairThemeFile, paletteOf, ISOLUMINANT_LC, labToHex, gamutFit, withLightness };
