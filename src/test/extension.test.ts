@@ -18,7 +18,12 @@ import * as assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const themesDir = path.resolve(__dirname, '..', '..', 'themes');
+// Compiled to `out/src/test/`, so the repo root is three levels up. The `out/`
+// layout shifted when `tests/` joined the TypeScript build, and resolving
+// relative to `__dirname` alone would point at `out/themes/`, which does not
+// exist.
+const repoRoot = path.resolve(__dirname, '..', '..', '..');
+const themesDir = path.join(repoRoot, 'themes');
 
 suite('Theme Validation Tests', () => {
 
@@ -158,9 +163,8 @@ suite('Theme Validation Tests', () => {
 
 suite('Package Manifest Tests', () => {
 
-  const pkgPath = path.resolve(__dirname, '..', '..', 'package.json');
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-  const themesDirResolved = path.resolve(__dirname, '..', '..', 'themes');
+  const pkg = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf8'));
+  const themesDirResolved = themesDir;
 
   test('package.json has contributes.themes', () => {
     assert.ok(pkg.contributes?.themes, 'Missing contributes.themes');
@@ -169,7 +173,7 @@ suite('Package Manifest Tests', () => {
   test('every contributed theme file exists on disk', () => {
     const themes = pkg.contributes.themes as Array<{ path: string }>;
     for (const theme of themes) {
-      const resolved = path.resolve(__dirname, '..', '..', theme.path);
+      const resolved = path.join(repoRoot, theme.path);
       assert.ok(
         fs.existsSync(resolved),
         `Contributed theme file does not exist: ${theme.path}`
