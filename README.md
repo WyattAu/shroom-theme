@@ -22,6 +22,26 @@ detector rather than a picture of what any individual sees. Full caveats,
 including what is explicitly *not* guaranteed, are in
 [docs/color-science.md](docs/color-science.md).
 
+### On dark mode and eye strain
+
+Dark-on-light text does read measurably faster in some conditions. The size of
+the effect, and the fact that it is a *luminance* effect rather than a polarity
+effect, are worth stating plainly rather than leaving as folklore:
+
+- Follow-up work that equated display luminance between polarities found the
+  proofreading advantage of light mode **disappeared** (η² < 0.01) while
+  display luminance kept its effect (η² = 0.12). The mechanism is pupil size:
+  positive polarity gives 2.09 mm against 3.65 mm, d = 2.96.
+- In bright ambient light the penalty is not detectable at all (p = 0.665). It
+  concentrates in evening and dim-room use.
+- It grows as text gets smaller.
+
+The background is not pure black. `#24212E` sits inside APCA's black soft-clamp
+regime, which exists because WCAG 2.x overstates contrast for near-blacks.
+Perceptually, pure black is not achievable anyway: the eye perceives black as
+about 0.0044 cd/m² even in a dim room. If you want the last few percent of
+reading speed, the light theme is there, and the accurate reason is above.
+
 ## Features
 
 - **Accent color customization** -- 7 presets (purple, teal, green, amber, rose, sky, coral) + custom HSL via settings

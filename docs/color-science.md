@@ -4,6 +4,28 @@ Every colour decision in this theme is made against a measured model rather
 than by eye. This document records which models, why those, and what each one
 does and does not guarantee.
 
+## The background is inside APCA's soft-clamp regime
+
+`#24212E` has an APCA screen luminance Y of 0.0084, below APCA's black
+soft-clamp threshold of 0.022. The clamp lifts it to 0.0107, a 27% increase,
+before any contrast is measured.
+
+This matters for interpreting every |Lc| figure in this document. The clamp
+exists because APCA's own documentation argues that WCAG 2.x overstates
+contrast for near-blacks and "cannot provide useful guidance when designing dark
+mode"; it deliberately treats sub-threshold backgrounds as less dark than their
+WCAG ratio implies.
+
+The practical effect here is small and uniform. Every token's |Lc| differs by
+0.9 with and without the clamp, so it shifts the reported values but changes no
+ranking and no gate outcome. The values in this document are all clamp-inclusive,
+matching the APCA reference implementation.
+
+WCAG relative luminance of the same background is 0.0166. Note that this is a
+different quantity from APCA's screen Y: WCAG linearises the sRGB transfer
+function, APCA applies a plain 2.4 power. Both numbers are correct for their
+respective models and should not be compared directly.
+
 ## Models in use
 
 | Model | Used for | Source |
@@ -117,6 +139,34 @@ The honest framing: if a token pair is distinguishable in the CVD variants, it i
 distinguishable for the milder anomalous trichromacies that make up most CVD
 users. The variants do not show any user their own experience.
 
+## The background hue is close to the neutral tokens' hue
+
+`editor.foreground` is `#CCC8D9`, at CIELAB hue 299.9°. The background is at
+300.9°, a separation of 1.0°. The comment colour `#726D89` is 2.1° away.
+
+Schloss & Palmer (PNAS 2000) report that a surround whose spectral return is
+similar to the target *reduces* the target's apparent saturation and brightness.
+A 1° separation is the worst case for that effect, and it applies to the
+default text colour, which is the colour a reader looks at most.
+
+**No correction has been applied, deliberately.** The magnitude here is small:
+the affected colours are near-neutral at C* = 9.2 and 16.7, so there is little
+saturation to lose. More importantly, the ergonomic claim is an inference by
+analogy. The chromatic-induction literature is well established, but no study
+was found measuring whether a chromatic dark background changes perceived text
+contrast or eye strain relative to a neutral dark of matched lightness. Rotating
+or desaturating the default text colour would change the theme's identity on
+the strength of a directional prediction with no measurement behind it.
+
+What is cheap and safe: desaturating reduces the exposure, and reducing chroma
+while holding hue does not move the hue at all — at C* below about 10 the hue
+angle is numerically unstable and 8-bit quantisation moves it by a degree or
+two either way. So the effect is not addressable by a chroma tweak, and any
+real fix is a hue rotation, which is a design decision.
+
+Recorded here rather than fixed, because the evidence does not support a
+change and a silent change would look like a fix.
+
 ## What is not guaranteed
 
 **Mutual distinguishability under simulated CVD is not achievable for a
@@ -194,6 +244,26 @@ constants.
   color appearance for dichromats. *JOSA A* 14(10), 2647–2655.
 - Lillo, J., Álvaro, L., & Moreira, H. (2014). An experimental method for the
   assessment of color simulation tools. *Journal of Vision* 14(8), 15.
+- Buchner, A. & Baumgartner, N. (2007). Text-background polarity affects
+  performance irrespective of ambient illumination and colour contrast.
+  *Ergonomics* 50(7), 1036–1063.
+- Buchner, A., Mayr, S., & Brandt, M. (2009). Why dark mode should not be the
+  default. *Ergonomics* 52(7), 882–886. Follows the 2007 polarity finding with
+  a design that equates display luminance: the advantage disappears (η² < 0.01)
+  while display luminance retains its effect (η² = 0.12). The penalty is a
+  luminance effect, not a polarity effect.
+- Piepenbrock, S., Mayr, S., & Buchner, A. (2014). Display luminance and
+  polarity: are they truly separable factors in visual fatigue?
+  *Ergonomics* 57(11), 1670–1677.
+- Schloss, J. & Palmer, S. E. (2000). Color assimilation against a
+  chromatic background. *PNAS* 97(13).
+- Dobres, J., Chahine, N., & Reimer, B. (2017). Effects of ambient
+  illumination, contrast polarity, and letter size on text legibility under
+  glance-like reading. *Applied Ergonomics* 60, 68–73.
+- Mantiuk, S., Daly, S., & Rok, A. (2010). *The luminance of pure black*.
+  SPIE. Pure black is not perceptually achievable: perceived black is about
+  0.0044 cd/m² at 0.1 cd/m² surround, so a "black" background is already
+  non-black to the eye.
 - Okabe, M., & Ito, K. *Color Universal Design*.
   <https://jfly.uni-koeln.de/color/>
 - Tol, P. (2021). *Colour Schemes*. SRON/EPS/TN/09-002 issue 3.2.

@@ -217,7 +217,7 @@ suite('Package Manifest Tests', () => {
 
 suite('Extension Activation Tests', () => {
   test('extension module exports activate and deactivate', () => {
-    const ext = require('../../out/extension');
+    const ext = require(path.join(repoRoot, 'out', 'src', 'extension'));
     assert.ok(typeof ext.activate === 'function', 'activate should be exported');
     assert.ok(typeof ext.deactivate === 'function', 'deactivate should be exported');
   });
