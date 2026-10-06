@@ -5,6 +5,89 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **Contrast audit discarded the alpha channel before measuring.** This was the
+  significant correctness bug in the audit layer. `#726D8980` on `#24212E` was
+  reported at 3.20:1; as rendered it is 1.77:1. Across the seven themes the bug
+  overstated 175 token pairs per theme, including pairs reported above 9:1 that
+  were actually below 1.3:1. Every ratio is now computed on the
+  alpha-composited pair.
+
+- **30 text tokens shipped below WCAG 2.1 AA once alpha was accounted for**,
+  including `editorLineNumber.foreground` and `editor.placeholderForeground` at
+  1.77:1. The alpha byte was stripped first, which is the largest single gain
+  and preserves the authored hue and lightness exactly; the four tokens still
+  short of AA after that were lightened along their own hue.
+
+- **Two dark-theme token colours were isoluminant.** `#BE9AF7` (keyword) and
+  `#82AAFF` (variable) both sat at CIELAB L* 70.0 and APCA |Lc| 54.4, so they
+  differed by hue alone. They were the same colour under achromatopsia and 1.66
+  CIEDE2000 apart under protanopia. Separated by lightness, holding hue.
+
+- **The light theme packed 8 token categories into a 5 Lc band**, leaving six
+  pairs under 1 Lc apart. Relocated into free lightness space.
+
+- **`focusBorder` on the light theme measured 2.83:1**, below the 3:1 that WCAG
+  2.2 SC 1.4.11 sets so a focus indicator stays perceivable.
+
+- **CVD simulation used Viénot matrices for tritanopia**, which has no tritan
+  matrix; the two Brettel half-planes are not coplanar, so reusing the
+  protan/deutan plane is wrong rather than approximate. Tritanopia now uses
+  Brettel 1997.
+
+- **The light theme's own repair tool could not see it.** The achievable |Lc|
+  range was computed as `apcaAbs("#FFFFFF", bg)`, which is 0 on a light
+  background because APCA is polarity-asymmetric. The search range collapsed
+  and the theme's categories were reported as unseparable.
+
+- The palette repair pipeline was not idempotent: the contrast stage and the
+  lightness stage each undid the other, because relocating a colour for
+  lightness separation could push it below AA. Separation now holds AA as a hard
+  constraint.
+
+### Added
+
+- `color-science.js`: WCAG 2.1, APCA (APCA-W3-0.1.9), CIELAB, CIEDE2000, and
+  CVD simulation. Every formula validated against `colour-science` 0.4.7 and the
+  published APCA constants. Deliberately excludes CAM16-UCS: its gain over
+  CIEDE2000 here is marginal and a hand-transcribed CAM16 forward model is easy
+  to get subtly wrong.
+
+- `tests/palette-audit.js` (`npm run audit:palette`): gates on alpha-composited
+  contrast and on APCA lightness separation between competing token colours, and
+  reports the closest simulated-CVD pair per theme as an ungated diagnostic.
+
+- `tools/repair-pipeline.js` (`npm run repair:palette`): idempotent repair in
+  dependency order.
+
+- `tests/color-science.test.ts` (42 tests): pins the colour library to an
+  external reference table, so a numerical regression fails rather than being
+  mirrored into the fixtures. Includes the linear-RGB regression test that
+  distinguishes a correct simulator from the gamma-space variant.
+
+- `docs/color-science.md`: what each metric measures, what it does not, and the
+  limitations that remain.
+
+### Changed
+
+- The lint script now covers the whole repository, not just `src/`. The audit
+  and build layer was never linted, which is how the alpha bug survived. Removed
+  dead code from the showcase and export generators along the way.
+
+- Visual regression tests need updating: token colours moved. Run
+  `npm run test:visual:update` and review the diff before committing.
+
+- Documentation no longer claims the theme is "APCA compliant" or implies WCAG 3
+  conformance. APCA was removed from the W3C SIL drafts in 2023 and is a
+  candidate, not a standard.
+
+- Documentation states plainly that mutual distinguishability under simulated
+  CVD is not achievable for a palette this size on one background, and that the
+  monochrome variant preserves semantic rank rather than token identity.
+
 ## [5.0.0] - 2026-05-29
 
 ### Added

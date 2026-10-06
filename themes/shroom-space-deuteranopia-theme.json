@@ -21,7 +21,7 @@
     "breadcrumb.activeSelectionForeground": "#BE9AF7",
     "breadcrumb.background": "#24212E",
     "breadcrumb.focusForeground": "#CCC8D9",
-    "breadcrumb.foreground": "#726D89",
+    "breadcrumb.foreground": "#8C86A3",
     "breadcrumbPicker.background": "#2A2739",
     "button.background": "#393552",
     "button.border": "#726D8950",
@@ -129,7 +129,7 @@
     "editor.findRangeHighlightBorder": "#39355250",
     "editor.focusedStackFrameHighlightBackground": "#FFCB6B25",
     "editor.foldBackground": "#39355220",
-    "editor.foldPlaceholderForeground": "#726D89",
+    "editor.foldPlaceholderForeground": "#8C86A3",
     "editor.foreground": "#CCC8D9",
     "editor.hoverHighlightBackground": "#39355230",
     "editor.inactiveLineHighlightBackground": "#2A273900",
@@ -137,7 +137,7 @@
     "editor.lineHighlightBackground": "#2A2739",
     "editor.lineHighlightBorder": "#2A273900",
     "editor.linkedEditingBackground": "#BE9AF720",
-    "editor.placeholder.foreground": "#726D8980",
+    "editor.placeholder.foreground": "#8C86A3",
     "editor.rangeHighlightBackground": "#39355220",
     "editor.rangeHighlightBorder": "#39355250",
     "editor.selectionBackground": "#393552",
@@ -190,7 +190,7 @@
     "editorError.foreground": "#E68484",
     "editorGhostText.background": "#24212E",
     "editorGhostText.border": "#726D8950",
-    "editorGhostText.foreground": "#726D8980",
+    "editorGhostText.foreground": "#8C86A3",
     "editorGroup.border": "#1E1C29",
     "editorGroup.dropBackground": "#BE9AF720",
     "editorGroup.dropIntoPromptBackground": "#393552",
@@ -238,7 +238,7 @@
     "editorLightBulbAutoFix.foreground": "#74D7C8",
     "editorLineNumber.activeForeground": "#CCC8D9",
     "editorLineNumber.dimmedForeground": "#726D8950",
-    "editorLineNumber.foreground": "#726D8980",
+    "editorLineNumber.foreground": "#8C86A3",
     "editorLink.activeForeground": "#74D7C8",
     "editorMarkerNavigation.background": "#2A2739",
     "editorMarkerNavigationError.background": "#E6848420",
@@ -768,7 +768,7 @@
     "editor.snippetFinalTabstopBorder": "#74D7C850",
     "editor.snippetTabstopBackground": "#BE9AF720",
     "editor.snippetTabstopBorder": "#BE9AF750",
-    "editor.placeholderForeground": "#726D8980",
+    "editor.placeholderForeground": "#8C86A3",
     "editor.inlineValuesBackground": "#39355230",
     "editor.inlineValuesForeground": "#E8C990",
     "editorBracketMatch.foreground": "#CCC8D9",
@@ -1018,7 +1018,7 @@
         "variable.parameter"
       ],
       "settings": {
-        "foreground": "#82AAFF"
+        "foreground": "#89AEFF"
       }
     },
     {
@@ -1180,7 +1180,7 @@
         "markup.underline"
       ],
       "settings": {
-        "foreground": "#82AAFF",
+        "foreground": "#89AEFF",
         "fontStyle": "underline"
       }
     },
@@ -1257,7 +1257,7 @@
         "string.other.link.title.markdown"
       ],
       "settings": {
-        "foreground": "#82AAFF"
+        "foreground": "#89AEFF"
       }
     },
     {
@@ -1438,7 +1438,7 @@
         "variable.other.object.property"
       ],
       "settings": {
-        "foreground": "#82AAFF"
+        "foreground": "#89AEFF"
       }
     },
     {
@@ -1669,7 +1669,7 @@
         "support.type.vendored.property-name.css"
       ],
       "settings": {
-        "foreground": "#82AAFF"
+        "foreground": "#89AEFF"
       }
     },
     {
@@ -1725,7 +1725,7 @@
         "support.type.property-name.json"
       ],
       "settings": {
-        "foreground": "#82AAFF"
+        "foreground": "#89AEFF"
       }
     },
     {
@@ -1737,7 +1737,7 @@
         "table.toml"
       ],
       "settings": {
-        "foreground": "#82AAFF"
+        "foreground": "#89AEFF"
       }
     },
     {
@@ -1873,16 +1873,16 @@
         "variable.other.env"
       ],
       "settings": {
-        "foreground": "#82AAFF"
+        "foreground": "#89AEFF"
       }
     }
   ],
   "semanticTokenColors": {
     "parameter": {
-      "foreground": "#82AAFF"
+      "foreground": "#89AEFF"
     },
     "method": {
-      "foreground": "#82AAFF"
+      "foreground": "#89AEFF"
     },
     "property": {
       "foreground": "#CCC8D9"
@@ -1896,7 +1896,7 @@
       "fontStyle": "italic"
     },
     "variable": {
-      "foreground": "#82AAFF"
+      "foreground": "#89AEFF"
     },
     "enum": {
       "foreground": "#E8C990",
@@ -1960,7 +1960,7 @@
       "foreground": "#E8C990"
     },
     "parameter.declaration": {
-      "foreground": "#82AAFF",
+      "foreground": "#89AEFF",
       "fontStyle": "italic"
     },
     "method.defaultLibrary": {

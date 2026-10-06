@@ -63,7 +63,19 @@ jobs:
       - name: Validate themes (structure + WCAG AA)
         run: npm run validate
 
-      - name: Test
+      # Palette audit is a separate step from validate so its output is legible
+      # in the CI log: validate-themes.js fails fast on the first structural
+      # problem, while the audit reports every sub-AA token and isoluminant
+      # pair at once, which is what you need when fixing a palette.
+      - name: Audit palette (alpha-composited contrast + lightness separation)
+        run: npm run audit:palette
+
+      # Colour science and palette tests. These need no VS Code host and no
+      # display, so they run as plain mocha and stay fast.
+      - name: Unit tests (color science, palette)
+        run: npm run test:unit
+
+      - name: Test (VS Code host)
         run: xvfb-run -a npm test
 
       - name: Convert themes to multi-editor formats
@@ -158,12 +170,12 @@ jobs:
           name: visual-references
           path: tests/visual/references/
 
-      - name: Upload WCAG reports
+      - name: Upload contrast reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: wcag-reports
-          path: reports/wcag-*.md
+          name: contrast-reports
+          path: reports/
 
       - name: Upload converted themes
         uses: actions/upload-artifact@v4

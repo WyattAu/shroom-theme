@@ -53,7 +53,7 @@ function simpleYamlStringify(obj, indent = 0) {
 }
 
 function getColor(colors, key, fallback) {
-  if (colors[key]) return colors[key];
+  if (colors[key]) {return colors[key];}
   return fallback || "";
 }
 
@@ -62,7 +62,7 @@ function findTokenColor(tokenColors, scopes) {
   for (const tc of tokenColors) {
     const tcScopes = Array.isArray(tc.scope) ? tc.scope : [tc.scope];
     for (const s of tcScopes) {
-      if (scopeSet.has(s)) return tc.settings;
+      if (scopeSet.has(s)) {return tc.settings;}
     }
   }
   return null;
@@ -152,7 +152,7 @@ function convertToTmTheme(theme) {
 
   for (const tc of tokenColors) {
     const scopes = Array.isArray(tc.scope) ? tc.scope : tc.scope ? [tc.scope] : [];
-    if (scopes.length === 0) continue;
+    if (scopes.length === 0) {continue;}
 
     const scopeStr = escapeXml(scopes.join(", "));
     const s = tc.settings || {};
@@ -165,9 +165,9 @@ function convertToTmTheme(theme) {
 \t\t\t<string>${scopeStr}</string>
 \t\t\t<key>settings</key>
 \t\t\t<dict>`;
-    if (s.foreground) xml += `\n\t\t\t\t<key>foreground</key>\n\t\t\t\t<string>${escapeXml(s.foreground)}</string>`;
-    if (s.background) xml += `\n\t\t\t\t<key>background</key>\n\t\t\t\t<string>${escapeXml(s.background)}</string>`;
-    if (s.fontStyle) xml += `\n\t\t\t\t<key>fontStyle</key>\n\t\t\t\t<string>${escapeXml(s.fontStyle)}</string>`;
+    if (s.foreground) {xml += `\n\t\t\t\t<key>foreground</key>\n\t\t\t\t<string>${escapeXml(s.foreground)}</string>`;}
+    if (s.background) {xml += `\n\t\t\t\t<key>background</key>\n\t\t\t\t<string>${escapeXml(s.background)}</string>`;}
+    if (s.fontStyle) {xml += `\n\t\t\t\t<key>fontStyle</key>\n\t\t\t\t<string>${escapeXml(s.fontStyle)}</string>`;}
     xml += `\n\t\t\t</dict>
 \t\t</dict>`;
   }
@@ -205,13 +205,13 @@ function convertToJetBrains(theme) {
   const decorator = findTokenColor(tokenColors, ["meta.decorator", "entity.name.decorator"]);
 
   function opt(val, key) {
-    if (!val) return "";
+    if (!val) {return "";}
     return `\n      <option name="${key}" value="${val}" />`;
   }
 
   const c = (v) => v?.foreground ? v.foreground : "";
 
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <scheme name="${name}" version="142" parent_scheme="${isDark ? "Darcula" : "Default"}">
   <colors>
     <option name="ADDITIONAL_TEXT_ALIGNMENT" value="" />
@@ -348,7 +348,7 @@ function convertToVim(theme) {
   const bold = (v) => (v?.fontStyle?.includes("bold") ? " cterm=bold gui=bold" : "");
   const italic = (v) => (v?.fontStyle?.includes("italic") ? " cterm=italic gui=italic" : "");
 
-  let vim = `" ${name} - Vim/Neovim color scheme
+  const vim = `" ${name} - Vim/Neovim color scheme
 " Converted from ${name} VS Code theme
 
 if exists("g:colors_name")

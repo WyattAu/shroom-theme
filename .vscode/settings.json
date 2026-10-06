@@ -7,5 +7,19 @@
 		"out": true // set this to false to include "out" folder in search results
 	},
 	// Turn off tsc task auto detection since we have the necessary tasks as npm scripts
-	"typescript.tsc.autoDetect": "off"
+	"typescript.tsc.autoDetect": "off",
+
+	// Dogfooding: work on this theme in this theme.
+	//
+	// Any change to `themes/*.json` should be looked at in the editor it affects,
+	// not only in the generated report pages. The visual regression suite catches
+	// unintended drift against committed references, but it cannot tell whether a
+	// deliberate change reads well; that requires using it.
+	"workbench.colorTheme": "Shroom Space",
+	"workbench.iconTheme": "vs-seti",
+
+	// This repo's own diagnostics should not be coloured differently from the
+	// diagnostics they describe.
+	"editor.semanticTokenColorCustomizations": {},
+	"editor.tokenColorCustomizations": {}
 }

@@ -1,102 +1,126 @@
 "use strict";
 
 /**
+ * Contrast auditing for Shroom Space themes.
+ *
+ * Wraps `color-science.js` to produce the per-theme audit consumed by
+ * `validate-themes.js` and the CI artifact.
+ *
+ * Two corrections relative to a naive implementation, both of which previously
+ * caused this project to over-report compliance:
+ *
+ *  1. Alpha is composited before measuring. Treating `#RRGGBBAA` as if the
+ *     alpha byte were absent inflates the measured ratio, because the reported
+ *     color is brighter than anything the user sees. For this theme that meant
+ *     70-87 token pairs per theme "passed" AA at a measured ratio above 9:1
+ *     while their true rendered contrast was as low as 1.21:1.
+ *
+ *  2. APCA Lc is reported alongside WCAG 2.1. WCAG 2.1 ratios are not
+ *     perceptual and are symmetric between polarities; APCA models lightness
+ *     difference directly and, crucially, treats light-on-dark differently from
+ *     dark-on-light. A dark theme and its light counterpart with equal WCAG
+ *     ratios are not equally legible.
+ */
+
+const color = require("./color-science.js");
+
+/**
  * @typedef {Object} ParsedColor
- * @property {number} r - Red channel (0-1)
- * @property {number} g - Green channel (0-1)
- * @property {number} b - Blue channel (0-1)
- * @property {number} a - Alpha channel (0-1), defaults to 1
+ * @property {number} r Red channel (0-1)
+ * @property {number} g Green channel (0-1)
+ * @property {number} b Blue channel (0-1)
+ * @property {number} a Alpha channel (0-1)
  */
 
 /**
  * @typedef {Object} AuditPair
- * @property {string} foreground - Foreground color key name
- * @property {string} background - Background color key name
- * @property {number} ratio - Contrast ratio
- * @property {boolean} passesAA - Whether it passes WCAG AA
- * @property {boolean} passesAAA - Whether it passes WCAG AAA
- * @property {string} level - "AAA", "AA", or "Fail"
+ * @property {string} foreground Foreground color key
+ * @property {string} background Background color key
+ * @property {number} ratio WCAG 2.1 contrast ratio, alpha-composited
+ * @property {number} apcaLc APCA Lc, signed
+ * @property {number} apcaAbs Absolute APCA Lc
+ * @property {boolean} opaque Whether the foreground color carries no alpha
+ * @property {boolean} passesAA Whether it passes WCAG 2.1 AA
+ * @property {boolean} passesAAA Whether it passes WCAG 2.1 AAA
+ * @property {string} level "AAA", "AA", or "Fail"
  */
 
 /**
- * Parses a hex color string to an object with r, g, b, a values in 0-1 range.
- * @param {string} hex - Color in #RRGGBB or #RRGGBBAA format
- * @returns {ParsedColor} Parsed color object
+ * Parse a hex color into normalized channels.
+ * @param {string} hex `#RGB`, `#RGBA`, `#RRGGBB` or `#RRGGBBAA`
+ * @returns {ParsedColor}
  */
 function parseHex(hex) {
-  const h = hex.replace(/^#/, "");
-  return {
-    r: parseInt(h.substring(0, 2), 16) / 255,
-    g: parseInt(h.substring(2, 4), 16) / 255,
-    b: parseInt(h.substring(4, 6), 16) / 255,
-    a: h.length >= 8 ? parseInt(h.substring(6, 8), 16) / 255 : 1,
-  };
+  return color.parseHex(hex);
 }
 
 /**
- * Linearizes a single sRGB channel value.
- * @param {number} c - Channel value in 0-1 range
- * @returns {number} Linearized value
- */
-function linearize(c) {
-  return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-}
-
-/**
- * Calculates the relative luminance of a color per WCAG 2.1.
- * L = 0.2126 * R + 0.7152 * G + 0.0722 * B
- * @param {number} r - Red channel (0-1)
- * @param {number} g - Green channel (0-1)
- * @param {number} b - Blue channel (0-1)
+ * WCAG 2.1 relative luminance.
+ * @param {number} r Red channel (0-1)
+ * @param {number} g Green channel (0-1)
+ * @param {number} b Blue channel (0-1)
  * @returns {number} Relative luminance (0-1)
  */
 function relativeLuminance(r, g, b) {
-  return (
-    0.2126 * linearize(r) + 0.7152 * linearize(g) + 0.0722 * linearize(b)
-  );
+  return color.relLum({ r, g, b });
 }
 
 /**
- * Computes the WCAG 2.1 contrast ratio between two hex colors.
- * @param {string} hex1 - First color in #RRGGBB or #RRGGBBAA format
- * @param {string} hex2 - Second color in #RRGGBB or #RRGGBBAA format
+ * WCAG 2.1 contrast ratio with alpha correctly composited.
+ * @param {string} hex1
+ * @param {string} hex2
  * @returns {number} Contrast ratio (1-21)
  */
 function contrastRatio(hex1, hex2) {
-  const c1 = parseHex(hex1);
-  const c2 = parseHex(hex2);
-  const l1 = relativeLuminance(c1.r, c1.g, c1.b);
-  const l2 = relativeLuminance(c2.r, c2.g, c2.b);
-  const lighter = Math.max(l1, l2);
-  const darker = Math.min(l1, l2);
-  return (lighter + 0.05) / (darker + 0.05);
+  return color.wcag21(hex1, hex2);
 }
 
 /**
- * Checks whether a contrast ratio meets WCAG AA requirements.
- * @param {number} ratio - Contrast ratio
- * @param {boolean} [isLargeText=false] - Whether the text is considered large (>=18pt or >=14pt bold)
- * @returns {boolean} True if the ratio passes AA
+ * APCA Lc contrast. Signed: positive is dark-on-light, negative is
+ * light-on-dark. Alpha is composited.
+ * @param {string} textHex
+ * @param {string} bgHex
+ * @returns {number} Signed Lc
+ */
+function apcaContrast(textHex, bgHex) {
+  return color.apcaLc(textHex, bgHex);
+}
+
+/**
+ * WCAG 2.1 AA threshold.
+ * @param {number} ratio
+ * @param {boolean} [isLargeText] >=18pt, or >=14pt bold
+ * @returns {boolean}
  */
 function meetsAA(ratio, isLargeText = false) {
   return isLargeText ? ratio >= 3.0 : ratio >= 4.5;
 }
 
 /**
- * Checks whether a contrast ratio meets WCAG AAA requirements.
- * @param {number} ratio - Contrast ratio
- * @param {boolean} [isLargeText=false] - Whether the text is considered large
- * @returns {boolean} True if the ratio passes AAA
+ * WCAG 2.1 AAA threshold.
+ * @param {number} ratio
+ * @param {boolean} [isLargeText]
+ * @returns {boolean}
  */
 function meetsAAA(ratio, isLargeText = false) {
   return isLargeText ? ratio >= 4.5 : ratio >= 7.0;
 }
 
+/**
+ * Whether a color string carries an explicit alpha channel.
+ * @param {string} value
+ * @returns {boolean}
+ */
+function hasAlpha(value) {
+  return /^#[0-9a-fA-F]{8}$/.test(String(value).trim());
+}
+
+/** Foreground/background pairings to audit, in priority order. */
 const BACKGROUND_MAP = [
   { pattern: /^editor\.(?!background).*foreground$/, bg: "editor.background" },
   { pattern: /^editorLineNumber\.foreground$/, bg: "editor.background" },
   { pattern: /^editorCursor\.foreground$/, bg: "editor.background" },
-  { pattern: /^editor.selectionForeground$/, bg: "editor.background" },
+  { pattern: /^editor\.selectionForeground$/, bg: "editor.background" },
   { pattern: /^editorError\.foreground$/, bg: "editor.background" },
   { pattern: /^editorWarning\.foreground$/, bg: "editor.background" },
   { pattern: /^editorInfo\.foreground$/, bg: "editor.background" },
@@ -131,53 +155,59 @@ const BACKGROUND_MAP = [
   { pattern: /^scrollbarSlider\.hoverForeground$/, bg: "editor.background" },
   { pattern: /^scrollbarSlider\.foreground$/, bg: "editor.background" },
   { pattern: /^minimap\.foreground$/, bg: "editor.background" },
-  { pattern: /^breadcrumb\.foreground$/, bg: "editor.background" },
+  { pattern: /^breadcrumb\.foreground$/, bg: "breadcrumb.background" },
   { pattern: /^editorGroupHeader\.tabsForeground$/, bg: "editorGroupHeader.tabsBackground" },
+  { pattern: /^editorGhostText\.foreground$/, bg: "editorGhostText.background" },
 ];
 
 /**
- * Resolves the background color key for a given foreground color key.
- * @param {string} fgKey - The foreground color key
- * @param {Object} colors - The theme colors object
- * @returns {string|null} The background color key, or null if no match
+ * Resolve the background color key for a given foreground key.
+ * @param {string} fgKey
+ * @param {Object<string,string>} colors
+ * @returns {string|null} Background key, or null when unresolvable
  */
 function resolveBackground(fgKey, colors) {
-  if (/\.(?:background|border)$/i.test(fgKey)) return null;
+  if (/\.(?:background|border)$/i.test(fgKey)) {return null;}
   for (const { pattern, bg } of BACKGROUND_MAP) {
-    if (pattern.test(fgKey)) return colors[bg] ? bg : null;
+    if (pattern.test(fgKey)) {return colors[bg] ? bg : null;}
   }
   const parts = fgKey.split(".");
   for (let i = parts.length - 1; i >= 1; i--) {
     const candidate = parts.slice(0, i).join(".") + ".background";
-    if (colors[candidate]) return candidate;
+    if (colors[candidate]) {return candidate;}
   }
   return null;
 }
 
 /**
- * Audits all foreground/background pairs in a theme colors object.
- * @param {Object<string, string>} colors - Theme colors keyed by VS Code color ID
- * @returns {AuditPair[]} Array of audit results
+ * Audit all resolvable foreground/background pairs in a theme.
+ *
+ * Ratios are computed on the alpha-composited pair, so a translucent token is
+ * measured as rendered rather than as authored.
+ *
+ * @param {Object<string,string>} colors Theme colors keyed by VS Code color ID
+ * @returns {AuditPair[]} Audit results, ascending by ratio
  */
 function auditThemePairs(colors) {
   const results = [];
   const seen = new Set();
 
   for (const key of Object.keys(colors)) {
-    if (seen.has(key)) continue;
-    if (/\.(?:background|border)$/i.test(key)) continue;
+    if (seen.has(key)) {continue;}
+    if (/\.(?:background|border)$/i.test(key)) {continue;}
 
     const bgKey = resolveBackground(key, colors);
-    if (!bgKey) continue;
+    if (!bgKey) {continue;}
 
     const fgVal = colors[key];
     const bgVal = colors[bgKey];
-    if (!fgVal || !bgVal) continue;
-    if (!/^#[0-9a-fA-F]{6,8}$/.test(fgVal)) continue;
-    if (!/^#[0-9a-fA-F]{6,8}$/.test(bgVal)) continue;
+    if (!fgVal || !bgVal) {continue;}
+    if (!/^#[0-9a-fA-F]{6,8}$/.test(fgVal)) {continue;}
+    if (!/^#[0-9a-fA-F]{6,8}$/.test(bgVal)) {continue;}
 
     seen.add(key);
-    const ratio = contrastRatio(fgVal, bgVal);
+    const ratio = color.wcag21(fgVal, bgVal);
+    const apcaLc = color.apcaLc(fgVal, bgVal);
     const passesAA = meetsAA(ratio);
     const passesAAA = meetsAAA(ratio);
     const level = passesAAA ? "AAA" : passesAA ? "AA" : "Fail";
@@ -186,6 +216,9 @@ function auditThemePairs(colors) {
       foreground: key,
       background: bgKey,
       ratio: Math.round(ratio * 100) / 100,
+      apcaLc: Math.round(apcaLc * 10) / 10,
+      apcaAbs: Math.abs(Math.round(apcaLc * 10) / 10),
+      opaque: !hasAlpha(fgVal),
       passesAA,
       passesAAA,
       level,
@@ -196,35 +229,45 @@ function auditThemePairs(colors) {
 }
 
 /**
- * Generates a markdown report table for audited theme pairs.
- * @param {string} themeName - Name of the theme
- * @param {AuditPair[]} pairs - Array of audit results
- * @returns {string} Markdown-formatted table string
+ * Render a markdown audit report.
+ *
+ * APCA is reported because it is the more perceptual of the two measures, but
+ * WCAG 2.1 remains the pass/fail criterion: APCA is not yet normative for
+ * conformance.
+ *
+ * @param {string} themeName
+ * @param {AuditPair[]} pairs
+ * @returns {string} Markdown report
  */
 function generateReport(themeName, pairs) {
   const lines = [];
-  lines.push(`# WCAG Contrast Report: ${themeName}`);
+  lines.push(`# Contrast Report: ${themeName}`);
   lines.push("");
   lines.push(
-    "| Foreground | Background | Ratio | AA | AAA | Level |"
+    "Ratios are computed on the alpha-composited pair, so translucent tokens " +
+      "are measured as rendered. `Lc` is signed APCA (positive = dark on " +
+      "light, negative = light on dark)."
   );
-  lines.push(
-    "|---|---|---|---|---|---|"
-  );
+  lines.push("");
+  lines.push("| Foreground | Background | WCAG 2.1 | APCA Lc | Alpha | Level |");
+  lines.push("|---|---|---|---|---|---|");
 
   for (const p of pairs) {
     lines.push(
-      `| ${p.foreground} | ${p.background} | ${p.ratio.toFixed(2)} | ${p.passesAA ? "Pass" : "Fail"} | ${p.passesAAA ? "Pass" : "Fail"} | ${p.level} |`
+      `| ${p.foreground} | ${p.background} | ${p.ratio.toFixed(2)} | ${p.apcaLc.toFixed(1)} | ${
+        p.opaque ? "no" : "yes"
+      } | ${p.level} |`
     );
   }
 
   const failCount = pairs.filter((p) => p.level === "Fail").length;
   const aaOnlyCount = pairs.filter((p) => p.level === "AA").length;
   const aaaCount = pairs.filter((p) => p.level === "AAA").length;
+  const translucent = pairs.filter((p) => !p.opaque).length;
 
   lines.push("");
   lines.push(
-    `**Summary:** ${pairs.length} pairs — ${aaaCount} AAA, ${aaOnlyCount} AA, ${failCount} Fail`
+    `**Summary:** ${pairs.length} pairs — ${aaaCount} AAA, ${aaOnlyCount} AA, ${failCount} Fail, ${translucent} with alpha`
   );
 
   return lines.join("\n");
@@ -234,8 +277,11 @@ module.exports = {
   parseHex,
   relativeLuminance,
   contrastRatio,
+  apcaContrast,
   meetsAA,
   meetsAAA,
+  hasAlpha,
+  resolveBackground,
   auditThemePairs,
   generateReport,
 };

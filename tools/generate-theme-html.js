@@ -9,10 +9,6 @@ const themesDir = path.resolve(__dirname, '..', 'themes');
 const outputDir = path.resolve(__dirname, '..', 'tests', 'visual', 'pages');
 
 const JS_SAMPLE = fs.readFileSync(path.resolve(__dirname, '..', 'showcase', 'test-samples.js'), 'utf8');
-const PY_SAMPLE = fs.readFileSync(path.resolve(__dirname, '..', 'showcase', 'test-samples.py'), 'utf8');
-const HTML_SAMPLE = fs.readFileSync(path.resolve(__dirname, '..', 'showcase', 'test-samples.html'), 'utf8');
-const CSS_SAMPLE = fs.readFileSync(path.resolve(__dirname, '..', 'showcase', 'test-samples.css'), 'utf8');
-const MD_SAMPLE = fs.readFileSync(path.resolve(__dirname, '..', 'showcase', 'test-samples.md'), 'utf8');
 
 function escapeHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -25,11 +21,9 @@ function generateThemePage(theme) {
   // Escape values for CSS
   const bg = c['editor.background'] || '#1e1e1e';
   const fg = c['editor.foreground'] || '#d4d4d4';
-  const lineNum = c['editorLineNumber.foreground'] || '#858585';
   const lineNumActive = c['editorLineNumber.activeForeground'] || '#c6c6c6';
   const selectionBg = c['editor.selectionBackground'] || '#264f78';
   const cursorColor = c['editorCursor.foreground'] || '#aeafad';
-  const findMatchBg = c['editor.findMatchBackground'] || '#515c6a';
   const gutterBg = c['editorGutter.background'] || bg;
   const sideBg = c['sideBar.background'] || '#252526';
   const sideFg = c['sideBar.foreground'] || '#cccccc';
@@ -49,19 +43,13 @@ function generateThemePage(theme) {
   const errorFg = c['editorError.foreground'] || '#f14c4c';
   const warningFg = c['editorWarning.foreground'] || '#cca700';
   const scrollbarThumb = c['scrollbarSlider.background'] || '#79797966';
-  const hoverBg = c['editor.hoverHighlightBackground'] || '#264f7840';
   const currentLine = c['editor.lineHighlightBackground'] || '#ffffff0a';
   const addedBg = c['editorGutter.addedBackground'] || '#587c0c';
   const modifiedBg = c['editorGutter.modifiedBackground'] || '#0c7d9d';
   const deletedBg = c['editorGutter.deletedBackground'] || '#94151b';
-  const inputBg = c['input.background'] || '#3c3c3c';
-  const inputFg = c['input.foreground'] || '#cccccc';
-  const inputBorder = c['input.border'] || '#3c3c3c';
   const panelBg = c['panel.background'] || '#1e1e1e';
   const panelFg = c['panel.foreground'] || '#cccccc';
   const listHoverBg = c['list.hoverBackground'] || '#2a2d2e';
-  const menuBg = c['menu.background'] || '#252526';
-  const menuFg = c['menu.foreground'] || '#cccccc';
   const purple = c['terminal.ansiMagenta'] || '#be9af7';
   const green = c['terminal.ansiGreen'] || '#a6c18b';
   const yellow = c['terminal.ansiYellow'] || '#ffcb6b';
@@ -81,7 +69,7 @@ function generateThemePage(theme) {
 
   function colorForScope(scope) {
     const settings = tc[scope];
-    if (settings && settings.foreground) return settings.foreground;
+    if (settings && settings.foreground) {return settings.foreground;}
     return fg;
   }
 
@@ -100,23 +88,6 @@ function generateThemePage(theme) {
     // Function calls
     html = html.replace(/\b([a-zA-Z_]\w*)\s*\(/g, `<span style="color:${colorForScope('entity.name.function')}">$1</span>(`);
     return html;
-  }
-
-  function highlightPython(code) {
-    let html = escapeHtml(code);
-    html = html.replace(/(#.*$)/gm, `<span style="color:${colorForScope('comment')}">$1</span>`);
-    html = html.replace(/(&quot;[^&]*&quot;|'[^']*'|"""[^"']*""")/g, `<span style="color:${colorForScope('string')}">$1</span>`);
-    html = html.replace(/\b(def|class|return|import|from|as|if|else|elif|for|while|try|except|finally|with|lambda|yield|pass|break|continue|raise|and|or|not|in|is|None|True|False)\b/g, `<span style="color:${colorForScope('keyword')}">$1</span>`);
-    html = html.replace(/\b(\d+)\b/g, `<span style="color:${colorForScope('constant.numeric')}">$1</span>`);
-    html = html.replace(/\b([a-zA-Z_]\w*)\s*\(/g, `<span style="color:${colorForScope('entity.name.function')}">$1</span>(`);
-    return html;
-  }
-
-  function lineNumbers(code) {
-    const lines = code.split('\n');
-    return lines.map((_, i) =>
-      `<div class="line-num" style="color:${i === 4 ? lineNumActive : lineNum}">${i + 1}</div>`
-    ).join('');
   }
 
   function codeLines(highlightedCode) {

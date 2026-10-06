@@ -4,7 +4,7 @@
   "description": "Cosmic dark theme with 7 variants: dark, light, deuteranopia, protanopia, tritanopia, monochrome, high contrast. WCAG 2.1 AA, 943 tokens, semantic highlighting, accent color customization, 9-format export.",
   "version": "5.0.0",
   "publisher": "wyattau",
-  "main": "./out/extension.js",
+  "main": "./out/src/extension.js",
   "activationEvents": [
     "onStartupFinished"
   ],
@@ -156,16 +156,19 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "validate": "node validate-themes.js",
+    "validate": "node validate-themes.js && npm run audit:palette",
     "convert": "node tools/convert.js",
     "generate-visual-pages": "node tools/generate-theme-html.js",
     "test:visual": "npm run generate-visual-pages && npx playwright test -c tests/visual/playwright.config.ts",
     "test:visual:update": "rm -rf tests/visual/references && npm run test:visual",
     "pretest": "npm run compile && npm run lint && npm run validate",
-    "lint": "eslint src",
+    "lint": "eslint .",
     "test": "vscode-test",
     "sbom": "node tools/generate-sbom.js",
-    "test:ci": "npm run compile && npm run lint && npm run validate && npm run convert && npm run test:visual && npm run sbom"
+    "test:ci": "npm run compile && npm run lint && npm run validate && npm run test:unit && npm run convert && npm run sbom",
+    "audit:palette": "node tests/palette-audit.js",
+    "repair:palette": "node tools/repair-pipeline.js",
+    "test:unit": "mocha --ui tdd \"out/tests/**/*.test.js\""
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",

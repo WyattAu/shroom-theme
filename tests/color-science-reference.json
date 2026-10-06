@@ -1,0 +1,344 @@
+{
+  "_provenance": {
+    "apca": "apca-w3 0.1.9 published reference values (algorithm 0.0.98G-4g)",
+    "wcag": "colour-science 0.4.7; WCAG 2.1 relative luminance, alpha composited",
+    "lab": "colour-science 0.4.7; CIELAB D65",
+    "de00": "colour-science 0.4.7; CIEDE2000 with kL=kC=kH=1",
+    "cvd": "Published Machado 2009 results for linear-RGB application, plus Brettel 1997 sRGB-adapted (libDaltonLens) for tritanopia, which Machado declines to model. Simulation must run in linear RGB: the gamma-encoded path differs by 10-15 dE00 on mid-lightness pastels, which is exactly the range a syntax theme uses.",
+    "regenerate": "node tools/generate-color-reference.js"
+  },
+  "apca": [
+    {
+      "fg": "#FFFFFF",
+      "bg": "#000000",
+      "lc": -107.88473318309848
+    },
+    {
+      "fg": "#000000",
+      "bg": "#FFFFFF",
+      "lc": 106.04067321268862
+    },
+    {
+      "fg": "#888888",
+      "bg": "#FFFFFF",
+      "lc": 63.056469930209424
+    },
+    {
+      "fg": "#FFFFFF",
+      "bg": "#888888",
+      "lc": -68.54146436644962
+    },
+    {
+      "fg": "#AAAAAA",
+      "bg": "#000000",
+      "lc": -56.24113336839742
+    },
+    {
+      "fg": "#112233",
+      "bg": "#DDEEFF",
+      "lc": 91.66830811481631
+    },
+    {
+      "fg": "#DDEEFF",
+      "bg": "#112233",
+      "lc": -93.06770049484275
+    }
+  ],
+  "wcag": [
+    {
+      "fg": "#FFFFFF",
+      "bg": "#000000",
+      "ratio": 21.0
+    },
+    {
+      "fg": "#000000",
+      "bg": "#FFFFFF",
+      "ratio": 21.0
+    },
+    {
+      "fg": "#888888",
+      "bg": "#FFFFFF",
+      "ratio": 3.544886215299
+    },
+    {
+      "fg": "#CCC8D9",
+      "bg": "#24212E",
+      "ratio": 9.632929861575
+    },
+    {
+      "fg": "#726D89",
+      "bg": "#24212E",
+      "ratio": 3.201307482302
+    },
+    {
+      "fg": "#726D8980",
+      "bg": "#24212E",
+      "ratio": 1.770947984026
+    },
+    {
+      "fg": "#E0DEF4",
+      "bg": "#24212E",
+      "ratio": 11.955112327375
+    },
+    {
+      "fg": "#4A4555",
+      "bg": "#F5F2E8",
+      "ratio": 8.246235732869
+    },
+    {
+      "fg": "#8C6D34",
+      "bg": "#F5F2E8",
+      "ratio": 4.307908431535
+    },
+    {
+      "fg": "#8A859A",
+      "bg": "#F5F2E8",
+      "ratio": 3.176496343736
+    },
+    {
+      "fg": "#AAAAAA80",
+      "bg": "#000000",
+      "ratio": 2.831546606714
+    },
+    {
+      "fg": "#4A455550",
+      "bg": "#F5F2E8",
+      "ratio": 1.688708550425
+    }
+  ],
+  "lab": [
+    {
+      "hex": "#000000",
+      "lab": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "hex": "#FFFFFF",
+      "lab": [
+        100.0,
+        0.0077,
+        0.0035
+      ]
+    },
+    {
+      "hex": "#24212E",
+      "lab": [
+        13.5913,
+        4.8461,
+        -8.0951
+      ]
+    },
+    {
+      "hex": "#CCC8D9",
+      "lab": [
+        81.3771,
+        4.5677,
+        -7.9395
+      ]
+    },
+    {
+      "hex": "#726D89",
+      "lab": [
+        47.3926,
+        8.0467,
+        -14.6544
+      ]
+    },
+    {
+      "hex": "#BE9AF7",
+      "lab": [
+        70.0171,
+        31.7306,
+        -41.6129
+      ]
+    },
+    {
+      "hex": "#74D7C8",
+      "lab": [
+        79.8885,
+        -32.6896,
+        -1.6163
+      ]
+    },
+    {
+      "hex": "#E8C990",
+      "lab": [
+        82.3479,
+        3.0903,
+        32.5339
+      ]
+    },
+    {
+      "hex": "#82AAFF",
+      "lab": [
+        69.976,
+        9.1341,
+        -46.3345
+      ]
+    },
+    {
+      "hex": "#A6C18B",
+      "lab": [
+        74.8949,
+        -18.7983,
+        24.2631
+      ]
+    },
+    {
+      "hex": "#E68484",
+      "lab": [
+        65.742,
+        37.5056,
+        16.5311
+      ]
+    },
+    {
+      "hex": "#FFCB6B",
+      "lab": [
+        84.5009,
+        7.8879,
+        54.1339
+      ]
+    },
+    {
+      "hex": "#F5F2E8",
+      "lab": [
+        95.4729,
+        -0.7083,
+        5.1754
+      ]
+    },
+    {
+      "hex": "#4A4555",
+      "lab": [
+        30.3225,
+        5.7633,
+        -8.7585
+      ]
+    },
+    {
+      "hex": "#AD58FF",
+      "lab": [
+        55.1584,
+        64.1087,
+        -69.755
+      ]
+    },
+    {
+      "hex": "#FFD978",
+      "lab": [
+        88.0848,
+        1.6933,
+        52.2017
+      ]
+    },
+    {
+      "hex": "#4AF8E1",
+      "lab": [
+        88.9352,
+        -48.7259,
+        -1.6816
+      ]
+    },
+    {
+      "hex": "#95F94A",
+      "lab": [
+        89.2219,
+        -56.7388,
+        70.8902
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "a": "#726D89",
+      "b": "#A6C18B",
+      "de00": 40.1049
+    },
+    {
+      "a": "#A6C18B",
+      "b": "#BE9AF7",
+      "de00": 43.9709
+    },
+    {
+      "a": "#BE9AF7",
+      "b": "#74D7C8",
+      "de00": 37.5203
+    },
+    {
+      "a": "#74D7C8",
+      "b": "#E8C990",
+      "de00": 30.4013
+    },
+    {
+      "a": "#E8C990",
+      "b": "#82AAFF",
+      "de00": 45.3021
+    },
+    {
+      "a": "#82AAFF",
+      "b": "#CCC8D9",
+      "de00": 22.252
+    },
+    {
+      "a": "#CCC8D9",
+      "b": "#E68484",
+      "de00": 25.829
+    },
+    {
+      "a": "#E68484",
+      "b": "#FFCB6B",
+      "de00": 34.5717
+    },
+    {
+      "a": "#FFCB6B",
+      "b": "#726D89",
+      "de00": 48.9386
+    },
+    {
+      "a": "#89AEFF",
+      "b": "#BE9AF7",
+      "de00": 16.2527
+    },
+    {
+      "a": "#286CD0",
+      "b": "#895D9C",
+      "de00": 23.036
+    }
+  ],
+  "cvd": [
+    {
+      "hex": "#BE9AF7",
+      "kind": "protan",
+      "linear": "#83ABFB"
+    },
+    {
+      "hex": "#A6C18B",
+      "kind": "deutan",
+      "linear": "#C2B88E"
+    },
+    {
+      "hex": "#E68484",
+      "kind": "protan",
+      "linear": "#989483"
+    },
+    {
+      "hex": "#FF0000",
+      "kind": "protan",
+      "linear": "#6D5F00"
+    },
+    {
+      "hex": "#0000FF",
+      "kind": "deutan",
+      "linear": "#003DFB"
+    },
+    {
+      "hex": "#74D7C8",
+      "kind": "tritan",
+      "linear": "#81D1ED"
+    }
+  ]
+}

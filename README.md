@@ -1,6 +1,6 @@
 # Shroom Space Theme
 
-A cosmic dark theme for VS Code with 7 variants, including accessibility-focused CVD adaptations. 943 color tokens (100% of VS Code API), 32 semantic token rules, WCAG 2.1 AA compliant, and 9-format multi-editor export.
+A cosmic dark theme for VS Code with 7 variants, including accessibility-focused CVD adaptations. 943 color tokens (100% of VS Code API), 32 semantic token rules, WCAG 2.1 AA, and 9-format multi-editor export.
 
 ## Themes
 
@@ -11,8 +11,16 @@ A cosmic dark theme for VS Code with 7 variants, including accessibility-focused
 | Shroom Space (Deuteranopia) | Dark | Adapted for deuteranopia (green-weak CVD). |
 | Shroom Space (Protanopia) | Dark | Adapted for protanopia (red-blind CVD). |
 | Shroom Space (Tritanopia) | Dark | Adapted for tritanopia (blue-yellow CVD). |
-| Shroom Space (Monochrome) | Dark | Grayscale palette. Luminance-based contrast. |
-| Shroom Space (High Contrast) | High Contrast | Maximum contrast. Pure black background. |
+| Shroom Space (Monochrome) | Dark | Grayscale ramp preserving semantic rank. Individual token identity is not preserved in greyscale. |
+| Shroom Space (High Contrast) | High Contrast | Maximum contrast against pure black. Contrast against a background and CVD separation are different properties; this variant optimises the former. |
+
+The CVD variants render the theme as it would appear to a **dichromat**, the most
+severely affected case. Dichromats are roughly a quarter of people with colour
+vision deficiency; the other three quarters are anomalous trichromats, whose
+impairment is milder. So these variants are a conservative worst-case collision
+detector rather than a picture of what any individual sees. Full caveats,
+including what is explicitly *not* guaranteed, are in
+[docs/color-science.md](docs/color-science.md).
 
 ## Features
 
@@ -21,7 +29,14 @@ A cosmic dark theme for VS Code with 7 variants, including accessibility-focused
 - **Semantic token support** -- 32 rules covering all VS Code standard types and modifiers
 - **9 export formats** -- tmTheme, JetBrains (.icls), Vim, Windows Terminal, iTerm2, Warp, Alacritty, Kitty, CSS
 - **Tailwind CSS plugin** -- `tools/tailwind-plugin.js` for use in Tailwind projects
-- **WCAG 2.1 AA** -- all text-foreground pairs pass contrast requirements
+- **WCAG 2.1 AA** -- enforced in CI on the alpha-composited pair, so translucent
+  tokens are measured as rendered rather than as authored
+- **Perceptual separation** -- token colours are kept apart by APCA |Lc| so no
+  two competing categories differ by hue alone. See
+  [docs/color-science.md](docs/color-science.md)
+- **Colour vision deficiency variants** -- simulated in linear RGB using
+  Machado 2009 and Brettel 1997. These are worst-case collision detectors,
+  not depictions of any user's experience
 - **i18n docs** -- English, Simplified Chinese, Japanese
 
 ## Installation
@@ -41,6 +56,19 @@ Download the `.vsix` from [releases](https://github.com/WyattAu/shroom-theme/rel
 ```bash
 code --install-extension shroom-space-theme-*.vsix
 ```
+
+## Accessibility
+
+Contrast and colour separation are measured, not judged by eye, and enforced in
+CI. What that does and does not cover, how the CVD variants should be
+interpreted, and what to test with real users is in
+[ACCESSIBILITY.md](ACCESSIBILITY.md) and
+[docs/color-science.md](docs/color-science.md).
+
+Short version: the CVD variants are a worst-case collision detector, not a
+depiction of what anyone sees. A pair that is distinguishable in them is
+distinguishable for the milder anomalous trichromacies that make up most colour
+vision deficiency.
 
 ## Accent Color
 
@@ -64,16 +92,24 @@ WCAG contrast report: [wyattau.github.io/shroom-theme/wcag.html](https://wyattau
 
 ## Color Palette
 
-| Role | Hex | Usage |
-|---|---|---|
-| Background | `#24212E` | Primary editor background |
-| Foreground | `#CCC8D9` | Default text |
-| Accent (purple) | `#BE9AF7` | Keywords, highlights |
-| Accent (teal) | `#74D7C8` | Functions, info |
-| Accent (green) | `#A6C18B` | Strings, git additions |
-| Accent (amber) | `#E8C990` | Constants, types, warnings |
-| Accent (red) | `#E68484` | Errors, deletions |
-| Muted | `#726D89` | Comments, disabled |
+| Role | Hex | Usage | APCA \|Lc\| |
+|---|---|---|---|
+| Background | `#24212E` | Primary editor background | -- |
+| Muted | `#726D89` | Comments, disabled | 25.0 |
+| Accent (red) | `#E68484` | Errors, deletions | 48.5 |
+| Accent (purple) | `#BE9AF7` | Keywords, operators | 54.4 |
+| Accent (blue) | `#89AEFF` | Variables, parameters | 56.5 |
+| Accent (green) | `#A6C18B` | Strings, git additions | 61.7 |
+| Accent (teal) | `#74D7C8` | Functions, info | 69.8 |
+| Foreground | `#CCC8D9` | Default text | 72.0 |
+| Accent (amber) | `#E8C990` | Constants, types | 73.7 |
+| Accent (gold) | `#FFCB6B` | Decorators, numbers | 77.4 |
+
+Token colours are kept apart by APCA lightness contrast, not by hue alone. Every
+adjacent pair differs by at least 2 |Lc|, which is finer than one step of APCA's
+own lookup tables, so no two categories collapse when hue is hard to
+discriminate. The muted comment colour is deliberately lower: it is de-emphasis,
+held to the 3:1 that WCAG sets for non-text components rather than to 4.5:1.
 
 ## Development
 
@@ -87,12 +123,15 @@ WCAG contrast report: [wyattau.github.io/shroom-theme/wcag.html](https://wyattau
 | Command | Description |
 |---|---|
 | `npm run compile` | TypeScript compilation |
-| `npm run lint` | ESLint |
-| `npm run validate` | Theme JSON validation |
-| `npm test` | Full pipeline: compile + lint + validate + 134 tests |
+| `npm run lint` | ESLint, whole repository |
+| `npm run validate` | Theme JSON structure, then the palette audit |
+| `npm run audit:palette` | Contrast and lightness gates. Fails the build on a violation |
+| `npm run repair:palette` | Repair the palettes. Idempotent |
+| `npm run test:unit` | Colour science tests. No display server needed |
+| `npm test` | VS Code host tests |
 | `npm run convert` | Generate 9-format exports |
 | `npm run sbom` | SPDX 2.3 SBOM |
-| `npm run test:ci` | Full CI pipeline (no VS Code host) |
+| `npm run test:ci` | Full CI pipeline, no VS Code host |
 
 ## Recommended Icon Theme
 
