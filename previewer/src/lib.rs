@@ -786,6 +786,15 @@ fn ColorExtractor(theme: Signal<Theme>) -> impl IntoView {
     }
 }
 
+/// Entry point for the WASM build.
+///
+/// `wasm_bindgen(start)` is what makes the generated module call this on
+/// instantiation. Without it the function compiles, is reported as dead code,
+/// and is never invoked: the WASM loads cleanly, reports no errors, and mounts
+/// nothing. That is exactly what happened on the first rebuild after the
+/// palette work, and it is easy to mistake for a loading problem because the
+/// browser console stays quiet.
+#[wasm_bindgen(start)]
 fn main() {
     console_log::init_with_level(log::Level::Debug).unwrap();
     leptos::mount::mount_to_body(|| view! { <App /> });
