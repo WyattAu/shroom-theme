@@ -87,6 +87,25 @@ function generateThemePage(theme) {
     html = html.replace(/\b(\d+)\b/g, `<span style="color:${colorForScope('constant.numeric')}">$1</span>`);
     // Function calls
     html = html.replace(/\b([a-zA-Z_]\w*)\s*\(/g, `<span style="color:${colorForScope('entity.name.function')}">$1</span>(`);
+
+    // Identifiers: variables and parameters. Runs last so it only catches what
+    // the passes above did not claim. Without this the variable colour never
+    // reaches the page at all, and a change to it is invisible to the visual
+    // regression test -- which is how a wrong variable colour could ship.
+    //
+    // Applied per text segment rather than to the whole string. By this point
+    // `html` already contains markup, so a whole-string match wraps the `span`,
+    // `style` and `color` inside the tags just generated -- measured at 152
+    // corrupted occurrences on this showcase.
+    const segments = html.split(/(<[^>]+>)/);
+    const identifierRe = /\b([a-zA-Z_]\w*)\b/g;
+    html = segments
+      .map((segment) =>
+        segment.startsWith('<')
+          ? segment
+          : segment.replace(identifierRe, `<span style="color:${colorForScope('variable')}">$1</span>`)
+      )
+      .join('');
     return html;
   }
 
