@@ -218,9 +218,82 @@ jobs:
           name: visual-regression-diffs
           path: tests/visual/diffs/
 
+  # Build the WASM previewer and fail if the committed artifact is stale.
+  #
+  # This exists because the previewer embeds theme JSON at compile time via
+  # include_str!, so every palette change makes docs/previewer/ wrong. That
+  # happened once and was only found by loading the page in a browser.
+  #
+  # trunk is installed from the release tarball rather than `cargo install`:
+  # cargo install trunk fails on libdeflate-sys, which needs GCC's
+  # no-evex512 target attribute (dropped in GCC 16) and does not compile under
+  # clang either. The prebuilt binary avoids both.
+  previewer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+            previewer/target
+          key: trunk-${{ runner.os }}-${{ hashFiles('previewer/Cargo.lock') }}
+
+      - name: Install trunk (release tarball)
+        run: |
+          if command -v trunk >/dev/null 2>&1; then
+            echo "trunk already cached: $(trunk --version)"
+          else
+            mkdir -p "$HOME/.local/bin"
+            gh release download v0.21.14 --repo trunk-rs/trunk \
+              --pattern "trunk-x86_64-unknown-linux-gnu.tar.gz" --dir /tmp --clobber
+            tar xzf /tmp/trunk-x86_64-unknown-linux-gnu.tar.gz -C /tmp
+            install -m 0755 /tmp/trunk "$HOME/.local/bin/trunk"
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+            trunk --version
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Build previewer
+        working-directory: previewer
+        run: trunk build --release
+
+      - name: Check committed artifact is current
+        run: |
+          fail=0
+          for f in index.html *.js *_bg.wasm; do
+            if [ ! -f "$f" ]; then continue; fi
+            base=$(basename "$f")
+            # The artifact filename carries a content hash, so a stale commit
+            # shows up as a missing file or an extra one rather than a byte diff.
+            if ! cmp -s "$f" "../docs/previewer/$base"; then
+              echo "STALE: docs/previewer/$base does not match previewer/dist/$f"
+              fail=1
+            fi
+          done
+          if [ "$fail" != "0" ]; then
+            echo ""
+            echo "The committed previewer is out of date with the current themes."
+            echo "Run: (cd previewer && trunk build --release)"
+            echo "then copy dist/{index.html,*.js,*_bg.wasm} to docs/previewer/."
+            exit 1
+          fi
+        working-directory: previewer/dist
+
   # Publish job - only on version tags, depends on test passing
   publish:
-    needs: test
+    needs: [test, previewer]
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:

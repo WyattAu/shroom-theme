@@ -5,6 +5,38 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `tools/repair-palette.js` (`npm run palette`): single entry point for the
+  palette tooling. `repair [--dry-run]`, `gamut`, `matrix`.
+- `tools/cvd-matrix.js` (`npm run audit:cvd`): per-variant CVD collision matrix
+  as a CI artifact. Reports all pairwise CIEDE2000 values per viewing condition
+  and per-colour exposure, which the palette audit's single worst-pair line
+  hides. The matrix is reported, not gated: an all-pairs threshold of 10 under
+  simulated dichromacy is not satisfiable for nine token colours, so a gate
+  would fail permanently and be ignored.
+- CI builds the WASM previewer and fails when the committed artifact in
+  `docs/previewer/` is stale. It went stale once and was found by loading the
+  page in a browser.
+
+### Removed
+
+- `tools/rotate-variable-hue.js`. It applied a fixed +54 degree offset
+  unconditionally, so a second run rotated the variable another 54 degrees:
+  pink became salmon. The rotation is a one-shot decision baked into the
+  themes, not a repeatable step, and a non-idempotent tool beside idempotent
+  ones is how the wrong one gets run.
+
+### Documented
+
+- The `apca-w3` licence position: APCA is an internal analysis metric
+  transcribed from published constants, not shipped, and never asserted as a
+  conformance claim. WCAG 2.1 remains the only gate. Removing `apcaLc` and
+  `apcaAbs` would cost the lightness-separation check, which would fall back to
+  a CIELAB L* gap -- weaker, but adequate.
+
 ## [5.1.0] - 2026-10-07
 
 ### Fixed

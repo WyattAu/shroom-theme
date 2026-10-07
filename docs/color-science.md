@@ -53,6 +53,19 @@ and it means a dark theme and a light theme with equal WCAG ratios are not
 equally legible. APCA is used here for one specific job: separating token
 colours from each other by lightness.
 
+**Licensing.** The `apca-w3` reference implementation carries a licence
+restricting use to WCAG accessibility guidelines for web content, and stating
+that non-compliant implementations are a copyright violation. This project does
+not ship APCA: the formula lives in `color-science.js`, transcribed from the
+published constants, and is used as an internal analysis metric. Nothing in the
+extension, the themes, or the documentation asserts APCA conformance, and APCA
+is not a pass/fail gate — WCAG 2.1 is. That is the position here: APCA is
+advisory, WCAG 2.1 is normative, and the licence is not relied on. If that is
+not comfortable, `apcaAbs` and `apcaLc` can be removed and the palette audit
+falls back to WCAG plus CIEDE2000 with no loss of gating coverage; the |Lc|
+lightness-separation check would need replacing with a CIELAB L\* gap, which is
+weaker but adequate.
+
 APCA is **not** in WCAG 3. It was removed from the W3C SIL drafts in 2023 and
 the current editor's draft states that the contrast algorithm is yet to be
 determined. APCA is a candidate, not a standard. Do not describe a theme as

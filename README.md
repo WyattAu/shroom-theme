@@ -149,9 +149,10 @@ held to the 3:1 that WCAG sets for non-text components rather than to 4.5:1.
 |---|---|
 | `npm run compile` | TypeScript compilation |
 | `npm run lint` | ESLint, whole repository |
-| `npm run validate` | Theme JSON structure, then the palette audit |
+| `npm run validate` | Theme JSON structure, palette audit, CVD matrix |
 | `npm run audit:palette` | Contrast and lightness gates. Fails the build on a violation |
-| `npm run repair:palette` | Repair the palettes. Idempotent |
+| `npm run audit:cvd` | CVD collision matrix report per variant |
+| `npm run palette` | Palette tooling: `repair [--dry-run]`, `gamut`, `matrix` |
 | `npm run test:unit` | Colour science tests. No display server needed |
 | `npm test` | VS Code host tests |
 | `npm run convert` | Generate 9-format exports |
