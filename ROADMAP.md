@@ -1,6 +1,12 @@
 # Shroom Space Theme - Production Roadmap
 
-## Current Status (v5.0.0)
+## Current Status (v5.1.0)
+
+5.1.0 was a correctness release. The contrast audit was discarding the alpha
+channel before measuring, which overstated 175 token pairs per theme; thirty text
+tokens shipped below WCAG AA once that was fixed; and the keyword and variable
+tokens were isoluminant, making them the same colour for a dichromat. See the
+CHANGELOG for the full list.
 
 ### Completed Infrastructure
 
@@ -391,6 +397,57 @@ Creating a custom icon theme would require 500+ SVG icons and months of work for
 
 ---
 
+## Phase 18: v5.1.0 - Colour Correctness (COMPLETED)
+
+### What was wrong
+
+The audit reported compliance that did not hold. Three independent defects, each
+of which would have been caught by a different check that did not exist:
+
+| Defect | Detection it needed |
+|---|---|
+| Alpha discarded before measuring contrast | Alpha-composited measurement |
+| Two token colours at identical lightness | Pairwise lightness separation |
+| CVD simulation in gamma space, using a matrix Viénot never published | External reference values |
+
+### Tasks
+
+| ID | Task | Status |
+|---|---|---|
+| T-5101 | Composite alpha before measuring contrast | Done |
+| T-5102 | Lift 30 sub-AA text tokens | Done |
+| T-5103 | Separate the isoluminant keyword/variable pair | Done |
+| T-5104 | Replace gamma-space CVD simulation with linear RGB | Done |
+| T-5105 | Use Brettel for tritanopia, which Viénot does not model | Done |
+| T-5106 | Add `color-science.js`, validated against `colour-science` 0.4.7 | Done |
+| T-5107 | Add a palette audit gate to CI | Done |
+| T-5108 | Pin the library to an external reference table | Done |
+| T-5109 | Rotate the variable token to separate it from the keyword | Done |
+
+### Acceptance Criteria
+
+- All 7 themes pass the palette audit: alpha-composited WCAG AA on text, and
+  APCA \|Lc\| separation between competing token colours
+- 56 tests pass, including a regression test that distinguishes linear-RGB
+  simulation from the gamma-space variant
+- No token colour is within 2 Lc of another competing token colour
+
+### Known limits, documented rather than fixed
+
+Three findings were recorded in `docs/color-science.md` instead of being
+corrected, because the evidence does not support a change:
+
+- Mutual distinguishability under simulated CVD is not achievable for nine token
+  colours on one background. 7.39 CIEDE2000 is the ceiling for the
+  keyword/variable pair, and that is the best of the available rotations.
+- The monochrome variant preserves semantic rank rather than token identity.
+  Eight greys cannot be mutually distinguishable in a readable lightness band.
+- Lightness adjustment cannot separate a pair that differs only along the
+  red-green axis. The variable token required a hue rotation, which is a design
+  change rather than a tuning one.
+
+---
+
 ## Recurring Maintenance
 
 | Frequency | Task |
@@ -399,6 +456,7 @@ Creating a custom icon theme would require 500+ SVG icons and months of work for
 | Monthly | Run npm audit and update dev dependencies |
 | Monthly | Check GitHub Actions deprecation notices |
 | Quarterly | Verify WCAG compliance after VS Code updates |
+| Quarterly | Run `npm run audit:palette` and review the reported CVD separation diagnostics |
 | Quarterly | Review CVD variant color mappings against latest accessibility research |
 | On VS Code major release | Test all themes against new stable version |
 | On VS Code major release | Update `engines.vscode` minimum version |
@@ -452,8 +510,11 @@ v0.2.0 (WCAG) --> v0.3.0 (Completeness) --> v0.4.0 (Multi-Editor) --> v0.5.0 (Vi
                                                                                   |
                                                                                   v
                                                                              v5.1.0 (AI)
+                                                                                  |
+                                                                                  v
+                                                                   v5.1.0 (Colour Correctness)
 
-Phases 1-17 ALL COMPLETED.
+Phases 1-18 ALL COMPLETED.
 ```
 
 ---
