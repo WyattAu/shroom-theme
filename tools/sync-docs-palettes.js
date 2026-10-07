@@ -165,6 +165,94 @@ function cardSwatches(title) {
   ].filter(Boolean);
 }
 
+
+// ---------------------------------------------------------------- wcag.html --
+
+/** Report label -> theme scope. Only labels the page uses are mapped. */
+const LABEL_TO_SCOPE = {
+  "Foreground": "editor.foreground",
+  "Accent (purple)": "keyword",
+  "Accent (pink)": "variable",
+  // The deuteranopia and protanopia cards label the variable token this way.
+  // The name is a leftover from when it was blue, and the label is updated
+  // below so the page stops describing a colour that is no longer in the theme.
+  "Accent (blue-shifted)": "variable",
+  "Accent (teal)": "entity.name.function",
+  "Accent (green)": "string",
+  "Accent (amber)": "constant.numeric",
+  "Accent (red)": "invalid",
+  "Muted": "comment",
+};
+
+/** Report variant name -> theme file. */
+const REPORT_NAME_TO_FILE = {
+  "Shroom Space (Dark)": "shroom-space-theme.json",
+  "Shroom Space Light": "shroom-space-light-theme.json",
+  "Deuteranopia (Dark)": "shroom-space-deuteranopia-theme.json",
+  "Protanopia (Dark)": "shroom-space-protanopia-theme.json",
+  "Tritanopia (Dark)": "shroom-space-tritanopia-theme.json",
+  "Monochrome (Dark)": "shroom-space-monochrome-theme.json",
+  "High Contrast": "shroom-space-high-contrast-theme.json",
+};
+
+/**
+ * Rewrite mapped label colours inside one variant block.
+ *
+ * Labels without a mapping are untouched, and a label whose colour already
+ * matches is not rewritten, so the returned count is values that were wrong
+ * rather than labels processed.
+ */
+function syncReportBlock(block, scopes) {
+  let fixed = 0;
+  const text = block.replace(
+    /\{\s*label:\s*"([^"]+)",\s*hex:\s*"(#[0-9A-Fa-f]{6})"\s*\}/g,
+    function (entry, label, current) {
+      const scope = LABEL_TO_SCOPE[label];
+      if (!scope) { return entry; }
+      const wanted = scopes.get(scope);
+      if (!wanted || wanted === current.toUpperCase()) { return entry; }
+      fixed++;
+      // The deuteranopia and protanopia cards label the variable token
+      // "Accent (blue-shifted)", which described the colour it had before the
+      // rotation. Rename alongside the value so the page stops describing a
+      // colour that is no longer in the theme.
+      const labelOut = label === "Accent (blue-shifted)" ? "Accent (pink)" : label;
+      return '{ label: "' + labelOut + '", hex: "' + wanted + '" }';
+    }
+  );
+  return { text: text, fixed: fixed };
+}
+
+/** Update the contrast report page's per-variant colour arrays. */
+function syncWcagReport(file) {
+  const filePath = path.join(ROOT, "docs", file);
+  let html = fs.readFileSync(filePath, "utf8");
+  let changed = 0;
+
+  for (const name of Object.keys(REPORT_NAME_TO_FILE)) {
+    const theme = JSON.parse(
+      fs.readFileSync(path.join(THEMES_DIR, REPORT_NAME_TO_FILE[name]), "utf8")
+    );
+    const scopes = scopeColours(theme);
+
+    // Anchor on the variant name and rewrite up to the next one, so a change
+    // cannot leak into a neighbouring variant's block.
+    const start = html.indexOf('name: "' + name + '"');
+    if (start === -1) { continue; }
+    const next = html.indexOf('name: "', start + 1);
+    const end = next === -1 ? html.length : next;
+
+    const synced = syncReportBlock(html.slice(start, end), scopes);
+    if (synced.fixed > 0) {
+      html = html.slice(0, start) + synced.text + html.slice(end);
+      changed += synced.fixed;
+    }
+  }
+
+  if (changed > 0) { fs.writeFileSync(filePath, html); }
+  return { changed: changed };
+}
+
 function main() {
   for (const file of DOCS) {
     if (!fs.existsSync(path.join(ROOT, "docs", file))) { continue; }
@@ -175,12 +263,17 @@ function main() {
       ", swatch cards updated " + b.changed
     );
   }
+  const w = syncWcagReport("wcag.html");
+  console.log(
+    "wcag.html".padEnd(16) + " report colours updated " + w.changed
+  );
 }
 
 if (require.main === module) { main(); }
 
 module.exports = {
   syncPalettes: syncPalettes,
+  syncWcagReport: syncWcagReport,
   syncSwatches: syncSwatches,
   roleColour: roleColour,
   cardSwatches: cardSwatches,
