@@ -530,15 +530,37 @@ function generateThemePage(theme) {
 // Generate pages for all themes
 const themeFiles = fs.readdirSync(themesDir).filter(f => f.endsWith('.json'));
 
-fs.mkdirSync(outputDir, { recursive: true });
-
-for (const file of themeFiles) {
-  const theme = JSON.parse(fs.readFileSync(path.join(themesDir, file), 'utf8'));
-  const html = generateThemePage(theme);
-  const slug = file.replace('.json', '');
-  const outputPath = path.join(outputDir, `${slug}.html`);
-  fs.writeFileSync(outputPath, html);
-  console.log(`Generated: ${slug}.html`);
+/**
+ * Regenerate every visual-regression page from the current theme JSON.
+ *
+ * Exported so the colour-provenance test can rebuild the pages before asserting
+ * against them. Without that, the test would assert against whatever was built
+ * last, which is not the current theme.
+ *
+ * @param {{quiet?: boolean}} [opts] suppress the per-file log when true
+ * @returns {string[]} slugs of the pages written
+ */
+function generateVisualPages(opts = {}) {
+  fs.mkdirSync(outputDir, { recursive: true });
+  const written = [];
+  for (const file of themeFiles) {
+    const theme = JSON.parse(fs.readFileSync(path.join(themesDir, file), 'utf8'));
+    const slug = file.replace('.json', '');
+    fs.writeFileSync(
+      path.join(outputDir, `${slug}.html`),
+      generateThemePage(theme)
+    );
+    if (!opts.quiet) {console.log(`Generated: ${slug}.html`);}
+    written.push(slug);
+  }
+  if (!opts.quiet) {
+    console.log(`\nGenerated ${written.length} visual test pages in ${outputDir}`);
+  }
+  return written;
 }
 
-console.log(`\nGenerated ${themeFiles.length} visual test pages in ${outputDir}`);
+if (require.main === module) {
+  generateVisualPages();
+}
+
+module.exports = { generateThemePage, generateVisualPages };
