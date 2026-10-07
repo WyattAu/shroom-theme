@@ -90,6 +90,11 @@ depiction of what anyone sees. A pair that is distinguishable in them is
 distinguishable for the milder anomalous trichromacies that make up most colour
 vision deficiency.
 
+Variables are pink rather than the more conventional blue for this reason: a
+blue variable sat 1.55 CIEDE2000 from the purple keyword under deuteranopia,
+which is functionally the same colour. The full measurement is in the
+documentation.
+
 ## Accent Color
 
 Use the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and search **Shroom: Set Accent Color**. Or configure in settings:
@@ -118,7 +123,7 @@ WCAG contrast report: [wyattau.github.io/shroom-theme/wcag.html](https://wyattau
 | Muted | `#726D89` | Comments, disabled | 25.0 |
 | Accent (red) | `#E68484` | Errors, deletions | 48.5 |
 | Accent (purple) | `#BE9AF7` | Keywords, operators | 54.4 |
-| Accent (blue) | `#89AEFF` | Variables, parameters | 56.5 |
+| Accent (pink) | `#E794D2` | Variables, parameters | 56.6 |
 | Accent (green) | `#A6C18B` | Strings, git additions | 61.7 |
 | Accent (teal) | `#74D7C8` | Functions, info | 69.8 |
 | Foreground | `#CCC8D9` | Default text | 72.0 |

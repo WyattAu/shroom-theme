@@ -1018,7 +1018,7 @@
         "variable.parameter"
       ],
       "settings": {
-        "foreground": "#89DDFF"
+        "foreground": "#CACEFF"
       }
     },
     {
@@ -1231,7 +1231,7 @@
         "punctuation.definition.list_item.markdown"
       ],
       "settings": {
-        "foreground": "#89DDFF"
+        "foreground": "#CACEFF"
       }
     },
     {
@@ -1470,7 +1470,7 @@
         "variable.function"
       ],
       "settings": {
-        "foreground": "#89DDFF"
+        "foreground": "#CACEFF"
       }
     },
     {
@@ -1483,7 +1483,7 @@
         "support.function.construct"
       ],
       "settings": {
-        "foreground": "#89DDFF"
+        "foreground": "#CACEFF"
       }
     },
     {
@@ -1608,7 +1608,7 @@
         "punctuation.separator.label"
       ],
       "settings": {
-        "foreground": "#89DDFF"
+        "foreground": "#CACEFF"
       }
     },
     {
@@ -1713,7 +1713,7 @@
         "punctuation.definition.entity.css"
       ],
       "settings": {
-        "foreground": "#89DDFF"
+        "foreground": "#CACEFF"
       }
     },
     {
@@ -1749,7 +1749,7 @@
         "support.function.builtin.shell"
       ],
       "settings": {
-        "foreground": "#89DDFF"
+        "foreground": "#CACEFF"
       }
     },
     {
@@ -1839,7 +1839,7 @@
         "entity.name.type.class.python"
       ],
       "settings": {
-        "foreground": "#89DDFF"
+        "foreground": "#CACEFF"
       }
     },
     {
@@ -1879,10 +1879,10 @@
   ],
   "semanticTokenColors": {
     "parameter": {
-      "foreground": "#89DDFF"
+      "foreground": "#CACEFF"
     },
     "method": {
-      "foreground": "#89DDFF"
+      "foreground": "#CACEFF"
     },
     "property": {
       "foreground": "#CCC8D9"
@@ -1896,7 +1896,7 @@
       "fontStyle": "italic"
     },
     "variable": {
-      "foreground": "#89DDFF"
+      "foreground": "#CACEFF"
     },
     "enum": {
       "foreground": "#E8C990",
@@ -1921,7 +1921,7 @@
       "foreground": "#E8C990"
     },
     "function": {
-      "foreground": "#89DDFF"
+      "foreground": "#CACEFF"
     },
     "decorator": {
       "foreground": "#FFCB6B"
@@ -1951,7 +1951,7 @@
       "foreground": "#E8C990"
     },
     "function.defaultLibrary": {
-      "foreground": "#89DDFF"
+      "foreground": "#CACEFF"
     },
     "type.defaultLibrary": {
       "foreground": "#E8C990"
@@ -1964,7 +1964,7 @@
       "fontStyle": "italic"
     },
     "method.defaultLibrary": {
-      "foreground": "#89DDFF"
+      "foreground": "#CACEFF"
     },
     "class.defaultLibrary": {
       "foreground": "#E8C990"

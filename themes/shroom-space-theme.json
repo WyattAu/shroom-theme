@@ -1018,7 +1018,7 @@
         "variable.parameter"
       ],
       "settings": {
-        "foreground": "#89AEFF"
+        "foreground": "#E794D2"
       }
     },
     {
@@ -1180,7 +1180,7 @@
         "markup.underline"
       ],
       "settings": {
-        "foreground": "#89AEFF",
+        "foreground": "#E794D2",
         "fontStyle": "underline"
       }
     },
@@ -1257,7 +1257,7 @@
         "string.other.link.title.markdown"
       ],
       "settings": {
-        "foreground": "#89AEFF"
+        "foreground": "#E794D2"
       }
     },
     {
@@ -1438,7 +1438,7 @@
         "variable.other.object.property"
       ],
       "settings": {
-        "foreground": "#89AEFF"
+        "foreground": "#E794D2"
       }
     },
     {
@@ -1669,7 +1669,7 @@
         "support.type.vendored.property-name.css"
       ],
       "settings": {
-        "foreground": "#89AEFF"
+        "foreground": "#E794D2"
       }
     },
     {
@@ -1725,7 +1725,7 @@
         "support.type.property-name.json"
       ],
       "settings": {
-        "foreground": "#89AEFF"
+        "foreground": "#E794D2"
       }
     },
     {
@@ -1737,7 +1737,7 @@
         "table.toml"
       ],
       "settings": {
-        "foreground": "#89AEFF"
+        "foreground": "#E794D2"
       }
     },
     {
@@ -1873,13 +1873,13 @@
         "variable.other.env"
       ],
       "settings": {
-        "foreground": "#89AEFF"
+        "foreground": "#E794D2"
       }
     }
   ],
   "semanticTokenColors": {
     "parameter": {
-      "foreground": "#89AEFF"
+      "foreground": "#E794D2"
     },
     "property": {
       "foreground": "#CCC8D9"
@@ -1896,7 +1896,7 @@
       "fontStyle": "italic"
     },
     "variable": {
-      "foreground": "#89AEFF"
+      "foreground": "#E794D2"
     },
     "enum": {
       "foreground": "#E8C990",
@@ -1960,7 +1960,7 @@
       "foreground": "#E8C990"
     },
     "parameter.declaration": {
-      "foreground": "#89AEFF",
+      "foreground": "#E794D2",
       "fontStyle": "italic"
     },
     "method.defaultLibrary": {

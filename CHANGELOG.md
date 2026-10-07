@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **The variable token colour was confusable with the keyword under
+  deuteranopia and protanopia.** `#BE9AF7` (keyword) and `#89AEFF` (variable)
+  differed only along the red-green axis, so they projected to `#5E81C8` and
+  `#677EB3`: 1.55 CIEDE2000 apart, functionally the same colour. No lightness
+  adjustment can fix this, because the deficiency removes the dimension they
+  differ on. Variables are now `#E794D2`, a +54 degree hue rotation that holds
+  lightness and chroma, taking the pair to 7.39. That is the best available:
+  every rotation that separates the pair further lands on another token's hue,
+  because nine token colours already fill the hue circle.
+
+- A first attempt at the above searched the hue circle for maximum CVD
+  separation and picked amber, which reached 16.16 by landing the variable on
+  the constant colour's hue at 9.02 normal-vision separation. The problem was
+  moved, not solved. The search now constrains against introducing a new
+  collision.
+
+
 - **Contrast audit discarded the alpha channel before measuring.** This was the
   significant correctness bug in the audit layer. `#726D8980` on `#24212E` was
   reported at 3.20:1; as rendered it is 1.77:1. Across the seven themes the bug

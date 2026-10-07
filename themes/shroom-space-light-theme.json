@@ -1018,7 +1018,7 @@
         "variable.parameter"
       ],
       "settings": {
-        "foreground": "#585FB5"
+        "foreground": "#AC3E79"
       }
     },
     {
@@ -1879,7 +1879,7 @@
   ],
   "semanticTokenColors": {
     "parameter": {
-      "foreground": "#585FB5"
+      "foreground": "#AC3E79"
     },
     "property": {
       "foreground": "#4A4555"
@@ -1896,7 +1896,7 @@
       "fontStyle": "italic"
     },
     "variable": {
-      "foreground": "#585FB5"
+      "foreground": "#AC3E79"
     },
     "enum": {
       "foreground": "#886930",

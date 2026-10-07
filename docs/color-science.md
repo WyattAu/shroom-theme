@@ -190,11 +190,28 @@ monochrome variant is therefore a lightness ramp that preserves semantic
 rank, not a palette where every token is separately identifiable.
 
 **Lightness alone cannot fix a pair separated along the red-green axis.** The
-keyword/variable purple-blue pair projected to `#5E81C8` and `#677EB3` under
-deuteranopia: adjacent. Any amount of lightness adjustment leaves them there,
-because they differ only in the dimension a dichromat cannot see. Fixing such a
-pair requires moving the hues apart, which is a design change rather than a
-tuning one.
+keyword/variable pair was purple `#BE9AF7` at hue 307 against blue `#89AEFF` at
+hue 281. They projected to `#5E81C8` and `#677EB3` under deuteranopia: adjacent.
+Any amount of lightness adjustment left them there, because they differed only
+in the dimension a dichromat cannot see.
+
+The variable colour is now `#E794D2`, hue 335, a fixed +54° rotation from each
+variant's own variable hue. Holding lightness and chroma keeps |Lc| at 56.6, so
+it does not disturb the lightness separation the rest of the palette relies on.
+Keyword/variable goes from 1.55 to 7.39 CIEDE2000 under dichromacy.
+
+That is still below the 10 threshold, and it is as far as this palette can go.
+Searching the full hue circle at constant lightness and chroma, every rotation
+that separates the pair further lands on another token's hue: amber at +85
+reaches 16.16 but sits on the constant colour at 9.02 normal-vision separation;
+teal at -90 reaches 13.33 but sits on the function colour at 7.68. Pink is the
+one rotation that improves the target pair while leaving every other pairwise
+distance healthy, at 19.6 to its nearest neighbour. With nine token colours the
+hue circle is full, and this is the structural consequence.
+
+Fewer categories would solve it outright. Four colours separated by 30° of hue
+reach 35.7 CIEDE2000 at equal lightness, against 29.9 for six and about 22 for
+eight.
 
 ## Provenance and reproduction
 
@@ -269,3 +286,7 @@ constants.
 - Tol, P. (2021). *Colour Schemes*. SRON/EPS/TN/09-002 issue 3.2.
 - Geddes, C., Eggertson, E. C., Sutton, J., & Tigwell, G. W. (2025). Designing
   for colour vision deficiency: a scoping review. *ACM ASSETS '25*, Article 90.
+- Li, C., Li, Z., Wang, Z., Xu, Y., Luo, M. R., Cui, G., Melgosa, M., Brill, M.
+  H., & Pointer, M. (2017). Comprehensive color solutions: CAM16, CAT16, and
+  CAM16-UCS. *Color Research & Application* 42(6), 703–718. Source of the
+  categorical-separation figures quoted above.
