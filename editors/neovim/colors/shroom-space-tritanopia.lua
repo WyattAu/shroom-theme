@@ -41,12 +41,12 @@ M.palette = {
   tag        = "#FF79C6",
   attribute  = "#E8C990",
   decorator  = "#C3E88D",
-  purple     = "#BE9AF7",
-  teal       = "#74D7C8",
-  green      = "#A6C18B",
-  amber      = "#E8C990",
+  purple     = "#FF79C6",
+  teal       = "#FF79C6",
+  green      = "#C3E88D",
+  amber      = "#FF79C6",
   red        = "#E68484",
-  blue       = "#82AAFF",
+  blue       = "#CACEFF",
   muted      = "#726D89",
 }
 

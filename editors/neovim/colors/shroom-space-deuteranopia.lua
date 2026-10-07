@@ -42,11 +42,11 @@ M.palette = {
   attribute  = "#E8C990",
   decorator  = "#E8C990",
   purple     = "#BE9AF7",
-  teal       = "#74D7C8",
-  green      = "#A6C18B",
+  teal       = "#FFCB6B",
+  green      = "#E8C990",
   amber      = "#E8C990",
   red        = "#E68484",
-  blue       = "#82AAFF",
+  blue       = "#E794D2",
   muted      = "#726D89",
 }
 

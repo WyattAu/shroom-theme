@@ -97,14 +97,24 @@ function extractPalette(theme) {
     tag: scopeMap['entity.name.tag'] || '#BE9AF7',
     attribute: scopeMap['entity.other.attribute-name'] || '#E8C990',
     decorator: scopeMap['meta.decorator'] || '#FFCB6B',
-    // Palette accents
-    purple: '#BE9AF7',
-    teal: '#74D7C8',
-    green: '#A6C18B',
-    amber: '#E8C990',
-    red: '#E68484',
-    blue: '#82AAFF',
-    muted: '#726D89',
+    // Palette accents.
+    //
+    // `purple`, `teal`, `green`, `amber`, `red` and `muted` were hardcoded to
+    // the dark theme's values, which meant every other variant's editor export
+    // carried dark-theme accents regardless of its own palette. `blue` was both
+    // hardcoded and stale: the variable token moved to `#E794D2` when it was
+    // rotated away from the keyword, so Neovim's `@variable.parameter` and
+    // Helix's `blue` key were still emitting the old colour.
+    //
+    // All of them now resolve from the theme with the dark values as fallback,
+    // so a variant that recolours a role gets that colour in its exports.
+    purple: scopeMap['keyword'] || '#BE9AF7',
+    teal: scopeMap['entity.name.function'] || '#74D7C8',
+    green: scopeMap['string'] || '#A6C18B',
+    amber: scopeMap['constant.numeric'] || '#E8C990',
+    red: scopeMap['invalid'] || '#E68484',
+    blue: scopeMap['variable'] || '#E794D2',
+    muted: scopeMap['comment'] || '#726D89',
   };
 }
 

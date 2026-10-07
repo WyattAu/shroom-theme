@@ -41,13 +41,13 @@ M.palette = {
   tag        = "#895D9C",
   attribute  = "#886930",
   decorator  = "#886930",
-  purple     = "#BE9AF7",
-  teal       = "#74D7C8",
-  green      = "#A6C18B",
-  amber      = "#E8C990",
-  red        = "#E68484",
-  blue       = "#82AAFF",
-  muted      = "#726D89",
+  purple     = "#895D9C",
+  teal       = "#006161",
+  green      = "#476447",
+  amber      = "#886930",
+  red        = "#A14244",
+  blue       = "#AC3E79",
+  muted      = "#726C7C",
 }
 
 function M.setup()

@@ -240,10 +240,9 @@
           <p>Base dark theme. Purple/teal/green palette with warm amber constants.</p>
           <div>
             <span class="color-swatch" style="background:#24212E"></span>
-            <span class="color-swatch" style="background:#CCC8D9"></span>
+            <span class="color-swatch" style="background:#E794D2"></span>
             <span class="color-swatch" style="background:#BE9AF7"></span>
-            <span class="color-swatch" style="background:#74D7C8"></span>
-            <span class="color-swatch" style="background:#A6C18B"></span>
+            <span class="color-swatch" style="background:#E8C990"></span>
           </div>
         </div>
         <div class="theme-card">
@@ -252,10 +251,9 @@
           <p>Light variant with warm earth-tone backgrounds and muted accents.</p>
           <div>
             <span class="color-swatch" style="background:#F5F2E8"></span>
-            <span class="color-swatch" style="background:#4A4555"></span>
-            <span class="color-swatch" style="background:#8B5F9E"></span>
-            <span class="color-swatch" style="background:#007A7A"></span>
-            <span class="color-swatch" style="background:#5A785A"></span>
+            <span class="color-swatch" style="background:#AC3E79"></span>
+            <span class="color-swatch" style="background:#895D9C"></span>
+            <span class="color-swatch" style="background:#886930"></span>
           </div>
         </div>
         <div class="theme-card">
@@ -264,8 +262,8 @@
           <p>Adapted for deuteranopia (green-weak CVD). Blue-shifted additions, avoided red-green confusion.</p>
           <div>
             <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#E794D2"></span>
             <span class="color-swatch" style="background:#BE9AF7"></span>
-            <span class="color-swatch" style="background:#82AAFF"></span>
             <span class="color-swatch" style="background:#E8C990"></span>
           </div>
         </div>
@@ -275,9 +273,9 @@
           <p>Adapted for protanopia (red-blind CVD). Coral-shifted errors with blue additions.</p>
           <div>
             <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#E794D2"></span>
             <span class="color-swatch" style="background:#BE9AF7"></span>
-            <span class="color-swatch" style="background:#82AAFF"></span>
-            <span class="color-swatch" style="background:#F07178"></span>
+            <span class="color-swatch" style="background:#E8C990"></span>
           </div>
         </div>
         <div class="theme-card">
@@ -286,9 +284,9 @@
           <p>Adapted for tritanopia (blue-yellow CVD). Pink/cyan-shifted accents with green strings.</p>
           <div>
             <span class="color-swatch" style="background:#24212E"></span>
+            <span class="color-swatch" style="background:#CACEFF"></span>
             <span class="color-swatch" style="background:#FF79C6"></span>
-            <span class="color-swatch" style="background:#89DDFF"></span>
-            <span class="color-swatch" style="background:#C3E88D"></span>
+            <span class="color-swatch" style="background:#FF79C6"></span>
           </div>
         </div>
         <div class="theme-card">
@@ -297,9 +295,9 @@
           <p>Grayscale palette. Error indicators use luminance contrast. Maximum text clarity.</p>
           <div>
             <span class="color-swatch" style="background:#1C1C1C"></span>
-            <span class="color-swatch" style="background:#CCCCCC"></span>
+            <span class="color-swatch" style="background:#DDDDDD"></span>
             <span class="color-swatch" style="background:#FFFFFF"></span>
-            <span class="color-swatch" style="background:#777777"></span>
+            <span class="color-swatch" style="background:#CCCCCC"></span>
           </div>
         </div>
         <div class="theme-card">
@@ -308,9 +306,9 @@
           <p>Maximum contrast ratios. Pure black background. Full WCAG AAA compliance target.</p>
           <div>
             <span class="color-swatch" style="background:#000000"></span>
-            <span class="color-swatch" style="background:#FFFFFF"></span>
-            <span class="color-swatch" style="background:#AD58FF"></span>
             <span class="color-swatch" style="background:#4AF8E1"></span>
+            <span class="color-swatch" style="background:#AD58FF"></span>
+            <span class="color-swatch" style="background:#FFD978"></span>
           </div>
         </div>
       </div>
@@ -451,32 +449,25 @@
     (function () {
       var themes = {
         'shroom-space': {
-          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7',
-          teal: '#74D7C8', green: '#A6C18B', amber: '#E8C990', red: '#E68484', border: '#393552'
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7', teal: '#74D7C8', green: '#A6C18B', amber: '#E8C990', red: '#E68484', border: '#393552'
         },
         'shroom-space-light': {
-          bg: '#F5F2E8', fg: '#4A4555', muted: '#8A8598', accent: '#8B5F9E',
-          teal: '#007A7A', green: '#5A785A', amber: '#8B6914', red: '#A03030', border: '#D4CFC5'
+          bg: '#F5F2E8', fg: '#4A4555', muted: '#726C7C', accent: '#895D9C', teal: '#006161', green: '#476447', amber: '#886930', red: '#A14244', border: '#393552'
         },
         'deuteranopia': {
-          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7',
-          teal: '#74D7C8', green: '#82AAFF', amber: '#E8C990', red: '#E68484', border: '#393552'
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7', teal: '#FFCB6B', green: '#E8C990', amber: '#E8C990', red: '#E68484', border: '#393552'
         },
         'protanopia': {
-          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7',
-          teal: '#74D7C8', green: '#82AAFF', amber: '#E8C990', red: '#F07178', border: '#393552'
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#BE9AF7', teal: '#FFCB6B', green: '#E8C990', amber: '#E8C990', red: '#F07178', border: '#393552'
         },
         'tritanopia': {
-          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#FF79C6',
-          teal: '#89DDFF', green: '#C3E88D', amber: '#E8C990', red: '#E68484', border: '#393552'
+          bg: '#24212E', fg: '#CCC8D9', muted: '#726D89', accent: '#FF79C6', teal: '#FF79C6', green: '#C3E88D', amber: '#FF79C6', red: '#E68484', border: '#393552'
         },
         'monochrome': {
-          bg: '#1C1C1C', fg: '#CCCCCC', muted: '#777777', accent: '#FFFFFF',
-          teal: '#AAAAAA', green: '#999999', amber: '#BBBBBB', red: '#EEEEEE', border: '#444444'
+          bg: '#1C1C1C', fg: '#CCCCCC', muted: '#777777', accent: '#FFFFFF', teal: '#FFFFFF', green: '#BBBBBB', amber: '#CCCCCC', red: '#FFFFFF', border: '#393552'
         },
         'high-contrast': {
-          bg: '#000000', fg: '#FFFFFF', muted: '#AAAAAA', accent: '#AD58FF',
-          teal: '#4AF8E1', green: '#A6C18B', amber: '#E8C990', red: '#FF6B6B', border: '#555555'
+          bg: '#000000', fg: '#FFFFFF', muted: '#AAAAAA', accent: '#AD58FF', teal: '#4AF8E1', green: '#98FC4D', amber: '#FFD978', red: '#FF6B6B', border: '#393552'
         }
       };
 
