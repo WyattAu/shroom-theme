@@ -50,13 +50,34 @@ jobs:
         run: npm ci
 
       # apt-get on shared runners hangs periodically -- two consecutive runs sat
-      # on this step for over an hour with no output, blocking the matrix. The
-      # timeout bounds the damage: a run fails in 10 minutes instead of
-      # occupying a runner indefinitely. Packages are installed in one
-      # invocation because separate calls re-resolve the index each time.
+      # on this step for over an hour with no output, blocking the matrix, and a
+      # later run timed out outright. So: bound it with timeout-minutes, and
+      # retry the whole step, since a hung mirror is usually transient rather
+      # than persistent. Three attempts at 10 minutes each is 30 minutes of
+      # ceiling, which is enough to outlast a stuck mirror without pinning a
+      # runner for an hour.
+      #
+      # `sleep 20` before retrying, because retrying immediately against a
+      # mirror that is wedged tends to wedge again.
       - name: Install system dependencies for headless testing
         timeout-minutes: 10
         run: |
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y --no-install-recommends \
+            libasound2t64 libgbm1 libgtk-3-0t64 libnss3 xvfb
+      - name: Retry system dependencies (attempt 2)
+        timeout-minutes: 10
+        if: failure()
+        run: |
+          sleep 20
+          sudo apt-get update -o Acquire::Retries=3
+          sudo apt-get install -y --no-install-recommends \
+            libasound2t64 libgbm1 libgtk-3-0t64 libnss3 xvfb
+      - name: Retry system dependencies (attempt 3)
+        timeout-minutes: 10
+        if: failure()
+        run: |
+          sleep 40
           sudo apt-get update -o Acquire::Retries=3
           sudo apt-get install -y --no-install-recommends \
             libasound2t64 libgbm1 libgtk-3-0t64 libnss3 xvfb
