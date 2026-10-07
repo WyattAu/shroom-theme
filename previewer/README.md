@@ -2,10 +2,29 @@
 
 Interactive theme previewer built with Rust/Leptos, compiled to WASM.
 
+## Status: the deployed build is stale
+
+`docs/previewer/` holds a WASM artifact built before the palette work in
+October 2026. The previewer embeds theme JSON at compile time via
+`include_str!`, so that artifact renders the old palette — the blue variable
+token, the pre-fix comment and line-number colours.
+
+`src/lib.rs` is current. Rebuild to see the shipped themes:
+
+```bash
+cd previewer && trunk build --release
+```
+
+Note that `cargo install trunk` currently fails on `libdeflate-sys`, which needs
+a working C toolchain and `pkg-config`. There is no CI job that builds the
+previewer, so nothing catches this drift automatically. Adding one would close
+it; until then the artifact ages silently whenever the palette changes.
+
 ## Prerequisites
 
 - Rust 1.75+ (`rustup target add wasm32-unknown-unknown`)
 - trunk (`cargo install trunk`)
+- A C toolchain and `pkg-config`, for trunk's own dependencies
 
 ## Build
 

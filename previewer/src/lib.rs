@@ -422,7 +422,9 @@ fn PaletteSection(theme: Signal<Theme>) -> impl IntoView {
         ("Green", "#A6C18B"),
         ("Amber", "#E8C990"),
         ("Red", "#E68484"),
-        ("Blue", "#82AAFF"),
+        // Variable moved off blue when it was rotated away from the keyword;
+        // see docs/color-science.md.
+        ("Pink", "#E794D2"),
         ("Muted", "#726D89"),
         ("Foreground", "#CCC8D9"),
     ];
