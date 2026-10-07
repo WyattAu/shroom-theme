@@ -50,7 +50,7 @@ const repoRoot = path.resolve(__dirname, '..', '..');
 const themesDir = path.join(repoRoot, 'themes');
 const pagesDir = path.join(repoRoot, 'tests', 'visual', 'pages');
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+ 
 const { generateVisualPages } = require(path.join(repoRoot, 'tools', 'generate-theme-html.js')) as {
   generateVisualPages: (opts?: { quiet?: boolean }) => string[];
 };
