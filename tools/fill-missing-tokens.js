@@ -80,6 +80,8 @@ const RULES = [
   { match: /^quickInputList\.focusHighlightForeground$/, from: "list.highlightForeground" },
   { match: /^commentsView\.resolvedIcon$/, from: "gitDecoration.addedResourceForeground" },
   { match: /^commentsView\.unresolvedIcon$/, from: "testing.iconUnset" },
+  { match: /^testing\.coveredMinimapBackground$/, from: "testing.coveredBackground" },
+  { match: /^testing\.uncoveredMinimapBackground$/, from: "testing.uncoveredBackground" },
   { match: /^editorInlayHint\.paramForeground$/, from: "editorInlayHint.parameterForeground" },
   { match: /^editorGroupHeader\.connectedTabsBackground$/, from: "editorGroupHeader.tabsBackground" },
 
@@ -205,7 +207,7 @@ function main() {
   const registry = new Set(
     fs.readFileSync(registryPath, "utf8").split("\n").map((s) => s.trim()).filter(Boolean)
   );
-  console.log(`VS Code registry: ${registry.size} colour IDs`);
+  console.log(`VS Code registry: ${registry.size} colour IDs (from reports/vscode-registry.txt -- run npm run audit:vscode to refresh)`);
 
   const files = fs.readdirSync(THEMES_DIR).filter((f) => f.endsWith(".json"));
   for (const file of files) {
