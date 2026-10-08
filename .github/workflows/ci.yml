@@ -49,6 +49,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Production dependencies are empty -- everything here is a devDependency,
+      # so nothing ships to users. The audit runs anyway to catch a compromised
+      # dev dependency early: a malicious postinstall or a poisoned transitive
+      # version executes on this runner with access to the repository secrets.
+      # Both steps are report-only. Failing CI on a dev-department advisory
+      # blocks releases over something users cannot receive.
+      - name: Dependency audit (production)
+        run: npm audit --omit=dev || true
+      - name: Dependency audit (dev, report only)
+        run: npm audit || true
+
       # apt-get on shared runners hangs periodically -- two consecutive runs sat
       # on this step for over an hour with no output, blocking the matrix, and a
       # later run timed out outright. So: bound it with timeout-minutes, and
