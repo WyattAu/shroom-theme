@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **The extension destroyed the user's colour customisations.**
+  `applyAccentColor` wrote `workbench.colorCustomizations = {}` when the accent
+  was reset, erasing every customisation from every source. It also replaced the
+  whole object when setting an accent, dropping non-editor entries.
+- **The extension autoSwitch feature used extension IDs instead of theme
+  labels.** `workbench.colorTheme` matches against the theme label (Shroom
+  Space), not the publisher-prefixed ID (wyattau.shroom-space-theme). The old
+  value would have been silently ignored.
+- **The Tailwind plugin exposed colours from the wrong variants.** Blue was the
+  variable colour that had been rotated away; pink, cyan and orange were from
+  the tritanopia and protanopia variants rather than the dark theme.
+- **Translucent backgrounds were composited over black instead of their real
+  backdrop.** The light theme's banner reported 1.68:1 and is actually 7.07:1.
+  Both `wcag21` and `apcaLc` were affected. `apcaLc` additionally composited
+  the background over the text (inverted layer order).
 - **Terminal ANSI palette: six of eight base colours were byte-identical to
   their bright counterparts** in every dark variant. Red, Green, Yellow, Blue,
   Magenta and Cyan were all the same hex as BrightRed, BrightGreen,
