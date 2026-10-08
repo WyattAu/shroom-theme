@@ -20,6 +20,17 @@ import { generateFromHsl } from "./theme-generator";
 const DARK_THEME_LABEL = "Shroom Space";
 const LIGHT_THEME_LABEL = "Shroom Space Light";
 
+// Accent selection backgrounds. These are muted tints designed to layer over
+// the dark theme's editor background without obscuring the syntax colours.
+//
+// Under simulated dichromacy 10 of the 21 pairs collide (below 10 CIEDE2000),
+// with green/amber at 0.7 under protanopia and teal/cyan at 1.1 under
+// tritanopia. A CVD user selecting between those accents would see the same
+// colour. This is not fixable by adjusting these hex values: the colours are
+// deliberately low-chroma so they do not obscure the syntax layer, and
+// low-chroma pairs collapse first under dichromacy. The mitigation is that the
+// user is choosing, not identifying -- if two accents look the same, they can
+// pick a different one.
 const ACCENT_MAP: Record<string, Record<string, string>> = {
   purple: {
     "editor.findMatchBackground": "#393552",
