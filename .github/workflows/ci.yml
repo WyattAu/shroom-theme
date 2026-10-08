@@ -269,27 +269,33 @@ jobs:
         working-directory: previewer
         run: trunk build --release
 
-      - name: Check committed artifact is current
+      # Byte-comparing the artifact does not work: trunk's content hash changes
+      # with the toolchain, so a CI build never matches a local one byte for
+      # byte. The invariant that matters is narrower -- the artifact was built
+      # from the current themes. A digest of the theme JSON over the build
+      # captures that, and is stable across environments.
+      #
+      # The digest is committed next to the artifact and refreshed whenever the
+      # previewer is rebuilt. A mismatch means the themes moved and the
+      # previewer was not rebuilt.
+      - name: Check the previewer was built from the current themes
+        working-directory: previewer
         run: |
-          fail=0
-          for f in index.html *.js *_bg.wasm; do
-            if [ ! -f "$f" ]; then continue; fi
-            base=$(basename "$f")
-            # The artifact filename carries a content hash, so a stale commit
-            # shows up as a missing file or an extra one rather than a byte diff.
-            if ! cmp -s "$f" "../docs/previewer/$base"; then
-              echo "STALE: docs/previewer/$base does not match previewer/dist/$f"
-              fail=1
-            fi
-          done
-          if [ "$fail" != "0" ]; then
+          current=$(cat ../themes/*.json | sha256sum | cut -d' ' -f1)
+          recorded=$(cat ../docs/previewer/theme-digest 2>/dev/null || echo MISSING)
+          echo "themes digest:  $current"
+          echo "recorded:       $recorded"
+          if [ "$current" != "$recorded" ]; then
             echo ""
-            echo "The committed previewer is out of date with the current themes."
-            echo "Run: (cd previewer && trunk build --release)"
-            echo "then copy dist/{index.html,*.js,*_bg.wasm} to docs/previewer/."
+            echo "STALE: docs/previewer/ was built from a different palette."
+            echo ""
+            echo "Refresh it with:"
+            echo "  (cd previewer && trunk build --release)"
+            echo "  cp dist/index.html dist/*.js dist/*_bg.wasm ../docs/previewer/"
+            echo "  cat ../themes/*.json | sha256sum | cut -d' ' -f1 \\"
+            echo "    > ../docs/previewer/theme-digest"
             exit 1
           fi
-        working-directory: previewer/dist
 
   # Publish job - only on version tags, depends on test passing
   publish:

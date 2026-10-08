@@ -9,6 +9,7 @@
  *   repair [--dry-run]   Contrast, then lightness separation. Idempotent.
  *   gamut                Report chroma headroom per token colour.
  *   matrix               CVD collision matrix report.
+ *   digest               Print the theme digest the previewer is checked against.
  *
  * `rotate-variable-hue` was removed. It applied a fixed +54 degree offset
  * unconditionally, so a second run rotated the variable another 54 degrees: the
@@ -18,16 +19,55 @@
  * wrong one gets run.
  *
  * Everything here is safe to run repeatedly. `repair` writes only when a value
- * actually changes; `gamut` and `matrix` are read-only.
+ * actually changes; `gamut`, `matrix` and `digest` are read-only.
  */
 
+const fs = require("fs");
 const path = require("path");
 
 const SUBCOMMANDS = {
   repair: "./repair-pipeline.js",
   gamut: "./gamut-headroom.js",
   matrix: "./cvd-matrix.js",
+  digest: null,
 };
+
+/**
+ * Digest of the theme JSON, as a stand-in for "what the previewer was built
+ * from".
+ *
+ * The previewer embeds theme JSON at compile time, so its artifact is only
+ * current if it was built from the themes now on disk. CI compares this digest
+ * against `docs/previewer/theme-digest`; rebuild the previewer and refresh the
+ * digest whenever they differ.
+ *
+ * Byte-comparing the WASM does not work: trunk's content hash changes with the
+ * toolchain, so a CI build never matches a local one.
+ *
+ * @param {string} themesDir
+ * @returns {string} sha256 hex digest
+ */
+function themeDigest(themesDir) {
+  const { createHash } = require("crypto");
+  const hash = createHash("sha256");
+  for (const file of fs.readdirSync(themesDir).sort()) {
+    if (!file.endsWith(".json")) { continue; }
+    hash.update(fs.readFileSync(path.join(themesDir, file)));
+  }
+  return hash.digest("hex");
+}
+
+/**
+ * Refresh `docs/previewer/theme-digest`.
+ * Call this after rebuilding the previewer, not instead of rebuilding it.
+ */
+function writeDigest() {
+  const digest = themeDigest(path.resolve(__dirname, "..", "themes"));
+  const out = path.resolve(__dirname, "..", "docs", "previewer", "theme-digest");
+  fs.writeFileSync(out, digest + "\n");
+  console.log("wrote " + path.relative(process.cwd(), out) + " -> " + digest);
+  return digest;
+}
 
 function usage() {
   console.log("usage: node tools/repair-palette.js <subcommand> [args]");
@@ -36,12 +76,25 @@ function usage() {
   console.log("                       Idempotent. --dry-run reports without writing.");
   console.log("  gamut                Chroma headroom per token colour (read-only).");
   console.log("  matrix               CVD collision matrix report (read-only).");
+  console.log("  digest               Print the theme digest the previewer artifact");
+  console.log("                       is checked against. Use `--write` to refresh");
+  console.log("                       docs/previewer/theme-digest after a rebuild.");
   process.exit(1);
 }
 
 function main() {
   const sub = process.argv[2];
-  if (!sub || !SUBCOMMANDS[sub]) { usage(); }
+  if (!sub || !(sub in SUBCOMMANDS)) { usage(); }
+
+  if (sub === "digest") {
+    const themesDir = path.resolve(__dirname, "..", "themes");
+    if (process.argv.includes("--write")) {
+      writeDigest();
+      return;
+    }
+    console.log(themeDigest(themesDir));
+    return;
+  }
 
   if (sub === "repair" && process.argv.includes("--dry-run")) {
     // Run in a throwaway directory tree so the writes land somewhere harmless.
