@@ -59,6 +59,11 @@ jobs:
         run: npm audit --omit=dev || true
       - name: Dependency audit (dev, report only)
         run: npm audit || true
+      # Fetch the current VS Code colour registry and report any tokens the
+      # theme is missing. Report-only: adding tokens requires deriving colours
+      # for each variant, which is a design decision rather than a mechanical fix.
+      - name: VS Code token coverage audit
+        run: node tools/audit-vscode-tokens.js 2>&1 || true
 
       # apt-get on shared runners hangs periodically -- two consecutive runs sat
       # on this step for over an hour with no output, blocking the matrix, and a
