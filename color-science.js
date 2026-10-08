@@ -122,9 +122,33 @@ function relLum(c) {
  * @param {string} bgHex background, treated as opaque
  * @returns {number} contrast ratio
  */
-function wcag21(fgHex, bgHex) {
-  const l1 = relLum(over(fgHex, bgHex));
-  const l2 = relLum(over(bgHex, "#000000"));
+/**
+ * WCAG 2.1 contrast ratio in [1,21].
+ *
+ * Alpha in `fgHex` is composited over the resolved background before measuring.
+ * Ignoring alpha over-reports contrast for translucent tokens: `#726D89` at 50%
+ * alpha measures 3.20:1 opaque but only 1.77:1 as actually rendered on
+ * `#24212E`.
+ *
+ * A translucent *background* is composited over `backdropHex`. That matters
+ * because a translucent background does not render against black -- a banner at
+ * 50% alpha renders over whatever the editor background is. Compositing it over
+ * black instead reports dark-on-dark and produces false failures: the light
+ * theme's banner measured 1.68:1 that way and is actually 7.07:1.
+ *
+ * The default backdrop of white is a deliberate choice. It is the least
+ * misleading assumption when the real parent is unknown, and it is the value
+ * WCAG's own examples use. Callers that know the parent should pass it.
+ *
+ * @param {string} fgHex foreground, may carry alpha
+ * @param {string} bgHex background, may carry alpha
+ * @param {string} [backdropHex] what a translucent bgHex renders over
+ * @returns {number} contrast ratio
+ */
+function wcag21(fgHex, bgHex, backdropHex = "#FFFFFF") {
+  const resolved = over(bgHex, backdropHex);
+  const l1 = relLum(over(fgHex, resolved));
+  const l2 = relLum(resolved);
   return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
 }
 
@@ -170,12 +194,14 @@ function apcaY(c) {
  * thresholds.
  *
  * @param {string} textHex text color, may carry alpha
- * @param {string} bgHex background color
+ * @param {string} bgHex background color, may carry alpha
+ * @param {string} [backdropHex] what a translucent bgHex renders over.
+ *   Defaults to white.
  * @returns {number} signed Lc
  */
-function apcaLc(textHex, bgHex) {
-  const bg = over(bgHex, textHex);
-  const txt = over(textHex, bgHex);
+function apcaLc(textHex, bgHex, backdropHex = "#FFFFFF") {
+  const bg = over(bgHex, backdropHex);
+  const txt = over(textHex, bg);
   let txtY = apcaY(txt);
   let bgY = apcaY(bg);
   txtY = txtY > APCA.blkThrs ? txtY : txtY + Math.pow(APCA.blkThrs - txtY, APCA.blkClmp);

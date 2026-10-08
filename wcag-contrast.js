@@ -67,12 +67,21 @@ function relativeLuminance(r, g, b) {
 
 /**
  * WCAG 2.1 contrast ratio with alpha correctly composited.
+ *
+ * `backdrop` is what a translucent background renders over. Defaults to white,
+ * which is the least misleading assumption when the real parent is unknown;
+ * callers that know the parent should pass it, because compositing a
+ * translucent light-theme banner over black reports dark-on-dark and produces
+ * false failures (the light theme's banner measured 1.68:1 that way and is
+ * actually 7.07:1 over its editor background).
+ *
  * @param {string} hex1
  * @param {string} hex2
+ * @param {string} [backdrop]
  * @returns {number} Contrast ratio (1-21)
  */
-function contrastRatio(hex1, hex2) {
-  return color.wcag21(hex1, hex2);
+function contrastRatio(hex1, hex2, backdrop = "#FFFFFF") {
+  return color.wcag21(hex1, hex2, backdrop);
 }
 
 /**
@@ -206,7 +215,7 @@ function auditThemePairs(colors) {
     if (!/^#[0-9a-fA-F]{6,8}$/.test(bgVal)) {continue;}
 
     seen.add(key);
-    const ratio = color.wcag21(fgVal, bgVal);
+    const ratio = color.wcag21(fgVal, bgVal, "#FFFFFF");
     const apcaLc = color.apcaLc(fgVal, bgVal);
     const passesAA = meetsAA(ratio);
     const passesAAA = meetsAAA(ratio);
