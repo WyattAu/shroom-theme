@@ -7,7 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.2.0] - 2026-10-08
 
+### Fixed
+
+- **Terminal ANSI palette: six of eight base colours were byte-identical to
+  their bright counterparts** in every dark variant. Red, Green, Yellow, Blue,
+  Magenta and Cyan were all the same hex as BrightRed, BrightGreen,
+  BrightYellow, BrightBlue, BrightMagenta and BrightCyan. In a terminal this
+  means bold and coloured output is indistinguishable from regular output:
+  `ls --color` cannot separate directories from symlinks, and a compiler cannot
+  visually separate errors from warnings.
+
+  The bright colours are now derived by increasing CIELAB lightness while
+  holding hue, to the smallest step that separates the pair above 10 CIEDE2000
+  under normal vision, protanopia, deuteranopia and tritanopia. The same
+  pattern held in the light and tritanopia variants with different colours
+  collapsed; high contrast and monochrome were already correct.
+
 ### Added
+
+- `tools/fix-ansi-palette.js`: derives bright ANSI colours from their base and
+  verifies separation under CVD simulation. Idempotent.
+- `tools/audit-vscode-tokens.js` (`npm run audit:vscode`): committed, repeatable
+  audit against the VS Code colour registry.
+- `tools/string-what-if.js` (`npm run whatif`): sweeps all 360 degrees of hue
+  for a token colour and reports the cost of every candidate.
+
 
 - 104 VS Code colour tokens the theme was missing: the agent and chat surfaces
   (58), the modern UI family (30), and misc (16). Found by diffing the theme
