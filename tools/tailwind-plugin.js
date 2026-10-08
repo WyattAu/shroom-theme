@@ -3,7 +3,7 @@ const plugin = require('tailwindcss/plugin');
 const colors = {
   bg: '#24212E',
   'bg-surface': '#1E1C29',
-  'bg-hover': '#2A2840',
+  'bg-hover': '#393552',
   fg: '#CCC8D9',
   'fg-muted': '#726D89',
   purple: '#BE9AF7',
@@ -11,10 +11,8 @@ const colors = {
   green: '#A6C18B',
   amber: '#E8C990',
   red: '#E68484',
-  pink: '#FF79C6',
-  cyan: '#89DDFF',
-  blue: '#82AAFF',
-  orange: '#F07178',
+  pink: '#E794D2',
+  blue: '#89AEFF',
   border: '#393552',
   selection: '#393552',
 };
