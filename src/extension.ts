@@ -91,12 +91,19 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 function applyAccentColor(accent: string, config: vscode.WorkspaceConfiguration): void {
+  // Read the user's existing customizations so this extension only touches the
+  // `editor` key it owns. The previous implementation wrote `{}` when reset to
+  // default, which silently destroyed every color customization the user had
+  // from any source: other extensions, settings.json, manual edits.
+  const workbench = vscode.workspace.getConfiguration("workbench");
+  const existing =
+    (workbench.get<Record<string, unknown>>("colorCustomizations") ?? {});
+
   if (accent === "default") {
-    vscode.workspace.getConfiguration("workbench").update(
-      "colorCustomizations",
-      {},
-      vscode.ConfigurationTarget.Global
-    );
+    if (!("editor" in existing)) { return; }
+    const rest = { ...existing };
+    delete rest.editor;
+    workbench.update("colorCustomizations", rest, vscode.ConfigurationTarget.Global);
     return;
   }
 
@@ -116,11 +123,9 @@ function applyAccentColor(accent: string, config: vscode.WorkspaceConfiguration)
     return;
   }
 
-  vscode.workspace.getConfiguration("workbench").update(
+  workbench.update(
     "colorCustomizations",
-    {
-      editor: overrides,
-    },
+    { ...existing, editor: overrides },
     vscode.ConfigurationTarget.Global
   );
 }
