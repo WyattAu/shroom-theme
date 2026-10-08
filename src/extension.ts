@@ -17,8 +17,8 @@ limitations under the License.
 import * as vscode from "vscode";
 import { generateFromHsl } from "./theme-generator";
 
-const DARK_THEME_ID = "wyattau.shroom-space-theme";
-const LIGHT_THEME_ID = "wyattau.shroom-space-light-theme";
+const DARK_THEME_LABEL = "Shroom Space";
+const LIGHT_THEME_LABEL = "Shroom Space Light";
 
 const ACCENT_MAP: Record<string, Record<string, string>> = {
   purple: {
@@ -143,13 +143,13 @@ function handleColorThemeChange(kind: vscode.ColorThemeKind): void {
   if (kind === vscode.ColorThemeKind.Light) {
     vscode.workspace.getConfiguration("workbench").update(
       "colorTheme",
-      LIGHT_THEME_ID,
+      LIGHT_THEME_LABEL,
       vscode.ConfigurationTarget.Global
     );
   } else if (kind === vscode.ColorThemeKind.Dark || kind === vscode.ColorThemeKind.HighContrast) {
     vscode.workspace.getConfiguration("workbench").update(
       "colorTheme",
-      DARK_THEME_ID,
+      DARK_THEME_LABEL,
       vscode.ConfigurationTarget.Global
     );
   }
