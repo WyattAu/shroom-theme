@@ -226,6 +226,28 @@ Fewer categories would solve it outright. Four colours separated by 30° of hue
 reach 35.7 CIEDE2000 at equal lightness, against 29.9 for six and about 22 for
 eight.
 
+## The string colour cannot be usefully moved
+
+`#A6C18B` is the most exposed colour in the palette: it appears in three of the
+six worst CVD pairs, because green sits between the red and amber families that
+dichromacy collapses. That made it the obvious candidate for the same hue
+rotation the variable token received.
+
+`npm run palette matrix` and `reports/string-what-if-*.md` hold the analysis.
+Sweeping all 360 degrees at constant lightness and chroma:
+
+- Only 7 of 72 candidates reduce the total number of sub-threshold pairs, and
+  the best reduction is 40 to 38.
+- The best rotation is +10 degrees to `#9BC392` -- a change small enough that it
+  reads as the same colour.
+- The dominant collision is not a string pair at all. It is
+  `#E8C990` / `#CCC8D9` -- constant against plain text -- at 0.73 under
+  achromatopsia. The string is not involved.
+
+So the string colour stays where it is. The exposure is real, but the available
+moves do not address it, and the dominant collision belongs to the monochrome
+problem documented above rather than to anything a hue change would fix.
+
 ## Provenance and reproduction
 
 ```bash

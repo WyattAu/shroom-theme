@@ -170,7 +170,8 @@
     "test:unit": "mocha --ui tdd \"out/tests/**/*.test.js\"",
     "gamut": "node tools/gamut-headroom.js",
     "audit:cvd": "node tools/cvd-matrix.js",
-    "palette": "node tools/repair-palette.js"
+    "palette": "node tools/repair-palette.js",
+    "whatif": "node tools/string-what-if.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
