@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- 104 VS Code colour tokens the theme was missing: the agent and chat surfaces
+  (58), the modern UI family (30), and misc (16). Found by diffing the theme
+  against the `registerColor` calls on the VS Code main branch, which is a check
+  that had never been run -- the 943-token claim predated these features. Themes
+  now carry 1047 tokens. Each is derived from its variant's own palette through
+  explicit rules in `tools/fill-missing-tokens.js`.
+
+
 - `tools/repair-palette.js` (`npm run palette`): single entry point for the
   palette tooling. `repair [--dry-run]`, `gamut`, `matrix`.
 - `tools/cvd-matrix.js` (`npm run audit:cvd`): per-variant CVD collision matrix

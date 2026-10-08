@@ -1,6 +1,6 @@
 # Shroom Space Theme
 
-A cosmic dark theme for VS Code with 7 variants, including accessibility-focused CVD adaptations. 943 color tokens (100% of VS Code API), 32 semantic token rules, WCAG 2.1 AA, and 9-format multi-editor export.
+A cosmic dark theme for VS Code with 7 variants, including accessibility-focused CVD adaptations. 1047 colour tokens, 32 semantic token rules, WCAG 2.1 AA, and 9-format multi-editor export.
 
 ## Themes
 

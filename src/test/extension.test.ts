@@ -139,8 +139,8 @@ suite('Theme Validation Tests', () => {
         const colors = theme.colors as Record<string, string>;
         const count = Object.keys(colors).length;
         assert.ok(
-          count >= 500,
-          `Expected >= 500 color tokens, got ${count}. Theme coverage is too low.`
+          count >= 1000,
+          `Expected >= 1000 colour tokens, got ${count}. Theme coverage is too low.`
         );
       });
 
