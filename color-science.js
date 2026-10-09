@@ -399,6 +399,254 @@ function ciede2000(l1, l2) {
 const deltaE00 = (hex1, hex2) =>
   ciede2000(rgbToLab(parseHex(hex1)), rgbToLab(parseHex(hex2)));
 
+// ------------------------------------------------------------------ CAM16 ----
+
+/**
+ * CAM16 colour appearance model (Li et al. 2017), forward direction.
+ *
+ * CAM16 is used here for three things CIELAB cannot do well:
+ *
+ * - **Hue architecture.** CIELAB hue is compressed at high chroma and
+ *   non-uniform around the circle. CAM16's hue angle is perceptually
+ *   uniform, so angular gaps between token hues mean something.
+ * - **Chroma budget.** CAM16 `M` is designed to be roughly perceptually
+ *   uniform across lightness, so summing `M` across the palette approximates
+ *   total colourfulness in a way that CIELAB `C` does not.
+ * - **Helmholtz-Kohlrausch brightness.** The H-K correction is defined over
+ *   CIECAM16's `J` and `C`, so predicting perceived brightness distortion
+ *   requires CAM16 rather than a lightness stand-in.
+ *
+ * Viewing conditions are fixed to the sRGB defaults used by
+ * `colour-science` (L_A = 4.074 cd/m^2, average surround), so the output is
+ * comparable against that reference implementation. See
+ * `tests/color-science-reference.json`, pinned from colour-science 0.4.7.
+ *
+ * Reference: Li, C. et al. (2017) "The CAM16 color appearance model for
+ * related color materials", Color and Imaging Conference.
+ */
+const CAM16 = Object.freeze({
+  /** CMCCAT2000 sharpened RGB matrix, rows are the transform basis. */
+  matrix16: [
+    [0.401288, 0.650173, -0.051461],
+    [-0.250268, 1.204414, 0.045854],
+    [-0.002079, 0.048952, 0.953127],
+  ],
+  /** sRGB / IEC 61966-2-1 D65 white point, Y normalised to 100. */
+  whitePoint: [95.04559270516715, 100.0, 108.90577507598785],
+  /** Adapting field luminance, cd/m^2. */
+  adaptingLuminance: 4.074366543152521,
+  /** Luminance of the background, as a fraction of the white point. */
+  backgroundLuminance: 20.0,
+  /** Surround: maximum degree of adaptation, non-linearity, chroma induction. */
+  surround: Object.freeze({ F: 1, c: 0.69, N_c: 1 }),
+});
+
+/** Signed power, matching `colour.algebra.spow`: sign(a) * |a|^p. */
+function spow(a, p) {
+  return Math.sign(a) * Math.pow(Math.abs(a), p);
+}
+
+/** Multiply a column vector by a 3x3 matrix. */
+function mat3mul(m, v) {
+  return [
+    m[0][0] * v[0] + m[0][1] * v[1] + m[0][2] * v[2],
+    m[1][0] * v[0] + m[1][1] * v[1] + m[1][2] * v[2],
+    m[2][0] * v[0] + m[2][1] * v[1] + m[2][2] * v[2],
+  ];
+}
+
+/**
+ * CAM16 viewing-condition parameters: n, F_L, N_bb, N_cb, z.
+ * @param {number} Y_b background luminance, 0-100
+ * @param {number} Y_w white point luminance, 0-100
+ * @param {number} L_A adapting luminance, cd/m^2
+ */
+function cam16Conditions(Y_b, Y_w, L_A) {
+  const n = Y_b / Y_w;
+  const k = 1 / (5 * L_A + 1);
+  const k4 = k ** 4;
+  const F_L =
+    0.2 * k4 * (5 * L_A) + 0.1 * (1 - k4) ** 2 * spow(5 * L_A, 1 / 3);
+  const N_bb = 0.725 * spow(1 / n, 0.2);
+  return { n, F_L, N_bb, N_cb: N_bb, z: 1.48 + Math.sqrt(n) };
+}
+
+/**
+ * CAM16 post-adaptation non-linear response compression, the piecewise form
+ * introduced by Li et al. (2017). The CIECAM02 form diverges outside
+ * [q_L, q_U] = [0.26, 150]; the piecewise form stays monotonic, which matters
+ * because near-black token colours fall below q_L.
+ *
+ * @param {number[]} RGB_c adapted cone responses
+ * @param {number} F_L
+ * @returns {number[]}
+ */
+function cam16Compress(RGB_c, F_L) {
+  const q_L = 0.26;
+  const q_U = 150;
+  const f = (q) => {
+    const t = spow((F_L * q) / 100, 0.42);
+    return (400 * t) / (27.13 + t);
+  };
+  const df = (q) => {
+    const t = (F_L * q) / 100;
+    return (1.68 * 27.13 * F_L * spow(t, -0.58)) / Math.pow(27.13 + spow(t, 0.42), 2);
+  };
+  return RGB_c.map((v) => {
+    if (v > q_U) { return f(q_U) + df(q_U) * (v - q_U); }
+    if (v < q_L) { return f(q_L) * (v / q_L); }
+    return f(v);
+  });
+}
+
+/**
+ * CIECAM02 post-adaptation non-linear response compression, signed and with
+ * the +0.1 offset folded in. Used for the white point only.
+ * @param {number[]} RGB
+ * @param {number} F_L
+ * @returns {number[]}
+ */
+function cam16Palc(RGB, F_L) {
+  return RGB.map((v) => {
+    const t = spow((F_L * Math.abs(v)) / 100, 0.42);
+    return (400 * Math.sign(v) * t) / (27.13 + t) + 0.1;
+  });
+}
+
+/** Hue quadrature data: reference hue, eccentricity factor, quadrature value. */
+const CAM16_HUE_DATA = Object.freeze([
+  [20.14, 0.8, 0.0],
+  [90.0, 0.7, 100.0],
+  [164.25, 1.0, 200.0],
+  [237.53, 1.2, 300.0],
+  [380.14, 0.8, 400.0],
+]);
+
+/** Hue quadrature H from hue angle h, by linear interpolation of the data. */
+function cam16HueQuadrature(h) {
+  const rows = CAM16_HUE_DATA;
+  for (let i = 0; i < rows.length - 1; i++) {
+    const [h0, e0, H0] = rows[i];
+    const [h1, e1] = rows[i + 1];
+    if (h >= h0 && h <= h1) {
+      const num = (100 * (h - h0)) / e0;
+      const den = (h - h0) / e0 + (h1 - h) / e1;
+      return den === 0 ? H0 : H0 + num / den;
+    }
+  }
+  return h < CAM16_HUE_DATA[0][0] ? 0.0 : 400.0;
+}
+
+/**
+ * Forward CAM16. Accepts XYZ in [0,1] and returns the correlates on the
+ * 0-100 scale, which is the domain colour-science reports them in.
+ *
+ * @param {{X:number,Y:number,Z:number}} xyz
+ * @returns {{J:number,a:number,b:number,M:number,C:number,h:number,Q:number,s:number,H:number}}
+ */
+function xyzToCam16(xyz) {
+  const cfg = CAM16;
+  const XYZ = [xyz.X * 100, xyz.Y * 100, xyz.Z * 100];
+  const XYZ_w = cfg.whitePoint;
+  const { F, c, N_c } = cfg.surround;
+  const L_A = cfg.adaptingLuminance;
+  const Y_w = XYZ_w[1];
+
+  const { n, F_L, N_bb, N_cb, z } = cam16Conditions(
+    cfg.backgroundLuminance, Y_w, L_A
+  );
+
+  // Degree of adaptation (CIECAM02 formula, F = 1 here).
+  const D = F * (1 - (1 / 3.6) * Math.exp((-L_A - 42) / 92));
+
+  const RGB_w = mat3mul(cfg.matrix16, XYZ_w);
+  const D_RGB = RGB_w.map((w) => (D * 100) / w + 1 - D);
+
+  const RGB_wc = D_RGB.map((d, i) => d * RGB_w[i]);
+  // The white point uses the CIECAM02 compression, the stimulus uses CAM16's
+  // piecewise one. This asymmetry is in the published model.
+  const A_w = cam16Achromatic(cam16Palc(RGB_wc, F_L), N_bb);
+
+  const RGB = mat3mul(cfg.matrix16, XYZ);
+  const RGB_c = D_RGB.map((d, i) => d * RGB[i]);
+  const RGB_a = cam16Compress(RGB_c, F_L).map((v) => v + 0.1);
+
+  const a = RGB_a[0] - (12 * RGB_a[1]) / 11 + RGB_a[2] / 11;
+  const b = (RGB_a[0] + RGB_a[1] - 2 * RGB_a[2]) / 9;
+
+  let h = (Math.atan2(b, a) * 180) / Math.PI;
+  if (h < 0) { h += 360; }
+
+  const e_t = (Math.cos(2 + (h * Math.PI) / 180) + 3.8) / 4;
+  const H = cam16HueQuadrature(h);
+  const A = cam16Achromatic(RGB_a, N_bb);
+
+  const J = 100 * spow(A / A_w, c * z);
+  const Q = ((4 / c) * Math.sqrt(J / 100) * (A_w + 4)) * spow(F_L, 0.25);
+
+  const t =
+    ((50000 / 13) * N_c * N_cb * e_t * Math.sqrt(a * a + b * b)) /
+    (RGB_a[0] + RGB_a[1] + (21 * RGB_a[2]) / 20);
+
+  const C =
+    spow(t, 0.9) * spow(J / 100, 0.5) * spow(1.64 - Math.pow(0.29, n), 0.73);
+  const M = C * spow(F_L, 0.25);
+  const s = 100 * spow(M / Q, 0.5);
+
+  return { J, a, b, M, C, h, Q, s, H };
+}
+
+/** CAM16 achromatic response A from compressed cone responses. */
+function cam16Achromatic(RGB_aw, N_bb) {
+  return (2 * RGB_aw[0] + RGB_aw[1] + RGB_aw[2] / 20 - 0.305) * N_bb;
+}
+
+/**
+ * sRGB hex to CAM16 correlates.
+ * @param {string} hex
+ * @returns {{J:number,M:number,C:number,h:number,Q:number}} J and Q 0-100, M and
+ *   C 0-100, h in [0,360)
+ */
+function hexToCam16(hex) {
+  return xyzToCam16(rgbToXyz(parseHex(hex)));
+}
+
+/**
+ * Chroma below which CAM16 hue is treated as undefined. Below this the hue
+ * angle is dominated by quantisation noise, not by the colour.
+ */
+const CAM16_HUE_CHROMA_EPSILON = 0.5;
+
+/**
+ * Helmholtz-Kohlrausch perceived lightness, following High, Green and
+ * Nussbaum (2023): J_HK = sqrt(J^2 + 66 C).
+ *
+ * The H-K effect is that a saturated colour *looks* brighter than an
+ * equiluminant grey. A theme that assigns high chroma to a de-emphasised role
+ * therefore makes that role visually prominent in a way its lightness does not
+ * admit, and the lightness ladder overstates how quiet the quiet roles are.
+ *
+ * J_HK quantifies that: it is the lightness an observer would need to match the
+ * perceived brightness. The gap between J_HK and J is the chroma-driven
+ * promotion, in the same 0-100 units.
+ *
+ * The model as published is defined over *revised* CIECAM16. This uses plain
+ * CAM16, which is an approximation: the revisions improve J and C accuracy in
+ * specific lightness regions but CAM16 captures the bulk of the effect. Treated
+ * as a diagnostic, not a prediction of a specific observer's response.
+ *
+ * Reference: High, J. S., Green, P. and Nussbaum, P. D. (2023) "A new approach
+ * to modeling the Helmholtz-Kohlrausch effect", Color and Imaging Conference.
+ *
+ * @param {string} hex
+ * @returns {{J:number,C:number,Jhk:number,promotion:number}}
+ */
+function helmholtzKohlrausch(hex) {
+  const { J, C } = hexToCam16(hex);
+  const Jhk = Math.sqrt(J * J + 66 * C);
+  return { J, C, Jhk, promotion: Jhk - J };
+}
+
 // ------------------------------------------------------- CVD simulation ----
 
 /**
@@ -602,6 +850,16 @@ module.exports = {
   HUE_CHROMA_EPSILON,
   ciede2000,
   deltaE00,
+  spow,
+  CAM16,
+  CAM16_HUE_DATA,
+  cam16Conditions,
+  cam16Compress,
+  cam16HueQuadrature,
+  xyzToCam16,
+  hexToCam16,
+  CAM16_HUE_CHROMA_EPSILON,
+  helmholtzKohlrausch,
   BRETTEL,
   CVD_MATRICES,
   CVD_DICHROMACY_SEVERITY,

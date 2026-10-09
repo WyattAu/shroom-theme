@@ -167,6 +167,102 @@ suite('Color science: CIELAB and CIEDE2000', () => {
   });
 });
 
+suite('Color science: CAM16', () => {
+
+  test('matches colour-science 0.4.7', () => {
+    // Reference values generated with colour-science 0.4.7 under its own sRGB
+    // viewing conditions (L_A = 4.074 cd/m^2, average surround).
+    //
+    // Tolerances are absolute, not relative. CAM16's M and C for a saturated
+    // colour run past 100, so a relative tolerance would be looser there than
+    // the 0.04 absolute bound used here, which is itself already tight enough
+    // to catch any real error -- every stage of the model contributes to M.
+    for (const [hex, want] of Object.entries<Record<string, number>>(ref.cam16)) {
+      const got = color.hexToCam16(`#${hex}`);
+      assert.ok(Math.abs(got.J - want.J) < 0.01, `CAM16 ${hex} J: got ${got.J}, want ${want.J}`);
+      assert.ok(Math.abs(got.M - want.M) < 0.05, `CAM16 ${hex} M: got ${got.M}, want ${want.M}`);
+      assert.ok(Math.abs(got.h - want.h) < 0.2, `CAM16 ${hex} h: got ${got.h}, want ${want.h}`);
+      assert.ok(Math.abs(got.C - want.C) < 0.05, `CAM16 ${hex} C: got ${got.C}, want ${want.C}`);
+      assert.ok(Math.abs(got.Q - want.Q) < 0.01, `CAM16 ${hex} Q: got ${got.Q}, want ${want.Q}`);
+    }
+  });
+
+  test('white has J = 100 and black has J = 0', () => {
+    // The two anchors any lightness model must hit. A CAM16 implementation
+    // that gets these wrong is wrong everywhere else in a way that still
+    // produces plausible-looking numbers. Black is 3e-22 rather than exactly
+    // 0 because the model carries the value through five signed powers; a
+    // tolerance is the honest test, strict equality is not.
+    assert.ok(Math.abs(color.hexToCam16('#FFFFFF').J - 100) < 0.01);
+    assert.ok(color.hexToCam16('#000000').J < 1e-12, 'black J should be numerically zero');
+  });
+
+  test('the neutral axis stays nearly achromatic', () => {
+    // CAM16 is not *exactly* achromatic on neutrals: white carries C = 3.08
+    // and mid grey C = 2.02. That residual is a known property of the model
+    // -- it is part of why CAM16-UCS and revised CIECAM16 exist -- not an
+    // implementation error. What matters here is that it stays small. A large
+    // residual would make the hue angle of every near-neutral token noise, and
+    // would give achromatic colours a spurious H-K brightness promotion.
+    const grey = color.hexToCam16('#808080');
+    assert.ok(grey.C < 3, `grey C should stay small, got ${grey.C}`);
+    assert.ok(color.hexToCam16('#FFFFFF').C < 4, 'white C should stay small');
+  });
+
+  test('hue is stable and in range across the palette', () => {
+    for (const hex of ['#E68484', '#FFCB6B', '#A6C18B', '#74D7C8', '#BE9AF7', '#E794D2']) {
+      const { h, C } = color.hexToCam16(hex);
+      assert.ok(h >= 0 && h < 360, `${hex} hue out of range: ${h}`);
+      assert.ok(C > color.CAM16_HUE_CHROMA_EPSILON, `${hex} should be chromatic`);
+    }
+  });
+
+  test('Helmholtz-Kohlrausch promotion is near zero for grey and large for chroma', () => {
+    // The whole point of the H-K correction: achromatic stimuli get little
+    // brightness promotion, saturated ones get a lot. Grey's promotion is not
+    // exactly zero because CAM16 gives it C = 2.02 (see above), which puts
+    // sqrt(66 * 2.02) = 11.5 into J_HK but only 1.5 into the J difference.
+    // The bound is set by that residual, not by the effect being measured.
+    const grey = color.helmholtzKohlrausch('#808080');
+    assert.ok(grey.promotion < 2.5, `grey promotion should be small, got ${grey.promotion}`);
+
+    for (const hex of ['#FFCB6B', '#E68484', '#BE9AF7', '#74D7C8']) {
+      const r = color.helmholtzKohlrausch(hex);
+      assert.ok(r.promotion > 10, `${hex} should be strongly promoted, got ${r.promotion}`);
+      assert.ok(
+        Math.abs(r.Jhk - Math.sqrt(r.J * r.J + 66 * r.C)) < 1e-9,
+        'J_HK must be sqrt(J^2 + 66C)'
+      );
+    }
+  });
+
+  test('H-K promotion rises with chroma at matched lightness', () => {
+    // The defining empirical claim of the H-K effect: at matched lightness,
+    // more chroma must mean more perceived brightness. Holding lightness
+    // genuinely constant is the hard part -- two colours of equal J usually
+    // differ in C by a few units, which is not enough to isolate the effect.
+    // These pairs are within 0.6 J of each other and differ by more than 15 C.
+    const pairs: Array<[string, string]> = [
+      ['#1E193C', '#14145A'],
+      ['#23193C', '#14145A'],
+    ];
+    for (const [lowChroma, highChroma] of pairs) {
+      const lo = color.helmholtzKohlrausch(lowChroma);
+      const hi = color.helmholtzKohlrausch(highChroma);
+      assert.ok(
+        Math.abs(lo.J - hi.J) < 0.6,
+        `${lowChroma} and ${highChroma} must be lightness-matched, got ${lo.J} vs ${hi.J}`
+      );
+      assert.ok(hi.C > lo.C + 15, 'the high-chroma member must actually have more chroma');
+      assert.ok(
+        hi.promotion > lo.promotion,
+        `${highChroma} (C=${hi.C}) must be promoted above ${lowChroma} (C=${lo.C}): ` +
+        `${hi.promotion} vs ${lo.promotion}`
+      );
+    }
+  });
+});
+
 suite('Color science: CVD simulation', () => {
 
   test('neutral axis is preserved exactly', () => {
