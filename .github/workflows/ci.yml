@@ -104,19 +104,34 @@ jobs:
       - name: Compile
         run: npm run compile
 
+      # `npm run validate` runs validate-themes, the palette audit, the CVD
+      # matrix and the quality profile in sequence. Each is also broken out as
+      # its own step below so its output is legible in the log: these tools
+      # report every problem at once, which is what you need when fixing a
+      # palette, whereas validate-themes fails fast on the first structural
+      # error.
       - name: Validate themes (structure + WCAG AA)
-        run: npm run validate
+        run: node validate-themes.js
 
-      # Palette audit is a separate step from validate so its output is legible
-      # in the CI log: validate-themes.js fails fast on the first structural
-      # problem, while the audit reports every sub-AA token and isoluminant
-      # pair at once, which is what you need when fixing a palette.
+      # Alpha-composited contrast and APCA lightness separation.
       - name: Audit palette (alpha-composited contrast + lightness separation)
         run: npm run audit:palette
 
+      # Per-variant CVD collision matrix.
+      - name: CVD collision matrix
+        run: npm run audit:cvd
+
+      # The eight quality-profile metrics: semantic consistency, visual
+      # hierarchy, hue architecture, H-K brightness, chroma budget, colour
+      # naming, cross-variant hue, display degradation. Report-only here --
+      # the invariants that should fail the build are asserted in the unit
+      # tests below. This step exists so the report is regenerated each run.
+      - name: Quality profile (8 metrics)
+        run: npm run audit:quality
+
       # Colour science and palette tests. These need no VS Code host and no
       # display, so they run as plain mocha and stay fast.
-      - name: Unit tests (color science, palette)
+      - name: Unit tests (color science, palette, quality profile)
         run: npm run test:unit
 
       - name: Test (VS Code host)

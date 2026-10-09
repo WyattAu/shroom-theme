@@ -1,7 +1,7 @@
 {
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
-  "description": "Cosmic dark theme with 7 variants: dark, light, deuteranopia, protanopia, tritanopia, monochrome, high contrast. 1049 colour tokens covering the current VS Code API, semantic highlighting, alpha-composited WCAG 2.1 AA and APCA lightness separation, CVD simulation in linear RGB, 9-format export.",
+  "description": "Cosmic dark theme with 7 variants: dark, light, deuteranopia, protanopia, tritanopia, monochrome, high contrast. 1049 colour tokens covering the current VS Code API, semantic highlighting, alpha-composited WCAG 2.1 AA, APCA lightness separation, CVD simulation and CAM16 hue analysis in linear RGB, 9-format export.",
   "version": "5.2.1",
   "publisher": "wyattau",
   "main": "./out/src/extension.js",
@@ -156,7 +156,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "validate": "node validate-themes.js && npm run audit:palette && npm run audit:cvd",
+    "validate": "node validate-themes.js && npm run audit:palette && npm run audit:cvd && npm run audit:quality",
     "convert": "node tools/convert.js",
     "generate-visual-pages": "node tools/generate-theme-html.js",
     "test:visual": "npm run generate-visual-pages && npx playwright test -c tests/visual/playwright.config.ts",
@@ -170,6 +170,7 @@
     "test:unit": "mocha --ui tdd \"out/tests/**/*.test.js\"",
     "gamut": "node tools/gamut-headroom.js",
     "audit:cvd": "node tools/cvd-matrix.js",
+    "audit:quality": "node tools/quality-profile.js",
     "palette": "node tools/repair-palette.js",
     "whatif": "node tools/string-what-if.js",
     "audit:vscode": "node tools/audit-vscode-tokens.js"
