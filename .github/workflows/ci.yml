@@ -129,6 +129,12 @@ jobs:
       - name: Quality profile (8 metrics)
         run: npm run audit:quality
 
+      # Cost table for the amber pair the quality profile flagged as the
+      # palette's only pre-gamut-reduction collision. Report-only: it decides
+      # nothing, it prices the decision.
+      - name: Amber cluster what-if analysis
+        run: npm run whatif:amber
+
       # Colour science and palette tests. These need no VS Code host and no
       # display, so they run as plain mocha and stay fast.
       - name: Unit tests (color science, palette, quality profile)

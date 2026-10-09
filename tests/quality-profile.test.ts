@@ -231,9 +231,94 @@ suite('Quality profile: rank correlation', () => {
   });
 });
 
-suite('Quality profile: shipped themes', () => {
+suite('Quality profile: amber what-if', () => {
 
+  const whatif = require(path.join(repoRoot, 'tools', 'amber-what-if.js'));
   const themes = quality.loadThemes();
+
+  test('rotation holds chroma, never raises it', () => {
+    // An earlier version allowed chroma to grow by 40% during a "rotation",
+    // which changes two variables at once and produces candidates that look
+    // like a different palette rather than a rotated one. The -40 degree
+    // candidate was a desaturated green rather than a peach.
+    const c = color();
+    const original = c.rgbToLch(c.parseHex(whatif.rotateHue('#FFCB6B', 0)));
+    for (const delta of [-40, -20, -10, 10, 20, 40]) {
+      const rotated = c.rgbToLch(c.parseHex(whatif.rotateHue('#FFCB6B', delta)));
+      assert.ok(
+        rotated.C <= original.C + 0.5,
+        `${delta}° must not raise chroma: ${original.C} -> ${rotated.C}`
+      );
+      assert.ok(
+        Math.abs(rotated.L - original.L) < 1,
+        `${delta}° must hold lightness: ${original.L} -> ${rotated.L}`
+      );
+      let dh = Math.abs(rotated.h - original.h);
+      if (dh > 180) { dh = 360 - dh; }
+      assert.ok(Math.abs(dh - Math.abs(delta)) < 2, `${delta}° must rotate by the angle asked`);
+    }
+  });
+
+  test('each variant reads its own colours, not the dark variant\'s', () => {
+    // Hardcoding the amber and cream hexes would silently report the dark
+    // variant's numbers if a variant changed, which is exactly the failure
+    // class this tool exists to detect.
+    for (const [name, theme] of Object.entries<any>(themes)) {
+      const pal = whatif.palette(theme);
+      const amber = pal.get('constant');
+      const cream = pal.get('type');
+      assert.ok(amber, `${name} has no constant colour`);
+      assert.ok(cream, `${name} has no type colour`);
+      const baseline = whatif.score(theme, amber);
+      assert.strictEqual(baseline.baseAmber, amber, `${name} baseline must use its own amber`);
+      assert.strictEqual(baseline.cream, cream, `${name} baseline must use its own cream`);
+    }
+  });
+
+  test('collision counting is symmetric and matches a direct count', () => {
+    // A 45-pair loop with an index off by one still returns a plausible number,
+    // so the count is checked against an independent enumeration.
+    const hexes = ['#E68484', '#FFCB6B', '#A6C18B', '#74D7C8', '#BE9AF7', '#E794D2'];
+    let expected = 0;
+    for (let i = 0; i < hexes.length; i++) {
+      for (let j = i + 1; j < hexes.length; j++) {
+        if (color().deltaE00(hexes[i], hexes[j]) < 20) { expected++; }
+      }
+    }
+    const got = whatif.collisionsAmong(hexes);
+    assert.strictEqual(got.collisions, expected);
+    assert.strictEqual(got.worstPair !== null, true);
+  });
+
+  test('variants that already merge the pair are identified', () => {
+    // Light and high contrast carry the same colour for both roles, which is
+    // the merge option already taken. That is the most decision-relevant fact
+    // in the whole table and has to be surfaced rather than scored as a
+    // 0-degree collision.
+    for (const name of ['light', 'high-contrast']) {
+      const pal = whatif.palette(themes[name]);
+      assert.strictEqual(
+        pal.get('constant'),
+        pal.get('type'),
+        `${name} should merge constant and type`
+      );
+    }
+  });
+
+  test('the achromatic variant is excluded from hue analysis', () => {
+    // Monochrome is a lightness ramp by design. Rotating a grey's hue produces
+    // a number that means nothing, and reporting it would imply the metric
+    // applies where it does not.
+    const monochrome = whatif.palette(themes.monochrome).get('constant');
+    const cam = color().hexToCam16(monochrome);
+    assert.ok(
+      cam.C <= color().CAM16_HUE_CHROMA_EPSILON,
+      `monochrome constant should be achromatic, got C=${cam.C}`
+    );
+  });
+});
+
+suite('Quality profile: shipped themes', () => {  const themes = quality.loadThemes();
 
   test('every variant has no dead rules', () => {
     // The one mechanically unambiguous defect this tool can find. Every other
@@ -280,6 +365,8 @@ suite('Quality profile: shipped themes', () => {
 
   test('role colours are chromatic enough to be hue-distinguishable', () => {
     // A guard against a theme that passes every contrast check by being grey.
+    // Monochrome is excluded by design and separately asserted to be
+    // achromatic; every other variant must have real chroma.
     const c = color();
     for (const [name, theme] of Object.entries<any>(themes)) {
       if (name === 'monochrome') { continue; }
@@ -291,6 +378,27 @@ suite('Quality profile: shipped themes', () => {
           `${name}: ${e.role} ${e.hex} has CAM16 C ${e.C}, below the hue threshold`
         );
       }
+    }
+  });
+
+  test('the monochrome variant is achromatic and so excluded from hue analysis', () => {
+    // Its roles are a lightness ramp. If one of them picked up chroma, the hue
+    // metrics would start reporting angles for a palette that has no hue, and
+    // cross-variant consistency would compare it against the dark theme's.
+    const c = color();
+    const entries = quality.hueEntries(themes.monochrome);
+    assert.strictEqual(
+      entries.length,
+      0,
+      `monochrome should have no chromatic roles, got ${entries.length}: ` +
+      JSON.stringify(entries.map((e: any) => `${e.role}=${e.hex} C=${e.C.toFixed(1)}`))
+    );
+    // And the guard holds because the colours really are grey, not because the
+    // filter is broken.
+    const pal = quality.canonicalRoleColours(themes.monochrome);
+    for (const [role, entry] of pal) {
+      const { C } = c.hexToCam16(entry.hex);
+      assert.ok(C < c.CAM16_HUE_CHROMA_EPSILON, `${role} ${entry.hex} C=${C}`);
     }
   });
 

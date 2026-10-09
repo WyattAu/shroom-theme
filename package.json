@@ -171,6 +171,7 @@
     "gamut": "node tools/gamut-headroom.js",
     "audit:cvd": "node tools/cvd-matrix.js",
     "audit:quality": "node tools/quality-profile.js",
+    "whatif:amber": "node tools/amber-what-if.js",
     "palette": "node tools/repair-palette.js",
     "whatif": "node tools/string-what-if.js",
     "audit:vscode": "node tools/audit-vscode-tokens.js"

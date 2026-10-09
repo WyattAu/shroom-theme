@@ -189,10 +189,8 @@ change and a silent change would look like a fix.
 
 ## The quality profile: eight more measurements
 
-The gates above cover legibility. A theme can pass every contrast check and
-still be hard to learn, hard to name, or unreadable on a cheap display.
-`tools/quality-profile.js` measures eight further properties. All are
-deterministic given the theme JSON; none require participants.
+`tools/quality-profile.js` measures eight properties the contrast gates do not
+cover. All are deterministic given the theme JSON; none require participants.
 
 | # | Metric | Gated? | What it catches |
 |---|---|---|---|
@@ -254,12 +252,39 @@ Nothing was changed as a result. Two findings are worth recording:
   constant, notice) and `#E8C990` (type, substrate) sit 2.5° apart in CAM16
   hue and 7.7 CIEDE2000 apart. Reduced gamut does not cause this and the gamut
   sweep makes that explicit by showing the collision present at 100% coverage.
-  Merging them was declined: it would trade a real perceptual separation for a
-  metric, and the roles that share them are not typically adjacent on a line.
 - **High contrast deliberately inverts the de-emphasis.** Its comment colour is
   louder than variable, keyword and invalid. That is consistent with its intent,
   but it means comment is not the quietest thing on screen in that variant, and
   every other property measured here assumes it is.
+
+### The amber pair is not separable by rotation
+
+`npm run whatif:amber` prices the decision. Rotating the amber family through
+±40°, holding lightness and clipping chroma to gamut:
+
+- **No rotation clears the dE00 20 categorical threshold.** The widest
+  amber/cream separation reachable in gamut is 19.6, against a threshold of 20.
+  This is the documented ceiling for a palette this size on one background, not
+  a missed fix.
+- **No rotation reduces the palette's collision count.** Every candidate that
+  widens the amber/cream gap collides with something else instead. The
+  rotations that come closest move amber toward the red family, where the error
+  colour lives.
+- **The merge option has already been taken elsewhere.** The light and
+  high-contrast variants carry the same colour for both roles (`#886930` and
+  `#FFD978`). So the question is not "merge or not" but "why do four variants
+  differ on this" -- and there is no recorded reason.
+
+That last point is the actual finding. The palette is inconsistent about this
+pair across variants for no documented reason, and both options are already in
+use. Leaving it as it is means the dark and CVD variants keep a 7.7 dE00
+collision that no rotation can fix, and the light variant does not have one.
+Merging in the remaining variants would make the palette self-consistent and
+match what the light theme already does; it would also delete the distinction
+between a keyword-adjacent constant and a type name, which is doing real work
+in the dark theme. Neither choice is free, and choosing needs a judgement about
+which distinction matters more to a reader -- which is a human call, not a
+metric.
 
 ### What the metrics cannot tell you
 

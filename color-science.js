@@ -612,10 +612,22 @@ function hexToCam16(hex) {
 }
 
 /**
- * Chroma below which CAM16 hue is treated as undefined. Below this the hue
- * angle is dominated by quantisation noise, not by the colour.
+ * Chroma below which CAM16 hue is treated as undefined.
+ *
+ * CAM16 is not perfectly achromatic on neutrals: white measures C = 3.09, mid
+ * grey 2.03, #AAAAAA 2.41. That residual is a documented property of the model,
+ * so a threshold below it would classify every grey as chromatic and report hue
+ * angles that are quantisation noise.
+ *
+ * 8 sits in the gap between the residual and anything with a real hue. The
+ * highest value measured on a true neutral is 3.09; the lowest on a colour
+ * whose hue is visually meaningful is the dark theme's comment at 19.4. The
+ * grey palettes of the monochrome variant land at 2.4-2.8, so they are
+ * correctly excluded from hue analysis, while the deliberately tinted dark
+ * backgrounds at 4.6-11.8 stay in -- their hue is stable and is the reference
+ * the cross-variant metric would otherwise need.
  */
-const CAM16_HUE_CHROMA_EPSILON = 0.5;
+const CAM16_HUE_CHROMA_EPSILON = 8;
 
 /**
  * Helmholtz-Kohlrausch perceived lightness, following High, Green and

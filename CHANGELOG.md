@@ -26,8 +26,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   design judgement produces false failures that get ignored.
 - `data/xkcd-colors.json`, the 949 colour names from the 2005 xkcd survey,
   reduced to name and hex. Provenance and limits in `data/README.md`.
-- 23 tests for the quality-profile mechanics and the invariants a well-formed
-  theme must satisfy.
+- **Amber-cluster what-if analysis** (`npm run whatif:amber`,
+  `tools/amber-what-if.js`). Prices the decision the quality profile raises:
+  rotating the amber family through ±40°, no candidate clears the dE00 20
+  categorical threshold and none reduces the palette's collision count. Also
+  records that the light and high-contrast variants already merge the pair,
+  so the merge option is in use and the palette is simply inconsistent about
+  it across variants.
+- 35 tests for the quality-profile and what-if mechanics and the invariants a
+  well-formed theme must satisfy.
+
+### Fixed
+
+- `CAM16_HUE_CHROMA_EPSILON` was 0.5, below CAM16's own residual chroma on
+  neutrals (white measures 3.09, mid grey 2.03), so every grey classified as
+  chromatic and the hue metrics reported angles that were quantisation noise.
+  Now 8, which sits between the highest measured neutral residual and the least
+  chromatic token colour, with the measured gap documented at the constant.
 
 ### Changed
 

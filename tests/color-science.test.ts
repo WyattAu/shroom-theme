@@ -209,6 +209,23 @@ suite('Color science: CAM16', () => {
     assert.ok(color.hexToCam16('#FFFFFF').C < 4, 'white C should stay small');
   });
 
+  test('the hue epsilon sits above the neutral residual and below real chroma', () => {
+    // This is the property that makes CAM16_HUE_CHROMA_EPSILON mean something.
+    // Set it below the residual and every grey reports a hue angle that is
+    // quantisation noise; set it above the least chromatic token and hue
+    // analysis silently drops real colours.
+    const eps = color.CAM16_HUE_CHROMA_EPSILON;
+    for (const neutral of ['#FFFFFF', '#808080', '#AAAAAA', '#CCCCCC', '#EEEEEE']) {
+      const { C } = color.hexToCam16(neutral);
+      assert.ok(C < eps, `${neutral} C=${C} must be below the hue epsilon ${eps}`);
+    }
+    // The least chromatic token colour in the shipped palette.
+    for (const chromatic of ['#726D89', '#E8C990', '#74D7C8']) {
+      const { C } = color.hexToCam16(chromatic);
+      assert.ok(C > eps, `${chromatic} C=${C} must be above the hue epsilon ${eps}`);
+    }
+  });
+
   test('hue is stable and in range across the palette', () => {
     for (const hex of ['#E68484', '#FFCB6B', '#A6C18B', '#74D7C8', '#BE9AF7', '#E794D2']) {
       const { h, C } = color.hexToCam16(hex);
