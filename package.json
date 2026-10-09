@@ -2,7 +2,7 @@
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
   "description": "Cosmic dark theme with 7 variants: dark, light, deuteranopia, protanopia, tritanopia, monochrome, high contrast. 1049 colour tokens covering the current VS Code API, semantic highlighting, alpha-composited WCAG 2.1 AA and APCA lightness separation, CVD simulation in linear RGB, 9-format export.",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "publisher": "wyattau",
   "main": "./out/src/extension.js",
   "activationEvents": [
