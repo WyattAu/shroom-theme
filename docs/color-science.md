@@ -34,11 +34,18 @@ respective models and should not be compared directly.
 | APCA Lc (APCA-W3-0.1.9) | Perceptual lightness separation | Myndex, frozen 2021-02-15 |
 | CIELAB D65 | Chroma and hue bookkeeping | CIE 15:2004 |
 | CIEDE2000 | Categorical colour distance | Sharma, Wu & Dalal 2005 |
+| CAM16 J, M, C, h | Hue architecture, chroma budget, H-K brightness | Li et al. 2017 |
+| Helmholtz-Kohlrausch `J_HK` | Chroma-driven brightness promotion | High, Green & Nussbaum 2023 |
 | Machado 2009 (severity 1.0) | Protanopia / deuteranopia simulation | IEEE TVCG 15(6) |
 | Brettel 1997 (sRGB-adapted) | Tritanopia simulation | JOSA A 14(10) |
+| xkcd colour survey | Naming vocabulary | xkcd, 2005 |
 
 Implementation: [`color-science.js`](../color-science.js).
 Verification table: [`tests/color-science-reference.json`](../tests/color-science-reference.json).
+
+CAM16 is validated against `colour-science` 0.4.7 across 30 colours, worst
+deviation 0.04 in M and C and 0.12° in hue. Reference values are pinned in the
+verification table above.
 
 ## What each metric can and cannot tell you
 
@@ -179,6 +186,105 @@ real fix is a hue rotation, which is a design decision.
 
 Recorded here rather than fixed, because the evidence does not support a
 change and a silent change would look like a fix.
+
+## The quality profile: eight more measurements
+
+The gates above cover legibility. A theme can pass every contrast check and
+still be hard to learn, hard to name, or unreadable on a cheap display.
+`tools/quality-profile.js` measures eight further properties. All are
+deterministic given the theme JSON; none require participants.
+
+| # | Metric | Gated? | What it catches |
+|---|---|---|---|
+| 1 | Semantic consistency | dead rules only | A role painted inconsistently; an entry that can never render |
+| 2 | Visual hierarchy | invariants only | Comment failing to recede; a role too quiet to read |
+| 3 | Hue architecture | no | Hues collapsing onto each other; a one-hue palette |
+| 4 | H-K brightness | invariants only | Chroma promoting a role past its lightness |
+| 5 | Chroma budget | no | A palette that is loud rather than legible |
+| 6 | Colour naming | no | Two colours a reader would call by the same word |
+| 7 | Cross-variant hue | no | A role that changes hue between dark and light |
+| 8 | Display degradation | invariants only | Distinguishability that only holds on a wide-gamut panel |
+
+Only metric 1's dead-rule check is a hard gate on a measurement. The rest are
+reported because a threshold on a design judgement produces false failures that
+get ignored, which is worse than no threshold.
+
+### How each metric was made honest
+
+Most of the effort went into stopping the metrics from reporting confidently
+wrong numbers. Four bugs, each of which would have survived a casual look:
+
+**Scope resolution is longest-prefix, not last-wins.** TextMate resolves a
+scope against the *most specific* matching rule. Resolving by "the last rule
+that mentions it" reports every deliberate carve-out — decorators, shell pipes,
+annotations, CSS units — as an inconsistency, and scored this palette at 39%
+consistency when the truth is 68%. This matters more for a well-built theme
+than a badly-built one: the better a theme's scope handling, the worse the
+naive metric scores it.
+
+**Gamut clipping must simulate a target, not search for the boundary.** An
+early version searched for the largest in-gamut chroma and returned the
+original colour, since the original is in gamut by definition. Every colour
+reported zero shift. Clipping now reduces chroma to the target and searches
+only when the reduced colour still falls outside sRGB, which is what a display
+that cannot render a colour actually does.
+
+**A role's colour is what the theme declares it is.** Reading the modal
+resolved scope works until a role's scopes split several ways, at which point
+the modal reflects which scopes happen to be enumerated. The light theme's
+`variable` is the concrete case: its scopes split four ways so the modal came
+out blue, while the theme's own `semanticTokenColors` entry — what VS Code
+actually resolves — is magenta. Using the modal inflated the cross-variant hue
+shift from 13° to 75° and would have reported a hue inconsistency that does not
+exist.
+
+**Cross-variant hue is absolute, not background-relative.** Measuring hue
+relative to each variant's background is the intuitive choice and it is wrong
+across a light/dark pair: the dark background is hue 296° and the light one is
+117°, 179° apart. Subtracting the background hue rotates every role by an
+arbitrary amount, reporting 84° of dispersion for a palette that is in fact
+consistent to 6.3°. Relative hue is only meaningful between variants with
+similarly-hued backgrounds.
+
+### What the metrics found
+
+Nothing was changed as a result. Two findings are worth recording:
+
+- **The amber cluster already collides at full sRGB.** `#FFCB6B` (decorator,
+  constant, notice) and `#E8C990` (type, substrate) sit 2.5° apart in CAM16
+  hue and 7.7 CIEDE2000 apart. Reduced gamut does not cause this and the gamut
+  sweep makes that explicit by showing the collision present at 100% coverage.
+  Merging them was declined: it would trade a real perceptual separation for a
+  metric, and the roles that share them are not typically adjacent on a line.
+- **High contrast deliberately inverts the de-emphasis.** Its comment colour is
+  louder than variable, keyword and invalid. That is consistent with its intent,
+  but it means comment is not the quietest thing on screen in that variant, and
+  every other property measured here assumes it is.
+
+### What the metrics cannot tell you
+
+**Nothing here predicts comprehension, speed, error rate or fatigue.** Every
+metric is a property of the palette, not of a reader meeting it. The
+Helmholtz-Kohlrausch correction in particular is a model: it is defined over
+*revised* CIECAM16, and plain CAM16 is an approximation of that. It is a
+diagnostic for how much chroma is doing work the lightness ladder does not
+admit, not a prediction of what any individual will see.
+
+**Colour naming inherits the survey's blind spots.** The xkcd names were
+gathered from trichromats, so the dataset cannot describe a dichromat's
+vocabulary. The survey colours are also sampled coarsely and skew saturated,
+so near-neutrals are sparsely covered and their nearest name is fitted from a
+short distance.
+
+**Display degradation models chroma loss, not everything a cheap panel does.**
+It assumes a panel preserves hue and lightness and loses saturation, which is
+close to right for chroma truncation. It does not model the blue shift of
+cheap TN panels, or the ambient-reflection contrast loss that Buchner and
+colleagues measured.
+
+**Cross-variant consistency has nothing to say about the CVD variants.** They
+rotate hues deliberately; measuring them would report the feature working as a
+defect. Monochrome has no hue to be consistent about.
 
 ## What is not guaranteed
 
@@ -324,4 +430,15 @@ constants.
 - Li, C., Li, Z., Wang, Z., Xu, Y., Luo, M. R., Cui, G., Melgosa, M., Brill, M.
   H., & Pointer, M. (2017). Comprehensive color solutions: CAM16, CAT16, and
   CAM16-UCS. *Color Research & Application* 42(6), 703–718. Source of the
-  categorical-separation figures quoted above.
+  categorical-separation figures quoted above, and of the CAM16 implementation.
+- High, J. S., Green, P., & Nussbaum, P. D. (2023). A new approach to modeling
+  the Helmholtz-Kohlrausch effect. *Color and Imaging Conference*. Source of
+  `J_HK = sqrt(J² + 66C)`.
+- Corney, D., Haynes, J. D., Rees, G., & Lotto, R. B. (2009). The brightness of
+  colour. *PLOS ONE* 4(3), e5091. Establishes the effect (saturated colours
+  appear brighter than equiluminant neutrals) with r = 0.992 between its
+  saturation model and perceived brightness. Not a closed-form predictor, which
+  is why the H-K implementation follows High, Green and Nussbaum instead.
+- xkcd (2005). Color survey. <https://blog.xkcd.com/2010/05/03/color-survey-results/>.
+  222,500 responses naming 949 colours; the source of the naming vocabulary in
+  `data/xkcd-colors.json`.

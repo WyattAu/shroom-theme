@@ -5,6 +5,48 @@ All notable changes to the Shroom Space Theme extension are documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **CAM16 colour appearance model** (`color-science.js`), validated against
+  `colour-science` 0.4.7 across 30 colours with a worst deviation of 0.04 in M
+  and C and 0.12° in hue. Reference values pinned in
+  `tests/color-science-reference.json`. Needed because CIELAB hue is
+  non-uniform around the circle, so an angular gap between two token hues in
+  CIELAB does not mean a constant perceptual amount.
+- **Helmholtz-Kohlrausch brightness correction**, `J_HK = sqrt(J² + 66C)`, after
+  High, Green and Nussbaum (2023). Quantifies how far chroma promotes a
+  colour's apparent brightness above what its lightness admits.
+- **Eight-metric quality profile** (`npm run audit:quality`,
+  `tools/quality-profile.js`): semantic consistency, visual hierarchy, hue
+  architecture, H-K brightness, chroma budget, colour naming, cross-variant hue
+  consistency, and reduced-gamut display degradation. All deterministic from the
+  theme JSON; none need participants. Report-only, because a threshold on a
+  design judgement produces false failures that get ignored.
+- `data/xkcd-colors.json`, the 949 colour names from the 2005 xkcd survey,
+  reduced to name and hex. Provenance and limits in `data/README.md`.
+- 23 tests for the quality-profile mechanics and the invariants a well-formed
+  theme must satisfy.
+
+### Changed
+
+- `npm run validate` now includes the quality profile.
+- CI runs the quality profile as its own step so its output is legible in the
+  log, alongside separate steps for the palette audit and CVD matrix.
+
+### Findings, not changes
+
+Nothing in the shipped palette was altered as a result of the new metrics. Two
+findings are recorded in `docs/color-science.md`:
+
+- `#FFCB6B` and `#E8C990` sit 2.5° apart in CAM16 hue and 7.7 CIEDE2000 apart,
+  and already collide at full sRGB. Reduced gamut does not cause this. Merging
+  them was declined: it would trade a real perceptual separation for a metric.
+- The high-contrast variant deliberately inverts the de-emphasis, making its
+  comment colour louder than variable, keyword and invalid. Consistent with its
+  intent, but it means comment is not the quietest thing on screen there.
+
 ## [5.2.0] - 2026-10-08
 
 ### Fixed

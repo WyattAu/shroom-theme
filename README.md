@@ -57,6 +57,12 @@ reading speed, the light theme is there, and the accurate reason is above.
 - **Colour vision deficiency variants** -- simulated in linear RGB using
   Machado 2009 and Brettel 1997. These are worst-case collision detectors,
   not depictions of any user's experience
+- **Eight-metric quality profile** -- `npm run audit:quality` measures semantic
+  consistency, visual hierarchy, hue architecture, Helmholtz-Kohlrausch
+  brightness, chroma budget, colour naming, cross-variant hue and reduced-gamut
+  display degradation. Report-only, because a threshold on a design judgement
+  produces false failures that get ignored. What it cannot tell you is spelled
+  out in [docs/color-science.md](docs/color-science.md)
 - **i18n docs** -- English, Simplified Chinese, Japanese
 
 ## Installation
@@ -149,11 +155,12 @@ held to the 3:1 that WCAG sets for non-text components rather than to 4.5:1.
 |---|---|
 | `npm run compile` | TypeScript compilation |
 | `npm run lint` | ESLint, whole repository |
-| `npm run validate` | Theme JSON structure, palette audit, CVD matrix |
+| `npm run validate` | Theme JSON structure, palette audit, CVD matrix, quality profile |
 | `npm run audit:palette` | Contrast and lightness gates. Fails the build on a violation |
 | `npm run audit:cvd` | CVD collision matrix report per variant |
+| `npm run audit:quality` | Eight-metric quality profile per variant. See [docs/color-science.md](docs/color-science.md) |
 | `npm run palette` | Palette tooling: `repair [--dry-run]`, `gamut`, `matrix` |
-| `npm run test:unit` | Colour science tests. No display server needed |
+| `npm run test:unit` | Colour science, palette and quality-profile tests. No display server needed |
 | `npm test` | VS Code host tests |
 | `npm run convert` | Generate 9-format exports |
 | `npm run sbom` | SPDX 2.3 SBOM |
