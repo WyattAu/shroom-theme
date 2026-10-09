@@ -446,17 +446,88 @@ corrected, because the evidence does not support a change:
   red-green axis. The variable token required a hue rotation, which is a design
   change rather than a tuning one.
 
+Phase 22 later added the measurement layer for everything the contrast gates do
+not cover, and the amber-pair cost table. See the Phase 22 section and the
+Open Decisions table.
+
+---
+
+## Phase 22: v5.3.0 - Quality Profile (COMPLETED)
+
+Measured the eight dimensions of theme quality that the contrast gates do not
+cover. All deterministic from the theme JSON; none need participants.
+
+**Delivered:**
+
+- `tools/quality-profile.js` (`npm run audit:quality`): semantic consistency,
+  visual hierarchy, hue architecture, Helmholtz-Kohlrausch brightness, chroma
+  budget, colour naming, cross-variant hue consistency, reduced-gamut display
+  degradation.
+- `tools/amber-what-if.js` (`npm run whatif:amber`): prices the one collision
+  the profile found, across every variant and every rotation from -40 to +40
+  degrees.
+- CAM16 (Li et al. 2017) and the H-K correction (High, Green & Nussbaum 2023)
+  in `color-science.js`, validated against `colour-science` 0.4.7 across 30
+  colours, worst deviation 0.04 in M and C and 0.12° in hue.
+- `data/xkcd-colors.json`: the 949 names from the 2005 xkcd survey, for the
+  naming metric.
+- 35 tests. Report-only, because a threshold on a design judgement produces
+  false failures that get ignored. The invariants that should fail the build are
+  asserted in the unit tests instead.
+
+**Four bugs found in the tooling while building it**, each of which would have
+reported confidently wrong numbers and all documented in
+`docs/color-science.md`:
+
+1. Scope resolution used last-rule-wins. TextMate is longest-prefix-wins, so
+   every deliberate carve-out registered as an inconsistency and the palette
+   scored 39% consistency instead of 68%.
+2. Gamut clipping searched for the largest in-gamut chroma and returned its own
+   input. Every colour reported zero shift.
+3. Role colours came from the modal resolved scope. The light theme's variable
+   is magenta by its own declaration and blue by modal scope, and the metric
+   picked blue.
+4. Cross-variant hue was background-relative across a 179-degree background hue
+   difference, reporting 84° of dispersion for a palette consistent to 6.3°.
+5. `CAM16_HUE_CHROMA_EPSILON` was below CAM16's own residual chroma on
+   neutrals, so every grey classified as chromatic.
+
+**Findings, not changes:**
+
+- The amber pair `#FFCB6B`/`#E8C990` is not separable by rotation. No candidate
+  clears dE00 20 and none reduces the palette's collision count.
+- The light and high-contrast variants already merge that pair. The palette is
+  inconsistent about it across variants for no documented reason.
+- High contrast deliberately inverts the de-emphasis: its comment colour is
+  louder than variable, keyword and invalid.
+- Every role keeps its hue within 20° between dark and light (mean 6.3°), so a
+  reader switching variants does not re-learn the palette.
+
+---
+
+## Open Decisions
+
+Things the measurements have priced but cannot decide. Each needs a judgement
+about what a reader should get, not a calculation.
+
+| Decision | State | What the numbers say |
+|---|---|---|
+| `apca-w3` licence | Documented position, needs sign-off | APCA is transcribed from published constants, never shipped, never claimed as conformance. WCAG 2.1 is the only gate. Removal path documented. |
+| Amber pair: merge or keep | Undecided | No rotation fixes it. Light and high contrast have already merged it; dark and the CVD variants have not. Merging makes the palette self-consistent and deletes a distinction that is doing real work in the dark theme. |
+| CVD user testing | Blocked on recruitment | Six named pairs in `ACCESSIBILITY.md`, ready for participants. Anomalous trichromats, not dichromats. |
+| Background chroma A/B | Blocked on users | C\* ≈ 9.4 against ≈ 6. Needs readers, not metrics. |
+
 ---
 
 ## Recurring Maintenance
 
 | Frequency | Task |
 |---|---|
-| Monthly | Audit VS Code changelog for new color tokens |
+| Monthly | Audit VS Code changelog for new color tokens (`npm run audit:vscode`) |
 | Monthly | Run npm audit and update dev dependencies |
 | Monthly | Check GitHub Actions deprecation notices |
 | Quarterly | Verify WCAG compliance after VS Code updates |
-| Quarterly | Run `npm run audit:palette` and review the reported CVD separation diagnostics |
+| Quarterly | Run `npm run audit:palette`, `npm run audit:cvd` and `npm run audit:quality`; review the reports together |
 | Quarterly | Review CVD variant color mappings against latest accessibility research |
 | On VS Code major release | Test all themes against new stable version |
 | On VS Code major release | Update `engines.vscode` minimum version |
@@ -513,8 +584,13 @@ v0.2.0 (WCAG) --> v0.3.0 (Completeness) --> v0.4.0 (Multi-Editor) --> v0.5.0 (Vi
                                                                                   |
                                                                                   v
                                                                    v5.1.0 (Colour Correctness)
+                                                                                        |
+                                                                                        v
+                                                                          v5.3.0 (Quality Profile)
 
-Phases 1-18 ALL COMPLETED.
+Phases 1-18 and 22 COMPLETED. Phase 22 added measurement, not change: the
+palette is untouched by it, and the decisions it surfaced are in the Open
+Decisions table.
 ```
 
 ---
@@ -531,6 +607,8 @@ Phases 1-18 ALL COMPLETED.
 | Extension activation increasing memory footprint | Medium | Medium | Lazy activation, deactivate when not needed |
 | GitHub Actions Node.js 20 deprecation | High | Low | Update action versions to Node.js 24 compatible |
 | npm transitive vulnerabilities | Medium | Low | Dev-only dependencies, not shipped |
+| A quality-profile metric reports confidently wrong numbers | Medium | Medium | Every metric is validated against an external reference or a hand-built fixture, and the four bugs found while building it are documented in `docs/color-science.md` |
+| An open decision is left unactioned indefinitely | Medium | Low | Tracked in the Open Decisions table with what the numbers say, so it can be picked up without re-deriving the analysis |
 
 ---
 
