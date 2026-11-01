@@ -59,9 +59,14 @@ const ROLES_OF_INTEREST = [
 ];
 
 function themeName(file) {
-  const named = /^shroom-space-(.*)-theme\.json$/.exec(file);
-  const variant = named ? named[1] : "";
-  return variant === "" || variant === "theme" ? "dark" : variant;
+  // Reuse the quality profile's parser so the two tools never disagree about
+  // what a theme is called.
+  const q = require("./quality-profile.js");
+  const themes = q.loadThemes();
+  for (const [name, theme] of Object.entries(themes)) {
+    if (theme.$file === file) { return name; }
+  }
+  return file;
 }
 
 /**

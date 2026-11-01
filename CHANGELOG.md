@@ -9,6 +9,74 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **The family extends to 20 themes across three families.** Derived through
+  the new pipeline (`tools/derive-theme.js`): parameters in, repair pipeline,
+  gates, hand-tune where the numbers demand it. The seven original themes are
+  untouched.
+
+  *Variants of the space family (same palette, one axis moved):*
+
+  - **Muted** (dark, light) -- competing chroma to ~65%; mean CAM16 M 28.2 to
+    18.2. Fixed L\*, so every contrast number is unchanged by construction.
+  - **Vivid** (dark) -- chroma up, capped per colour by the gamut. Lifts the
+    quiet colours more than the loud ones, because `#FFCB6B` already sits at
+    92% of the gamut. Mean M 33.6.
+  - **Dim** (dark) -- surfaces to L\* 8, competing chroma x0.8, keyword hue
+    -12\u00b0 so keyword/variable hold 13.9 dE00 at 70% gamut.
+  - **Soft** (dark, light) -- narrows the competing band, floor-limited by
+    search: dark lands at x0.85 (min 38.0 Lc), light at x0.55. De-emphasis is
+    excluded; the first attempt compressed the comment to 1.83:1, which is what
+    the 3:1 gate is for.
+  - **Minimal** (dark, light) -- five colours. 1049 tokens remain; the collapse
+    is onto colours, not coverage. Accent and substrate come from each family's
+    own roles -- hardcoding the dark purple gave the light variant a 2.05:1
+    accent.
+  - **(No Italics)** (dark, light) -- italic removed except `markup.italic`,
+    where italic is content.
+
+  *Siblings (own palettes, the family's hierarchy and chroma budget):*
+
+  - **Shroom Ember** (dark, light) -- warm. Error stays red, string stays
+    green; conventions carry meaning a rotation would destroy.
+  - **Shroom Night** (dark) -- minimises CIE Z at equal contrast. Z is the
+    standard short-wavelength indicator, not melanopic lux: claiming that
+    needs the display's spectral power distribution, which no theme has. The
+    cost is real and reported: blues and violets gone, so function carries a
+    desaturated teal as the one concession and the hue metrics show the
+    clustering.
+
+  All 20 pass the palette audit, validate-themes, and the gated quality-profile
+  invariants. The previewer embeds all 20 and is rebuilt; exports, Neovim,
+  Helix and the visual pages regenerate for all 20.
+
+### Changed
+
+- `quality-profile.loadThemes` parses the family grammar
+  (`shroom-<family>[-light][-<variant>]-theme.json`) and stamps the source
+  file, so tools share one parser. Cross-variant hue consistency now runs per
+  family: the space dark/light pair, and ember's.
+- `tests`: the token-AA test classifies the quiet layer by near-neutrality
+  (below AA at C\* < 20 clears 3:1) instead of a hardcoded hex list, and the
+  reduced-gamut invariant documents its two bounded exception classes -- the
+  chroma/prominence-reducing variants, whose axis moves the measured quantity,
+  and the warm siblings, whose hue clustering is the design. Both bounded at
+  three pairs, measured against the family's documented 7.39 ceiling.
+- `tools/fix-ui-anchors.js` is restricted to derived themes. It silently
+  repainted hand-tuned anchors on the original seven when run repo-wide -- the
+  info blue is identity, not an oversight.
+
+### Fixed
+
+- `tools/derive-theme.js`, four bugs found by the gates while building it:
+  the soft transform hardcoded the semantic tag instead of the selector, so
+  the comment exemption never fired and light-soft's comment landed at
+  2.13:1; minimal hardcoded the dark accent; soft's first factor breached the
+  APCA floor at 19.8 Lc until the search was introduced; and ember-light's
+  first hand-picked palette put seven colours inside a 4-point L\* window,
+  which no spacing satisfies.
+
+### Added
+
 - **CAM16 colour appearance model** (`color-science.js`), validated against
   `colour-science` 0.4.7 across 30 colours with a worst deviation of 0.04 in M
   and C and 0.12° in hue. Reference values pinned in

@@ -257,6 +257,38 @@ Nothing was changed as a result. Two findings are worth recording:
   but it means comment is not the quietest thing on screen in that variant, and
   every other property measured here assumes it is.
 
+### The family extension and what the gates caught
+
+Phase 23 derived twelve new themes through this pipeline. Five defects were
+caught by the gates rather than by review, which is the argument for the
+pipeline: every one would have shipped invisibly.
+
+- The soft transform hardcoded a tag instead of the semantic selector, so the
+  de-emphasis exemption never fired and light-soft's comment reached 2.13:1 --
+  caught by the 3:1 gate.
+- Minimal hardcoded the dark theme's accent, giving the light variant a 2.05:1
+  keyword. Fixed by resolving accent and substrate from each family's own
+  canonical roles.
+- Soft's first fixed factor passed the contrast gates but breached the APCA
+  legibility floor at 19.8 Lc. The factor is now found by search: the
+  strongest compression that keeps every competing role at or above 30 Lc and
+  every non-quiet token at or above AA. Dark lands at 0.85, light at 0.55 --
+  the floor binds differently per family, which is why it is measured.
+- Ember-light's first hand-picked palette put seven colours inside a 4-point
+  L\* window. No pairwise spacing satisfies the isoluminance gate in that
+  window; the palette was re-authored across the full AA window.
+- Dim compressed keyword and variable into 9.2 dE00 at 70% gamut. The keyword
+  hue shifts -12\u00b0 in that variant, restoring 13.9 at equal APCA -- the same
+  instrument the base palette used when it rotated variable +54\u00b0.
+
+Two trade-offs are documented rather than fixed. Muted and soft gain up to
+three reduced-gamut pairs: their axes move the quantity the reduced-gamut
+invariant measures, and no factor avoids it -- muted at 0.62 gains three pairs,
+at 0.74 still two. Ember and Night cluster hues by design, and clustered hues
+collapse first when chroma clips. Both classes are bounded in the tests
+(three pairs, measured against the 7.39 nine-colour ceiling) instead of being
+left as prose.
+
 ### The amber pair is not separable by rotation
 
 `npm run whatif:amber` prices the decision. Rotating the amber family through

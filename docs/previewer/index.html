@@ -6,8 +6,8 @@
     <title>Shroom Space Theme Previewer</title>
     
 <script type="module">
-import init, * as bindings from '/shroom-previewer-494efb0f5daf40f8.js';
-const wasm = await init({ module_or_path: '/shroom-previewer-494efb0f5daf40f8_bg.wasm' });
+import init, * as bindings from '/shroom-previewer-f6a52ecd43f547a3.js';
+const wasm = await init({ module_or_path: '/shroom-previewer-f6a52ecd43f547a3_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -17,7 +17,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 </script>
     
-<link rel="modulepreload" href="/shroom-previewer-494efb0f5daf40f8.js" crossorigin="anonymous" integrity="sha384-myW8R6r01VGaNe/r9uwNsn9fsas3pWIvhFVUIdPeRpxlbSauUJwHJNfUH3B4LJrp"><link rel="preload" href="/shroom-previewer-494efb0f5daf40f8_bg.wasm" crossorigin="anonymous" integrity="sha384-OOCYortCUKSgRt0oKEOfpFAPObC+6c+58zEDHlwR9R6I1+u8qOFzaZb+k3YGWw5A" as="fetch" type="application/wasm"></head>
+<link rel="modulepreload" href="/shroom-previewer-f6a52ecd43f547a3.js" crossorigin="anonymous" integrity="sha384-myW8R6r01VGaNe/r9uwNsn9fsas3pWIvhFVUIdPeRpxlbSauUJwHJNfUH3B4LJrp"><link rel="preload" href="/shroom-previewer-f6a52ecd43f547a3_bg.wasm" crossorigin="anonymous" integrity="sha384-TwgsY5UbnDU4KF+/KB0j4R3MyP8r/qvIi42Pb/vOtS0zr5hdHySx0/OiRUZ8RVfk" as="fetch" type="application/wasm"></head>
 <body>
     <div id="app"></div>
 </body>

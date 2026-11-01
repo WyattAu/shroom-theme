@@ -1,7 +1,7 @@
 {
   "name": "shroom-space-theme",
   "displayName": "Shroom Space Theme",
-  "description": "Cosmic dark theme with 7 variants: dark, light, deuteranopia, protanopia, tritanopia, monochrome, high contrast. 1049 colour tokens covering the current VS Code API, semantic highlighting, alpha-composited WCAG 2.1 AA, APCA lightness separation, CVD simulation and CAM16 hue analysis in linear RGB, 9-format export.",
+  "description": "Cosmic theme family: 20 themes across 3 families (Shroom Space, Shroom Ember, Shroom Night): dark, light, deuteranopia, protanopia, tritanopia, monochrome, high contrast. 1049 colour tokens covering the current VS Code API, semantic highlighting, alpha-composited WCAG 2.1 AA, APCA lightness separation, CVD simulation and CAM16 hue analysis in linear RGB, 9-format export.",
   "version": "5.2.1",
   "publisher": "wyattau",
   "main": "./out/src/extension.js",
@@ -104,6 +104,71 @@
         "label": "Shroom Space (High Contrast)",
         "uiTheme": "hc-black",
         "path": "./themes/shroom-space-high-contrast-theme.json"
+      },
+      {
+        "label": "Shroom Space Muted",
+        "path": "themes/shroom-space-muted-theme.json",
+        "uiTheme": "vs-dark"
+      },
+      {
+        "label": "Shroom Space Vivid",
+        "path": "themes/shroom-space-vivid-theme.json",
+        "uiTheme": "vs-dark"
+      },
+      {
+        "label": "Shroom Space Dim",
+        "path": "themes/shroom-space-dim-theme.json",
+        "uiTheme": "vs-dark"
+      },
+      {
+        "label": "Shroom Space Soft",
+        "path": "themes/shroom-space-soft-theme.json",
+        "uiTheme": "vs-dark"
+      },
+      {
+        "label": "Shroom Space Minimal",
+        "path": "themes/shroom-space-minimal-theme.json",
+        "uiTheme": "vs-dark"
+      },
+      {
+        "label": "Shroom Space (No Italics)",
+        "path": "themes/shroom-space-no-italics-theme.json",
+        "uiTheme": "vs-dark"
+      },
+      {
+        "label": "Shroom Space Light Muted",
+        "path": "themes/shroom-space-light-muted-theme.json",
+        "uiTheme": "vs"
+      },
+      {
+        "label": "Shroom Space Light Soft",
+        "path": "themes/shroom-space-light-soft-theme.json",
+        "uiTheme": "vs"
+      },
+      {
+        "label": "Shroom Space Light Minimal",
+        "path": "themes/shroom-space-light-minimal-theme.json",
+        "uiTheme": "vs"
+      },
+      {
+        "label": "Shroom Space Light (No Italics)",
+        "path": "themes/shroom-space-light-no-italics-theme.json",
+        "uiTheme": "vs"
+      },
+      {
+        "label": "Shroom Ember",
+        "path": "themes/shroom-ember-theme.json",
+        "uiTheme": "vs-dark"
+      },
+      {
+        "label": "Shroom Ember Light",
+        "path": "themes/shroom-ember-light-theme.json",
+        "uiTheme": "vs"
+      },
+      {
+        "label": "Shroom Night",
+        "path": "themes/shroom-night-theme.json",
+        "uiTheme": "vs-dark"
       }
     ],
     "configuration": {

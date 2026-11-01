@@ -411,16 +411,37 @@ suite('Color science: theme audit', () => {
       });
 
       test('every distinct token color meets AA or is an exempt de-emphasis color', () => {
-        const exempt = new Set(['#726D89', '#777777']);
-        const seen = new Set<string>();
+        // Three ways to be exempt from AA, matching the audit's philosophy:
+        //
+        // - 4.5:1 for text -- anything chromatic enough for its colour to be
+        //   doing work must clear AA.
+        // - 3:1 for comment-scoped colours, which are de-emphasis by role.
+        //   The vivid variant scales the comment's chroma up with everything
+        //   else, so a chroma test alone would misclassify it.
+        // - 3:1 for the near-neutral quiet layer -- punctuation, muted markup
+        //   and deprecated markers are not comment-scoped but are deliberately
+        //   quiet. The first version of this test hard-coded the two original
+        //   muted hexes, which exempted them by accident; near-neutrality is
+        //   the property the list was approximating.
+        const seen = new Map<string, boolean>();
         for (const entry of theme.tokenColors) {
           const fg = String(entry.settings.foreground || '').toUpperCase();
-          if (/^#[0-9A-F]{6}$/.test(fg)) {seen.add(fg);}
+          if (!/^#[0-9A-F]{6}$/.test(fg)) {continue;}
+          const scopes = Array.isArray(entry.scope) ? entry.scope : [entry.scope];
+          const isComment = scopes.some(
+            (s: string) => typeof s === 'string' && /^(comment|punctuation\.definition\.comment)/.test(s)
+          );
+          seen.set(fg, (seen.get(fg) || false) || isComment);
         }
-        for (const fg of seen) {
-          if (exempt.has(fg)) {continue;}
+        for (const [fg, isComment] of seen) {
           const ratio = color.wcag21(fg, bg);
-          assert.ok(ratio >= 4.5, `${fg} on ${bg} = ${ratio.toFixed(2)}:1`);
+          const chroma = color.rgbToLch(color.parseHex(fg)).C;
+          const quiet = isComment || (ratio < 4.5 && chroma < 20);
+          const floor = quiet ? 3 : 4.5;
+          assert.ok(
+            ratio >= floor,
+            `${fg} on ${bg} = ${ratio.toFixed(2)}:1 (need ${floor}:1${quiet ? ', quiet layer' : ''})`
+          );
         }
       });
     });

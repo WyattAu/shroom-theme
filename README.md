@@ -1,6 +1,6 @@
 # Shroom Space Theme
 
-A cosmic dark theme for VS Code with 7 variants, including accessibility-focused CVD adaptations. 1049 colour tokens covering the current VS Code API, 32 semantic token rules, WCAG 2.1 AA, and 9-format multi-editor export.
+A cosmic theme family for VS Code: 20 themes across three families, including accessibility-focused CVD adaptations. 1049 colour tokens per theme covering the current VS Code API, 32 semantic token rules, WCAG 2.1 AA, and 9-format multi-editor export.
 
 ## Themes
 
@@ -13,6 +13,13 @@ A cosmic dark theme for VS Code with 7 variants, including accessibility-focused
 | Shroom Space (Tritanopia) | Dark | Adapted for tritanopia (blue-yellow CVD). |
 | Shroom Space (Monochrome) | Dark | Grayscale ramp preserving semantic rank. Individual token identity is not preserved in greyscale. |
 | Shroom Space (High Contrast) | High Contrast | Maximum contrast against pure black. Contrast against a background and CVD separation are different properties; this variant optimises the former. |
+| Shroom Space Muted / Vivid | Dark | The chroma axis. Muted scales competing-role chroma to ~65% (mean CAM16 M 28 → 18); Vivid raises it, capped by the gamut — `#FFCB6B` already sits at 92%, so Vivid lifts the quiet colours more than the loud ones. |
+| Shroom Space Dim | Dark | Night polarity. Surfaces drop to L\* 8, competing chroma × 0.8. Keyword hue shifts −12° so keyword/variable keep 14 dE00 at 70% gamut. |
+| Shroom Space Soft | Dark / Light | Narrows the prominence band by pulling competing lightness toward the background — as far as the APCA legibility floor allows, found by search rather than fixed. De-emphasis is untouched: comment is not part of the band, and compressing it pushed the first attempt to 1.83:1. |
+| Shroom Space Minimal | Dark / Light | Five colours: comment, error, string, one accent, plain text. All 1049 tokens remain — the collapse is onto colours, not coverage. |
+| Shroom Space (No Italics) | Dark / Light | Italic declarations removed, except `markup.italic`, where italic is content rather than styling. |
+| Shroom Ember | Dark / Light | Warm sibling. Own syntax hues over the family's lightness ladder and chroma budget; error stays red and string stays green because those conventions carry meaning. |
+| Shroom Night | Dark | Short-wavelength-minimised sibling. Minimises CIE Z at equal contrast — a standard short-wavelength indicator, honestly not melanopic lux, which would need the display's spectral distribution. The cost shows in the hue metrics: with blues and violets gone, function carries a desaturated teal as the one concession. |
 
 The CVD variants render the theme as it would appear to a **dichromat**, the most
 severely affected case. Dichromats are roughly a quarter of people with colour
@@ -117,7 +124,7 @@ Use the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`) and search **Shroom: Se
 
 **WASM Previewer** (Rust/Leptos, 128KB): [wyattau.github.io/shroom-theme/previewer](https://wyattau.github.io/shroom-theme/previewer/)
 
-Static preview with all 7 variants: [wyattau.github.io/shroom-theme](https://wyattau.github.io/shroom-theme/)
+Static preview with all 20 themes: [wyattau.github.io/shroom-theme](https://wyattau.github.io/shroom-theme/)
 
 WCAG contrast report: [wyattau.github.io/shroom-theme/wcag.html](https://wyattau.github.io/shroom-theme/wcag.html)
 
@@ -184,7 +191,7 @@ For pixel-perfect control, **[Material Icon Theme](https://marketplace.visualstu
 
 Or copy `editors/neovim/colors/*.lua` to `~/.config/nvim/colors/` and `:colorscheme shroom-space`.
 
-7 variants: `shroom-space`, `shroom-space-light`, `shroom-space-deuteranopia`, `shroom-space-protanopia`, `shroom-space-tritanopia`, `shroom-space-monochrome`, `shroom-space-high-contrast`.
+20 themes: the seven above plus Muted, Vivid, Dim, Soft, Minimal and (No Italics) for the space family; Ember and Ember Light; and Night. Every theme exists as `themes/<name>-theme.json` and follows the VS Code, Neovim and Helix naming rules below.
 
 ## Helix
 
@@ -194,7 +201,7 @@ Copy `editors/helix/shroom_space.toml` to `~/.config/helix/themes/` and set in `
 theme = "shroom_space"
 ```
 
-7 variants available as `shroom_space`, `shroom_space_light`, `shroom_space_deuteranopia`, etc.
+Available as `shroom_space`, `shroom_space_muted`, `shroom_ember`, `shroom_night`, and so on for all 20.
 
 ## License
 

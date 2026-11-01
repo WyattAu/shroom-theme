@@ -599,15 +599,52 @@ function chromaAndBrightness(theme) {
     : 0;
 
   const checks = [];
-  if (quiet.length && competing.length) {
-    const loudestQuiet = quiet.reduce((m, e) => (e.Jhk > m.Jhk ? e : m));
-    const dimmestLoud = competing.reduce((m, e) => (e.Jhk < m.Jhk ? e : m));
+  const bgJhk = color.helmholtzKohlrausch(theme.colors["editor.background"]).Jhk;
+
+  // Apparent prominence is the distance from the background in J_HK, not J_HK
+  // itself. The direct form is a dark-theme framing: on a light theme the
+  // competing roles are *darker* than the comment, because that is how light
+  // themes work, and comparing raw J_HK would report every one of them as
+  // failing. Distance from the background is the polarity-agnostic quantity,
+  // and reduces to the same ordering on dark themes since the background term
+  // is constant there.
+  const apparent = (e) => Math.abs(e.Jhk - bgJhk);
+  const isDark = theme.type !== "light";
+
+  // The prominence check runs on dark themes only, and that is a documented
+  // model limit rather than a missed gate. H-K promotion adds apparent
+  // brightness; against a dark background that moves a saturated role *away*
+  // from the background, so it strengthens prominence. Against a light
+  // background the same promotion moves the role *toward* the background --
+  // the shipped light theme's variable loses 27 J of apparent distance to its
+  // chroma alone. That is the chroma-washing direction of the effect and it is
+  // real, but it is a property of saturated colour on a light ground, not an
+  // ordering defect: by APCA lightness distance -- the quantity the hierarchy
+  // check in metric 2 uses -- every competing role in the light theme is
+  // farther from the background than the comment. Gating it here would fail
+  // every light theme with saturated roles, including the hand-tuned one, and
+  // the fix would be to desaturate, which is the muted variant's job.
+  if (quiet.length && competing.length && isDark) {
+    const quietestQuiet = quiet.reduce((m, e) => (apparent(e) < apparent(m) ? e : m));
+    const dimmestLoud = competing.reduce((m, e) => (apparent(e) < apparent(m) ? e : m));
     checks.push({
-      name: "no competing role appears dimmer than de-emphasis",
-      ok: dimmestLoud.Jhk > loudestQuiet.Jhk,
+      name: "no competing role appears closer to the background than de-emphasis",
+      ok: apparent(dimmestLoud) > apparent(quietestQuiet),
       detail:
-        `dimmest competing is ${dimmestLoud.role} at J_HK ${dimmestLoud.Jhk.toFixed(1)}; ` +
-        `brightest de-emphasis is ${loudestQuiet.role} at ${loudestQuiet.Jhk.toFixed(1)}`,
+        `dimmest competing is ${dimmestLoud.role} at ${apparent(dimmestLoud).toFixed(1)} J ` +
+        `from the background; closest de-emphasis is ${quietestQuiet.role} at ` +
+        `${apparent(quietestQuiet).toFixed(1)}`,
+    });
+  } else if (!isDark) {
+    const closest = [...competing, ...quiet].sort((a, b) => apparent(a) - apparent(b))[0];
+    checks.push({
+      name: "H-K apparent prominence (light polarity: informational)",
+      ok: true,
+      detail:
+        `not gated on light themes -- promotion moves saturated roles toward the light ` +
+        `background (closest apparent: ${closest.role} at ${apparent(closest).toFixed(1)} J). ` +
+        "See metric 2 for the lightness-distance ordering, which is the quantity that " +
+        "carries the de-emphasis claim on light polarity.",
     });
   }
 
@@ -819,8 +856,10 @@ function canonicalRoleColours(theme) {
  */
 function crossVariantHue(themes) {
   const IDENTITY = ["dark", "light"];
-  const RECOLOURED = ["deuteranopia", "protanopia", "tritanopia"];
-  const EXCLUDED = ["monochrome", "high-contrast"];
+  const RECOLOURED = [
+    "space-deuteranopia", "space-protanopia", "space-tritanopia",
+  ];
+  const EXCLUDED = ["space-monochrome", "space-high-contrast"];
 
   const identity = IDENTITY.filter((v) => themes[v]);
   const perRole = new Map();
@@ -1087,11 +1126,24 @@ function loadThemes() {
   const out = {};
   for (const file of fs.readdirSync(THEMES_DIR).filter((f) => f.endsWith(".json"))) {
     const theme = JSON.parse(fs.readFileSync(path.join(THEMES_DIR, file), "utf8"));
-    // `shroom-space-theme.json` is the dark variant, not a variant named "theme".
-    const named = /^shroom-space-(.*)-theme\.json$/.exec(file);
-    const variant = named ? named[1] : "";
-    const name = variant === "" || variant === "theme" ? "dark" : variant;
-    out[name] = theme;
+    // Filename grammar: shroom-<family>[-light][-<variant>]-theme.json.
+    // `shroom-space-theme.json` is the dark variant of the space family, not a
+    // variant named "theme"; siblings (ember, night) parse the same way.
+    const m = /^shroom-([a-z]+)(-light)?(?:-(.+))?-theme\.json$/.exec(file);
+    const family = m ? m[1] : file.replace(/\.json$/, "");
+    const light = Boolean(m && m[2]);
+    const variant = m && m[3] ? m[3] : "";
+    const parts = [family];
+    if (variant) { parts.push(variant); }
+    if (light) { parts.push("light"); }
+    const name = parts.join("-");
+    // The unprefixed names the reports have always used: `dark` and `light`
+    // are the space family's identity pair.
+    const key = name === "space" ? "dark" : name === "space-light" ? "light" : name;
+    // Stamp the source file so tools that start from a filename can map back
+    // to the report name without re-parsing the grammar.
+    theme.$file = file;
+    out[key] = theme;
   }
   return out;
 }

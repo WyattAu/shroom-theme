@@ -46,11 +46,24 @@ fn load_theme_data() -> Vec<(&'static str, &'static str)> {
 
     themes.push(embed_theme!("shroom-space-theme.json"));
     themes.push(embed_theme!("shroom-space-light-theme.json"));
+    themes.push(embed_theme!("shroom-space-muted-theme.json"));
+    themes.push(embed_theme!("shroom-space-vivid-theme.json"));
+    themes.push(embed_theme!("shroom-space-dim-theme.json"));
+    themes.push(embed_theme!("shroom-space-soft-theme.json"));
+    themes.push(embed_theme!("shroom-space-minimal-theme.json"));
+    themes.push(embed_theme!("shroom-space-no-italics-theme.json"));
+    themes.push(embed_theme!("shroom-space-light-muted-theme.json"));
+    themes.push(embed_theme!("shroom-space-light-soft-theme.json"));
+    themes.push(embed_theme!("shroom-space-light-minimal-theme.json"));
+    themes.push(embed_theme!("shroom-space-light-no-italics-theme.json"));
     themes.push(embed_theme!("shroom-space-deuteranopia-theme.json"));
     themes.push(embed_theme!("shroom-space-protanopia-theme.json"));
     themes.push(embed_theme!("shroom-space-tritanopia-theme.json"));
     themes.push(embed_theme!("shroom-space-monochrome-theme.json"));
     themes.push(embed_theme!("shroom-space-high-contrast-theme.json"));
+    themes.push(embed_theme!("shroom-ember-theme.json"));
+    themes.push(embed_theme!("shroom-ember-light-theme.json"));
+    themes.push(embed_theme!("shroom-night-theme.json"));
 
     themes
 }

@@ -505,6 +505,32 @@ reported confidently wrong numbers and all documented in
 
 ---
 
+## Phase 23: v5.4.0 - Family Extension (COMPLETED)
+
+Extended the theme family from 7 to 20 across three families, using the
+Phase 22 metrics as the safety net for derivation.
+
+**Families:** Shroom Space (the original), Shroom Ember (warm sibling), Shroom
+Night (short-wavelength-minimised sibling).
+
+**Variants:** Muted, Vivid, Dim, Soft, Minimal, (No Italics) -- each moving one
+axis of the space palette. Muted/Vivid/Soft/Minimal ship for both polarities;
+Dim and Night are dark-only by definition.
+
+**The gate-driven loop worked as designed.** Five palette and transform defects
+were caught by the gates, not by reviewers: soft's selector bug (comment at
+2.13:1), minimal's hardcoded dark accent (light accent at 2.05:1), soft's
+breach of the APCA floor (19.8 Lc), ember-light's seven-colours-in-one-L\*-window
+palette, and dim's keyword/variable pair dropping to 9.2 dE00 at 70% gamut.
+Each was fixed by the instrument the gate pointed at.
+
+**Documented trade-offs, not defects:** muted/soft and the warm siblings gain
+up to three reduced-gamut pairs -- muted because its axis moves the measured
+quantity, ember/night because hue clustering is the design. Bounded, and
+asserted as bounded in the tests rather than left as prose.
+
+---
+
 ## Open Decisions
 
 Things the measurements have priced but cannot decide. Each needs a judgement
@@ -587,10 +613,12 @@ v0.2.0 (WCAG) --> v0.3.0 (Completeness) --> v0.4.0 (Multi-Editor) --> v0.5.0 (Vi
                                                                                         |
                                                                                         v
                                                                           v5.3.0 (Quality Profile)
+                                                                                        |
+                                                                                        v
+                                                                            v5.4.0 (Family Extension)
 
-Phases 1-18 and 22 COMPLETED. Phase 22 added measurement, not change: the
-palette is untouched by it, and the decisions it surfaced are in the Open
-Decisions table.
+Phases 1-18, 22 and 23 COMPLETED. Phase 22 added measurement; Phase 23 used it
+to derive the family from 7 themes to 20 across 3 families.
 ```
 
 ---
